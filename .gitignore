@@ -28,3 +28,12 @@ replay_pid*
 
 # Mac
 .DS_Store
+
+# env
+.env
+
+# node
+node_modules/
+
+# git
+.git
