@@ -9,7 +9,7 @@
   }
   
   .slider-box {
-    height: 100%;
+    height: 65px;
     float: left;
     border-radius:3px;
   }
@@ -56,7 +56,7 @@
 
 
   .slider-box.active {
-    background-color: green;
+    background-color: #98B66E;
     border-color: white;
   }
 

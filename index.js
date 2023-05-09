@@ -35,13 +35,13 @@ const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
 const node_session_secret = process.env.NODE_SESSION_SECRET;
 /* END secret section */
 
-let {database} = include('databaseConnection');
+let { database } = include('databaseConnection');
 
-// const userCollection = database.db(mongodb_database).collection('users');
+const reviewCollection = database.db(mongodb_database).collection('reviews');
 
 app.set('view engine', 'ejs');
 
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 
 
 var mongoStore = MongoStore.create({
@@ -52,43 +52,70 @@ var mongoStore = MongoStore.create({
 })
 
 app.use(session({
-    secret: node_session_secret,
-    store: mongoStore, //default is memory store
-    saveUninitialized: false,
-    resave: true
-  }
+  secret: node_session_secret,
+  store: mongoStore, //default is memory store
+  saveUninitialized: false,
+  resave: true
+}
 ));
 
 /* === Pages === */
 
 require("./routes/index.js");
 
-app.get('/', (req,res) => {
+app.get('/', (req, res) => {
   // let username = req.session.username || 'test';
   // res.render("index", {isLoggedIn: isLoggedIn(req), username: username});
-  res.render("index", {isLoggedIn: false});
+  res.render("index", { isLoggedIn: false });
 });
 
-app.get('/login', (req,res) => {
+app.get('/login', (req, res) => {
   res.render("login");
 });
 
 
-app.get('/reviews', (req,res) => {
+app.get('/reviews', (req, res) => {
   // let username = req.session.username || 'test';
   // res.render("index", {isLoggedIn: isLoggedIn(req), username: username});
-  res.render("review", {isLoggedIn: false});
+  res.render("review", {
+    req:req
+  });
 });
+
+app.post('/submitReview', async (req, res) => {
+  // console.log(req.body);
+  const { review } = req.body;
+  console.log(review);
+  // Validate the review input
+  // const schema = Joi.object({
+  //   review: Joi.string().max(256).required().messages({
+  //     'string.empty': 'Please enter your review.'
+  //   })
+  // });
+
+  // const { error } = schema.validate({ review });
+  // if (error) {
+  //   return res.status(400).send(error.details[0].message);
+  // }
+
+    await reviewCollection.insertOne({ Review: review });
+    // console.log('Inserted user review');
+    res.status(200).send('Review saved successfully');
+  
+
+
+});
+
 
 /* === // Pages end === */
 
 app.use(express.static(__dirname + "/public"));
 
-app.get("*", (req,res) => {
+app.get("*", (req, res) => {
   res.status(404);
   res.send("Page not found - 404");
 })
 
 app.listen(port, () => {
-  console.log("Node application listening on port "+port);
+  console.log("Node application listening on port " + port);
 });

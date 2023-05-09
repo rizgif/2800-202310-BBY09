@@ -47,6 +47,60 @@
     </div>
 </div>
 
+
+
+<!-- writing a review -->
+
+<form action="/submitReview" method="POST">
+    <div class="write-review-grid">
+        <div class="user-profile">user </div>
+        <textarea name="review" class="write-review" placeholder="Enter your review..."></textarea>
+
+
+        <div class="ratings">
+            <div class="review-section-1">
+                <div class="review-category">Course Content</div>
+                <div class="review-slider">
+                    <%- include("templates/slider") %>
+                </div>
+            </div>
+            <div class="review-section-2">
+                <div class="review-category">Course Structure</div>
+                <div class="review-slider">
+                    <%- include("templates/slider") %>
+                </div>
+            </div>
+            <div class="review-section-3">
+                <div class="review-category">Teaching Style</div>
+                <div class="review-slider">
+                    <%- include("templates/slider") %>
+                </div>
+            </div>
+            <div class="review-section-4">
+                <div class="review-category">Student Support</div>
+                <div class="review-slider">
+                    <%- include("templates/slider") %>
+                </div>
+            </div>
+
+            <div class="review-section-5">
+                <div class="review-category">Difficulty Level</div>
+                <div class="review-slider">
+                    <%- include("templates/slider") %>
+                </div>
+            </div>
+        </div>
+
+
+        <button class="btn-submit-review" type="submit">SUBMIT</button>
+
+
+
+    </div>
+</form>
+
+
+
 <script>
     // JavaScript code for each slider instance
     console.log("click event");
@@ -76,29 +130,3 @@
         }
     });
 </script>
-
-
-<!-- writing a review -->
-
-
-<div class="write_review_grid">
-    <div class="user_profile"></div>
-    <div class="write_review"></div>
-    <div class="review-category">Course Content</div>
-    <div class="review-slider">
-        <%- include("templates/slider") %>
-    </div>
-    <div class="review-category">Course Structure</div>
-    <div class="review-slider">
-        <%- include("templates/slider") %>
-    </div>
-    <div class="review-category">Teaching Style</div>
-    <div class="review-slider">
-        <%- include("templates/slider") %>
-    </div>
-    <div class="review-category">Student Support</div>
-    <div class="review-slider">
-        <%- include("templates/slider") %>
-    </div>
-    <button>SUBMIT</button>
-</div>
