@@ -1,14 +1,24 @@
-html, body{
-    height: 100%;
-}
-body {
+/* SignUp, SignIn */
+.form-wrapper {
     display: flex;
     align-items: center;
-    padding-top: 40px;
-    padding-bottom: 40px;
-    background-color: #f5f5f5;
+    justify-content: center;
+}
+.form-wrapper .container {
+    max-width: 500px;
+}
+.form-floating {
+    margin-bottom: 20px;
+}
+.form-signin h1 {
+    margin-bottom: 30px;
+}
+.btn-sign {
+    margin-top: 40px;
+    max-width: 120px;
+}
+.sign-btns-container {
+    display: flex;
+    justify-content: flex-end;
 }
 
-button {
-    margin-top: 20px;
-}
