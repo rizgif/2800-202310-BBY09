@@ -1,0 +1,39 @@
+.slider {
+    width: 300px;
+    height: 30px;
+    padding: 2%;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .slider-box {
+    height: 100%;
+    float: left;
+  }
+  
+  .slider-box-1 {
+    width: 20%;
+    background-color: #4caf50;
+  }
+  
+  .slider-box-2 {
+    width: 20%;
+    background-color: #8bc34a;
+  }
+  
+  .slider-box-3 {
+    width: 20%;
+    background-color: #cddc39;
+  }
+  
+  .slider-box-4 {
+    width: 20%;
+    background-color: #ffc107;
+  }
+  
+  .slider-box-5 {
+    width: 20%;
+    background-color: #ff5722;
+  }
+  

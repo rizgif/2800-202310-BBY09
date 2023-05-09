@@ -65,6 +65,12 @@ app.get('/', (req,res) => {
 });
 
 
+app.get('/reviews', (req,res) => {
+  // let username = req.session.username || 'test';
+  // res.render("index", {isLoggedIn: isLoggedIn(req), username: username});
+  res.render("review", {isLoggedIn: false});
+});
+
 /* === // Pages end === */
 
 app.use(express.static(__dirname + "/public"));
