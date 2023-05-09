@@ -1,7 +1,42 @@
-.form-signup,
-.form-signin {
-    width: 100%;
-    max-width: 500px;
-    padding: 15px;
-    margin: auto;
+/* Common */
+.wrapper {
+    padding-top: 120px;
+    padding-bottom: 100px;
+}
+.btn-md {
+    max-width: 200px;
+}
+
+/* reset */
+:root {
+    --color-primary-green: #96c15b;
+    --color-sub-green: #C5E5A5;
+    --color-primary-yellow: #F9D876;
+    --color-sub-yellow: #FBE39D;
+    --color-sand: #D7D3C1;
+  
+    --color-divider: #eee;
+  
+    --color-text-gray: rgb(147, 147, 147);
+    --color-placeholder: rgb(172, 172, 172);
+    --color-disabled:rgb(129, 129, 129);
+  
+    --height-header: 50px;
+    --height-nav: 60px;
+}
+
+/* SignUp, SignIn */
+.form-floating {
+    margin-bottom: 20px;
+}
+.form-signin h1 {
+    margin-bottom: 30px;
+}
+.btn-sign {
+    margin-top: 40px;
+    max-width: 120px;
+}
+.sign-btns-container {
+    display: flex;
+    justify-content: flex-end;
 }
