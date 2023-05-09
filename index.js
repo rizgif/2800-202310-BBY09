@@ -39,7 +39,7 @@ const node_session_secret = process.env.NODE_SESSION_SECRET;
 let {database} = include('databaseConnection');
 
 const userCollection = database.db(mongodb_database).collection('users');
-const datasetCollection = database.db(mongodb_database).collection('combined_data');
+const datasetCollection = database.db(mongodb_database).collection('courses');
 
 app.set('view engine', 'ejs');
 
