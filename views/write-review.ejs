@@ -36,7 +36,8 @@
 
         </div>
 
-        <button class="btn-submit-review" type="submit">SUBMIT</button>
+        <button id="submit-review-btn" class="btn-submit-review" type="submit">SUBMIT</button>
+        <input type="hidden" id="timestamp-input" name="timestamp" value="">
 
     </div>
 </form>
@@ -74,6 +75,15 @@
 
     });
 
+    document.getElementById('submit-review-btn').addEventListener('click', function () {
+        // Get the current timestamp
+        // var timestamp = new Date().toISOString();
+        var currentDate = new Date().toISOString().split('T')[0];
 
+        // Assign the timestamp value to a hidden input field in the form
+        document.getElementById('timestamp-input').value = currentDate;
+        // console.log(currentDate);
+    });
 
+   
 </script>

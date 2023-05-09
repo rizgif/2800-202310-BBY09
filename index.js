@@ -166,6 +166,9 @@ app.get('/reviews', async (req, res) => {
     review: review.Review
   }))
 
+  const currentDate = reviews.map(review => ({
+    currentDate: review.Time
+  }))
 
   const renderData = {
     req: req,
@@ -188,11 +191,16 @@ app.get('/reviews/write', async (req, res) => {
     studentSupportSliderValue: review.StudentSupportRating
   }));
 
+  const currentDate = reviews.map(review => ({
+    Time: review.currentDate
+  }))
+
   console.log(sliderValues);
 
   const renderData = {
     req: req,
-    sliderValues: sliderValues
+    sliderValues: sliderValues,
+    currentDate: currentDate
   };
 
   res.render("write-review", renderData);
@@ -205,9 +213,10 @@ app.post('/submitReview', async (req, res) => {
     courseContentSliderValue,
     courseStructureSliderValue,
     teachingStyleSliderValue,
-    studentSupportSliderValue } = req.body;
+    studentSupportSliderValue, 
+    currentDate} = req.body;
 
-  console.log(review);
+  console.log(currentDate);
 
   // Validate the review input
   // const schema = Joi.object({
@@ -227,7 +236,8 @@ app.post('/submitReview', async (req, res) => {
     CourseContentRating: courseContentSliderValue,
     CourseStructureRating: courseStructureSliderValue,
     TeachingStyleRating: teachingStyleSliderValue,
-    StudentSupportRating: studentSupportSliderValue
+    StudentSupportRating: studentSupportSliderValue,
+    Time: currentDate
   });
 
 
