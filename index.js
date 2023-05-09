@@ -38,7 +38,7 @@ const node_session_secret = process.env.NODE_SESSION_SECRET;
 
 let {database} = include('databaseConnection');
 
-const userCollection = database.db(mongodb_database).collection('courslacourses');
+const userCollection = database.db(mongodb_database).collection('users');
 
 app.set('view engine', 'ejs');
 
