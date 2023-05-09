@@ -90,11 +90,6 @@ app.get('/reviews', async (req, res) => {
     review: review.Review
   }))
 
-  console.log(sliderValues);
-  console.log(review);
-  // console.log(sliderValues[0].courseStructureSliderValue);
-  // console.log(sliderValues[0].teachingStyleSliderValue);
-
 
   const renderData = {
     req: req,
