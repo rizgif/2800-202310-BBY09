@@ -38,7 +38,7 @@ const node_session_secret = process.env.NODE_SESSION_SECRET;
 
 let {database} = include('databaseConnection');
 
-const userCollection = database.db(mongodb_database).collection('courslacourses');
+const userCollection = database.db(mongodb_database).collection('users');
 
 app.set('view engine', 'ejs');
 
@@ -118,8 +118,8 @@ app.post('/signupSubmit', signupValidation, async (req,res) => {
   req.session.user_type = 'user';
   req.session.cookie.maxAge = expireTime;
 
-  // redirect the user to the /members page.
-  res.redirect('/members');
+  // redirect the user to the / page.
+  res.redirect('/');
 });
 
 
