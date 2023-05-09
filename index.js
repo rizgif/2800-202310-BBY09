@@ -39,7 +39,7 @@ const node_session_secret = process.env.NODE_SESSION_SECRET;
 let {database} = include('databaseConnection');
 
 const userCollection = database.db(mongodb_database).collection('users');
-const datasetCollection = database.db(mongodb_database).collection('combined_data');
+const datasetCollection = database.db(mongodb_database).collection('courses');
 
 app.set('view engine', 'ejs');
 
@@ -72,11 +72,12 @@ require("./routes/index.js");
 // });
 
 app.get('/', (req,res) => {
-  if (!req.session.authenticated) {
-      res.render("index_beforeLogin");
-  } else {
-      res.render("index_afterLogin");
-  }
+  // if (!req.session.authenticated) {
+  //     res.render("index_beforeLogin");
+  // } else {
+  //     res.render("index_afterLogin");
+  // }
+  res.render("index", {isLoggedIn: isLoggedIn(req)});
 });
 
 app.post('/searchSubmit', async (req,res) => {
@@ -98,10 +99,9 @@ app.get('/sample', (req,res) => {
   res.render("sample");
 });
 
-
-app.get('/login', (req,res) => {
-  res.render('login')
-});
+// app.get('/login', (req,res) => {
+//   res.render('login');
+// });
 
 app.post('/loginSubmit', loginValidation, async (req,res) => {
   let email = req.body.email;
