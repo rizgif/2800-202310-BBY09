@@ -1,5 +1,5 @@
 <%- include("templates/header") %>
-<div class="signin">
+<div class="form-wrapper signin">
     <div class="container">
       <main class="form-signin w-100 m-auto">
           <form action='/loginSubmit' method='post'>
@@ -19,6 +19,10 @@
               </div>
           </form>
       </main>
+
+      <span class="hr"></span>
+      <p class="link-signup">Don't have an account? <a href="/signup">Sign up</a></p>
   </div>
 </div>
+
 <%- include("templates/footer") %>

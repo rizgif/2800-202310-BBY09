@@ -9,7 +9,8 @@ require("./utils.js");
 
 const {
   sessionValidation,
-  adminAuthorization,
+  loginValidation,
+  signupValidation,
   isValidSession,
   isAdmin,
   isLoggedIn
@@ -26,7 +27,7 @@ const expireTime = 1 * 60 * 60 * 1000; //expires after 1 hour  (hours * minutes 
 
 
 /* secret information section */
-const mongodb_host = process.env.MONGODB_HOST;
+const mongodb_host = process.env.MONGODB_HOST; 
 const mongodb_user = process.env.MONGODB_USER;
 const mongodb_password = process.env.MONGODB_PASSWORD;
 const mongodb_database = process.env.MONGODB_DATABASE;
@@ -37,6 +38,8 @@ const node_session_secret = process.env.NODE_SESSION_SECRET;
 
 let { database } = include('databaseConnection');
 
+const userCollection = database.db(mongodb_database).collection('users');
+const datasetCollection = database.db(mongodb_database).collection('courses');
 const reviewCollection = database.db(mongodb_database).collection('reviews');
 
 app.set('view engine', 'ejs');
@@ -45,7 +48,7 @@ app.use(express.urlencoded({ extended: false }));
 
 
 var mongoStore = MongoStore.create({
-  mongoUrl: `mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/${mongodb_database}`,
+  mongoUrl: `mongodb+srv://riz:apple@courselaapp.fb2pphc.mongodb.net/sessions`,
   crypto: {
     secret: mongodb_session_secret
   }
@@ -63,14 +66,87 @@ app.use(session({
 
 require("./routes/index.js");
 
-app.get('/', (req, res) => {
-  // let username = req.session.username || 'test';
-  // res.render("index", {isLoggedIn: isLoggedIn(req), username: username});
-  res.render("index", { isLoggedIn: false });
+// app.get('/', (req,res) => {
+//   // let username = req.session.username || 'test';
+//   // res.render("index", {isLoggedIn: isLoggedIn(req), username: username});
+//   res.render("index", {isLoggedIn: false});
+// });
+
+app.get('/', (req,res) => {
+  // if (!req.session.authenticated) {
+  //     res.render("index_beforeLogin");
+  // } else {
+  //     res.render("index_afterLogin");
+  // }
+  res.render("index", {isLoggedIn: isLoggedIn(req)});
+});
+
+app.post('/searchSubmit', async (req,res) => {
+  var courseSearch = req.body.courseSearch;
+
+  const searchResult = await datasetCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
+  _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, 
+  Course_URL: 1, Organization: 1, Course_Description: 1}).toArray();
+  
+  res.render("searchList", {searchResult: searchResult});
+  // res.redirect('/searchList');
 });
 
 app.get('/login', (req, res) => {
   res.render("login");
+});
+
+app.get('/sample', (req,res) => {
+  res.render("sample");
+});
+
+// app.get('/login', (req,res) => {
+//   res.render('login');
+// });
+
+app.post('/loginSubmit', loginValidation, async (req,res) => {
+  let email = req.body.email;
+
+  const result = await userCollection.find({email: email}).project({email: 1, password: 1, username: 1,  _id: 1}).toArray();
+
+  req.session.authenticated = true;
+  req.session.email = email;
+  req.session.username = result[0].username;
+  req.session.cookie.maxAge = expireTime;
+
+  res.redirect('/');
+});
+
+app.get('/signup', (req,res) => {
+  res.render('signup');
+});
+
+app.post('/signupSubmit', signupValidation, async (req,res) => {
+  let email = req.body.email;
+  let password = req.body.password;
+  let username = req.body.username;
+
+  // If inputs are valid, add the member
+  let hashedPassword = await bcrypt.hash(password, saltRounds);
+
+  await userCollection.insertOne({username: username, email: email, password: hashedPassword, user_type: 'user'});
+  console.log("Inserted user");
+
+  // Create a session
+  req.session.authenticated = true;
+  req.session.email = email;
+  req.session.username = username;
+  req.session.user_type = 'user';
+  req.session.cookie.maxAge = expireTime;
+
+  // redirect the user to the / page.
+  res.redirect('/');
+});
+
+
+app.get('logout', (req,res) => {
+  req.session.destroy();
+  res.render("/");
 });
 
 
@@ -172,5 +248,5 @@ app.get("*", (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log("Node application listening on port " + port);
+  console.log("Node application listening on port "+port);
 });

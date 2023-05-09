@@ -1,0 +1,18 @@
+<%- include("templates/header") %> 
+<div class="row justify-content-center">
+    <div class="col-sm-8">
+      <form action="/searchSubmit" method="post" class="form-inline my-2 my-lg-0 d-flex justify-content-center">
+        <div class="form-group mx-2 mb-2" style="width:300px;">
+            <input name="courseSearch" type="text" class="form-control" id="courseSearch" placeholder="Search courses">
+        </div>
+        <button type="submit" class="btn btn-main-search mb-2">Search</button>
+      </form>
+</div>
+</div>
+	<h2>Courses</h2>
+    <ul>
+        <% for(let i=0; i < searchResult.length; i++) { %>
+            <%- include('templates/list', {result: searchResult[i]})  %>
+        <% } %>
+    </ul>
+<%- include("templates/footer") %>

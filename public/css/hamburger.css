@@ -1,0 +1,103 @@
+#navbar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  padding: 1% 4%;
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+nav #i1,
+nav #i2 {
+  width: 40px;
+  height: 40px;
+  padding: 5px;
+  display: none;
+  cursor: pointer;
+}
+
+.nav-links {
+  flex: 1;
+  text-align: right;
+}
+
+.nav-links ul li {
+  list-style: none;
+  display: inline-block;
+  padding: 8px 10px;
+  position: relative;
+  text-decoration: none;
+}
+
+.nav-links ul li a:hover {
+  display: block;
+  transition: 0.2s;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.nav-links ul li:hover:after {
+  width: 100%;
+}
+
+.nav-links ul li a {
+  color: #000000;
+  text-decoration: none;
+  font-size: 24px;
+}
+
+
+@media only screen and (max-width: 700px) {
+  .nav-links ul li {
+    display: block;
+    color: unset;
+  }
+
+  .nav-links {
+    position: absolute;
+    display: none;
+    background: #9acd8b;
+    min-height: 100vh;
+    width: 200px;
+    top: 0;
+    right: 0;
+    text-align: left;
+    z-index: 2;
+    color: white;
+    opacity: 0.9;
+  }
+
+  nav #i2 {
+    display:block;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+   
+  }
+
+  nav #i1 {
+    display: block;
+    margin: 10px;
+    padding: 5px;
+  }
+
+  .nav-links ul {
+    padding: 30px;
+  }
+
+
+
+  .nav-links ul li::after {
+    content: "";
+    width: 0%;
+    height: 2px;
+    background: white;
+    display: block;
+    margin: auto;
+    transition: 0.2s;
+  }
+
+}
