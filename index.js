@@ -18,7 +18,7 @@ const {
 
 const saltRounds = 12;
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8000;
 
 const app = express();
 
@@ -36,14 +36,15 @@ const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
 const node_session_secret = process.env.NODE_SESSION_SECRET;
 /* END secret section */
 
-let {database} = include('databaseConnection');
+let { database } = include('databaseConnection');
 
 const userCollection = database.db(mongodb_database).collection('users');
 const datasetCollection = database.db(mongodb_database).collection('courses');
+const reviewCollection = database.db(mongodb_database).collection('reviews');
 
 app.set('view engine', 'ejs');
 
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 
 
 var mongoStore = MongoStore.create({
@@ -54,11 +55,11 @@ var mongoStore = MongoStore.create({
 })
 
 app.use(session({
-    secret: node_session_secret,
-    store: mongoStore, //default is memory store
-    saveUninitialized: false,
-    resave: true
-  }
+  secret: node_session_secret,
+  store: mongoStore, //default is memory store
+  saveUninitialized: false,
+  resave: true
+}
 ));
 
 /* === Pages === */
@@ -91,7 +92,7 @@ app.post('/searchSubmit', async (req,res) => {
   // res.redirect('/searchList');
 });
 
-app.get('/login', (req,res) => {
+app.get('/login', (req, res) => {
   res.render("login");
 });
 
@@ -149,11 +150,109 @@ app.get('logout', (req,res) => {
 });
 
 
+
+app.get('/reviews', async (req, res) => {
+  const reviews = await reviewCollection.find().toArray();
+
+  // Extract the slider values from the reviews
+  const sliderValues = reviews.map(review => ({
+    courseContentSliderValue: review.CourseContentRating,
+    courseStructureSliderValue: review.CourseStructureRating,
+    teachingStyleSliderValue: review.TeachingStyleRating,
+    studentSupportSliderValue: review.StudentSupportRating
+  }));
+
+  const review = reviews.map(review => ({
+    review: review.Review
+  }))
+
+  const currentDate = reviews.map(review => ({
+    currentDate: review.Time
+  }))
+
+  const renderData = {
+    req: req,
+    sliderValues: sliderValues,
+    review: review
+  };
+
+  res.render("read-review", renderData);
+});
+
+
+app.get('/reviews/write', async (req, res) => {
+  const reviews = await reviewCollection.find().toArray();
+
+  // Extract the slider values from the reviews
+  const sliderValues = reviews.map(review => ({
+    courseContentSliderValue: review.CourseContentRating,
+    courseStructureSliderValue: review.CourseStructureRating,
+    teachingStyleSliderValue: review.TeachingStyleRating,
+    studentSupportSliderValue: review.StudentSupportRating
+  }));
+
+  const currentDate = reviews.map(review => ({
+    Time: review.currentDate
+  }))
+
+  console.log(sliderValues);
+
+  const renderData = {
+    req: req,
+    sliderValues: sliderValues,
+    currentDate: currentDate
+  };
+
+  res.render("write-review", renderData);
+});
+
+//write to database
+app.post('/submitReview', async (req, res) => {
+
+  const { review,
+    courseContentSliderValue,
+    courseStructureSliderValue,
+    teachingStyleSliderValue,
+    studentSupportSliderValue, 
+    currentDate} = req.body;
+
+  console.log(currentDate);
+
+  // Validate the review input
+  // const schema = Joi.object({
+  //   review: Joi.string().max(256).required().messages({
+  //     'string.empty': 'Please enter your review.'
+  //   })
+  // });
+
+  // const { error } = schema.validate({ review });
+  // if (error) {
+  //   return res.status(400).send(error.details[0].message);
+  // }
+
+  // try {
+  await reviewCollection.insertOne({
+    Review: review,
+    CourseContentRating: courseContentSliderValue,
+    CourseStructureRating: courseStructureSliderValue,
+    TeachingStyleRating: teachingStyleSliderValue,
+    StudentSupportRating: studentSupportSliderValue,
+    Time: currentDate
+  });
+
+
+  // console.log('Inserted user review and active index');
+  res.status(200).send('Review and active index saved successfully');
+
+});
+
+
+
 /* === // Pages end === */
 
 app.use(express.static(__dirname + "/public"));
 
-app.get("*", (req,res) => {
+app.get("*", (req, res) => {
   res.status(404);
   res.send("Page not found - 404");
 })
