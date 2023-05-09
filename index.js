@@ -82,7 +82,7 @@ app.get('/', (req,res) => {
 app.post('/searchSubmit', async (req,res) => {
   var courseSearch = req.body.courseSearch;
 
-  const searchResult = await userCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
+  const searchResult = await datasetCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
   _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, 
   Course_URL: 1, Organization: 1, Course_Description: 1}).toArray();
   
