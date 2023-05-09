@@ -10,6 +10,7 @@ require("./utils.js");
 const {
   sessionValidation,
   loginValidation,
+  adminAuthorization,
   signupValidation,
   isValidSession,
   isAdmin,
@@ -82,6 +83,7 @@ app.get('/sample', (req,res) => {
 app.get('/login', (req,res) => {
   res.render('login')
 });
+app.use('/loggedin', sessionValidation);
 
 app.post('/loginSubmit', loginValidation, async (req,res) => {
   let email = req.body.email;
