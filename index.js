@@ -9,6 +9,7 @@ require("./utils.js");
 
 const {
   sessionValidation,
+  loginValidation,
   adminAuthorization,
   isValidSession,
   isAdmin,
@@ -77,6 +78,37 @@ app.get('/sample', (req,res) => {
   res.render("sample");
 });
 
+
+app.get('/login', (req,res) => {
+  res.render('login')
+});
+app.use('/loggedin', sessionValidation);
+
+app.post('/loginSubmit', loginValidation, async (req,res) => {
+  let email = req.body.email;
+
+  const result = await userCollection.find({email: email}).project({email: 1, password: 1, username: 1,  _id: 1}).toArray();
+
+  req.session.authenticated = true;
+  req.session.email = email;
+  req.session.username = result[0].username;
+  req.session.cookie.maxAge = expireTime;
+
+  res.redirect('/');
+});
+
+app.get('/loggedin', (req,res) => {
+  if (!req.session.authenticated) {
+    res.redirect('/login');
+  }
+  // If so, render the loggedin page
+  res.render("loggedin");
+});
+
+app.get('logout', (req,res) => {
+  req.session.destroy();
+  res.render("loggedout");
+});
 
 
 /* === // Pages end === */
