@@ -142,11 +142,15 @@ app.post('/signupSubmit', signupValidation, async (req,res) => {
   res.redirect('/');
 });
 
-
 app.get('logout', (req,res) => {
   req.session.destroy();
   res.render("/");
 });
+
+app.get('/profile', (req,res) => {
+  res.render('profile');
+});
+
 
 
 /* === // Pages end === */

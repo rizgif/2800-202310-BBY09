@@ -73,10 +73,6 @@ textarea {
   resize: none;
 }
 
-a {
-    color: var(--color-primary-green);
-}
-
 /* Common */
 .wrapper {
     padding-top: 120px;
@@ -89,7 +85,4 @@ a {
     display: block;
     margin: 30px 0;
     border-top: 1px solid var(--color-divider);
-}
-.link-signup {
-    text-align: center;
 }
