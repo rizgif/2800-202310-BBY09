@@ -73,6 +73,10 @@ app.get('/login', (req,res) => {
   res.render("login");
 });
 
+app.get('/sample', (req,res) => {
+  res.render("sample");
+});
+
 
 
 /* === // Pages end === */

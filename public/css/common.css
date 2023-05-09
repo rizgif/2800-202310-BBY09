@@ -1,13 +1,5 @@
-/* Common */
-.wrapper {
-    padding-top: 120px;
-    padding-bottom: 100px;
-}
-.btn-md {
-    max-width: 200px;
-}
+@import url("/css/form.css");
 
-/* reset */
 :root {
     --color-primary-green: #96c15b;
     --color-sub-green: #C5E5A5;
@@ -25,18 +17,23 @@
     --height-nav: 60px;
 }
 
-/* SignUp, SignIn */
-.form-floating {
-    margin-bottom: 20px;
+a {
+    color: var(--color-primary-green);
 }
-.form-signin h1 {
-    margin-bottom: 30px;
+
+/* Common */
+.wrapper {
+    padding-top: 120px;
+    padding-bottom: 100px;
 }
-.btn-sign {
-    margin-top: 40px;
-    max-width: 120px;
+.btn-md {
+    max-width: 200px;
 }
-.sign-btns-container {
-    display: flex;
-    justify-content: flex-end;
+.hr {
+    display: block;
+    margin: 30px 0;
+    border-top: 1px solid var(--color-divider);
+}
+.link-signup {
+    text-align: center;
 }
