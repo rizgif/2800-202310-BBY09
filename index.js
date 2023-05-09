@@ -10,7 +10,7 @@ require("./utils.js");
 const {
   sessionValidation,
   loginValidation,
-  adminAuthorization,
+  signupValidation,
   isValidSession,
   isAdmin,
   isLoggedIn
@@ -82,7 +82,6 @@ app.get('/sample', (req,res) => {
 app.get('/login', (req,res) => {
   res.render('login')
 });
-app.use('/loggedin', sessionValidation);
 
 app.post('/loginSubmit', loginValidation, async (req,res) => {
   let email = req.body.email;
@@ -97,17 +96,36 @@ app.post('/loginSubmit', loginValidation, async (req,res) => {
   res.redirect('/');
 });
 
-app.get('/loggedin', (req,res) => {
-  if (!req.session.authenticated) {
-    res.redirect('/login');
-  }
-  // If so, render the loggedin page
-  res.render("loggedin");
+app.get('/signup', (req,res) => {
+  res.render('signup');
 });
+
+app.post('/signupSubmit', signupValidation, async (req,res) => {
+  let email = req.body.email;
+  let password = req.body.password;
+  let username = req.body.username;
+
+  // If inputs are valid, add the member
+  let hashedPassword = await bcrypt.hash(password, saltRounds);
+
+  await userCollection.insertOne({username: username, email: email, password: hashedPassword, user_type: 'user'});
+  console.log("Inserted user");
+
+  // Create a session
+  req.session.authenticated = true;
+  req.session.email = email;
+  req.session.username = username;
+  req.session.user_type = 'user';
+  req.session.cookie.maxAge = expireTime;
+
+  // redirect the user to the /members page.
+  res.redirect('/members');
+});
+
 
 app.get('logout', (req,res) => {
   req.session.destroy();
-  res.render("loggedout");
+  res.render("/");
 });
 
 
