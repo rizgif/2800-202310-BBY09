@@ -1,13 +1,34 @@
-/* Common */
-.wrapper {
-    padding-top: 120px;
-    padding-bottom: 100px;
+@import url("/css/hamburger.css");
+@import url("/css/form.css");
+
+/* fonts */
+@font-face {
+    font-family: 'Lato';
+    src: url("/font/Lato/Lato-Thin.ttf");
+    font-style: normal;
+    font-weight: 300;
 }
-.btn-md {
-    max-width: 200px;
+@font-face {
+    font-family: 'Lato';
+    src: url("/font/Lato/Lato-Regular.ttf");
+    font-style: normal;
+    font-weight: 400;
 }
 
-/* reset */
+@font-face {
+    font-family: 'Lato';
+    src: url("/font/Lato/Lato-Bold.ttf");
+    font-style: normal;
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    src: url("/font/Lato/Lato-Black.ttf");
+    font-style: normal;
+    font-weight: 900;
+}
+  
 :root {
     --color-primary-green: #96c15b;
     --color-sub-green: #C5E5A5;
@@ -25,18 +46,50 @@
     --height-nav: 60px;
 }
 
-/* SignUp, SignIn */
-.form-floating {
-    margin-bottom: 20px;
+/* Reset */
+
+a,
+a:hover {
+  color: inherit;
+  text-decoration: none;
 }
-.form-signin h1 {
-    margin-bottom: 30px;
+
+img {
+    max-width: 100%;
+    vertical-align: top;
 }
-.btn-sign {
-    margin-top: 40px;
-    max-width: 120px;
+* {
+    box-sizing: border-box !important;
+    word-break: break-word;
 }
-.sign-btns-container {
-    display: flex;
-    justify-content: flex-end;
+
+body {
+  font-family: 'Lato', serif;
+  line-height: 1.2;
+  background-color: #fff;
+}
+
+textarea {
+  resize: none;
+}
+
+a {
+    color: var(--color-primary-green);
+}
+
+/* Common */
+.wrapper {
+    padding-top: 120px;
+    padding-bottom: 100px;
+}
+.btn-md {
+    max-width: 200px;
+}
+.hr {
+    display: block;
+    margin: 30px 0;
+    border-top: 1px solid var(--color-divider);
+}
+.link-signup {
+    text-align: center;
 }
