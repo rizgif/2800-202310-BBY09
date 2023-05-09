@@ -126,6 +126,13 @@
     padding: 2%;
 }
 
+.time-stamp{
+    grid-column:3;
+    grid-row: 1;
+    margin: 2%;
+    padding: 2%;
+}
+
 .write-review {
     grid-column: span 3;
     grid-row: 2;
