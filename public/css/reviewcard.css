@@ -3,50 +3,98 @@
 
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: 0.6fr 1fr 0.6fr 1fr;
     grid-template-rows: 0.5fr 1fr 0.7fr 0.7fr;
     grid-gap: 10px;
-    margin: 2%;
+    margin-top: 5%;
+    margin-left: auto;
+    margin-right: auto;
     padding: 2%;
     height: auto;
+    width: 80vw;
     border-radius: 15px;
     background-color: #D7D3C1;
     overflow: hidden;
     grid-auto-flow: row;
 
-  }
-  
-  .grid-item {
-    
+}
+
+/* .grid-item {
+    justify-content: center;
     text-align: center;
     line-height: 100px;
     font-size: 24px;
-  }
-  
-  .rating-wrapper, .level-wrapper {
-    margin-top:2%;
+  } */
+
+.rating-wrapper,
+.level-wrapper {
+    margin-top: 2%;
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
-  
-  .rating-label, .level-label {
+}
+
+.rating-label,
+.level-label {
     margin-bottom: 5px;
     font-weight: bold;
-  }
-  
-  .rating-button, .level-button {
+}
+
+.rating-button,
+.level-button {
     background-color: #98B66E;
     border: none;
-    padding:4%;
+    padding: 4%;
     font-size: 16px;
     margin: 5%;
     color: white;
     cursor: pointer;
     border-radius: 5px;
-  }
-  
-  .review-category{
+}
+
+.review-category {
+    display: flex;
+    align-items: center;
     text-align: center;
     font-weight: bold;
-  }
+    justify-content: center;
+}
+
+.review-grid {
+    grid-column: span 3;
+    grid-row: span 2;
+    padding: 2%;
+}
+
+.review-grid {
+    display: grid;
+    grid-template-rows: 0.6fr 1fr;
+    grid-template-columns: 0.7fr 2fr 0.7fr;
+    background-color:#98B66E;
+    grid-gap: 10px;
+    grid-template-areas:
+        "a1 a2 a3"
+        "a4 a4 a4";
+    text-align: center;
+    margin: 2%;
+    padding: 2%;
+    /* justify-content: center; */
+}
+
+
+.user_info {
+    grid-area: a1;
+    background-color: white;
+
+}
+
+.time_stamp {
+    background-color: white;
+    grid-area: a3;
+}
+
+.user_review {
+    background-color: white;
+    grid-area: a4;
+
+}

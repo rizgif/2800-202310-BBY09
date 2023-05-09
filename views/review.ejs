@@ -1,43 +1,104 @@
 <link rel="stylesheet" href="/css/reviewcard.css">
 
+
+<!-- for review card (data coming from database) -->
 <div class="grid-container">
     <div class="rating">
         <div class="rating-wrapper">
             <div class="rating-label">
                 Overall
             </div>
-            <button class="rating-button">3.5</button>
+            <button class="rating-button">SCORE</button>
         </div>
     </div>
 
-    <div class="user">user</div>
-    <div class="grid-item">3</div>
-    <div class="time">time</div>
+    <div class="review-grid">
+        <div class="user_info">user_info</div>
+        <div class="time_stamp">timestamp</div>
+        <div class="user_review">user_review</div>
+
+
+    </div>
+
     <div class="level">
         <div class="level-wrapper">
             <div class="level-label">
                 Difficulty
             </div>
-            <button class="level-button">Beginner</button>
+            <button class="level-button">LEVEL</button>
         </div>
     </div>
-    <div class="review">6</div>
-    <div class="review">7</div>
-    <div class="review">8</div>
+
     <div class="review-category">Course Content</div>
-    <div class="review-star">
-        <%- include("templates/star") %>
+    <div class="review-slider">
+        <%- include("templates/slider") %>
     </div>
     <div class="review-category">Course Structure</div>
-    <div class="review-star">
-        <%- include("templates/star") %>
+    <div class="review-slider">
+        <%- include("templates/slider") %>
     </div>
     <div class="review-category">Teaching Style</div>
-    <div class="review-star">
-        <%- include("templates/star") %>
+    <div class="review-slider">
+        <%- include("templates/slider") %>
     </div>
     <div class="review-category">Student Support</div>
-    <div class="review-star">
-        <%- include("templates/star") %>
+    <div class="review-slider">
+        <%- include("templates/slider") %>
     </div>
+</div>
+
+<script>
+    // JavaScript code for each slider instance
+    console.log("click event");
+    const sliders = document.querySelectorAll('.slider');
+
+    sliders.forEach(function (slider) {
+        const sliderBoxes = slider.querySelectorAll('.slider-box');
+
+        sliderBoxes.forEach(function (box, index) {
+            box.addEventListener('click', function () {
+                updateSlider(slider, index);
+            });
+        });
+
+        function updateSlider(slider, activeIndex) {
+            const sliderBoxes = slider.querySelectorAll('.slider-box');
+
+            sliderBoxes.forEach(function (box, index) {
+                if (index <= activeIndex) {
+                    box.classList.add('active');
+                } else {
+                    box.classList.remove('active');
+                }
+
+                console.log(activeIndex + 1);
+            });
+        }
+    });
+</script>
+
+
+<!-- writing a review -->
+
+
+<div class="write_review_grid">
+    <div class="user_profile"></div>
+    <div class="write_review"></div>
+    <div class="review-category">Course Content</div>
+    <div class="review-slider">
+        <%- include("templates/slider") %>
+    </div>
+    <div class="review-category">Course Structure</div>
+    <div class="review-slider">
+        <%- include("templates/slider") %>
+    </div>
+    <div class="review-category">Teaching Style</div>
+    <div class="review-slider">
+        <%- include("templates/slider") %>
+    </div>
+    <div class="review-category">Student Support</div>
+    <div class="review-slider">
+        <%- include("templates/slider") %>
+    </div>
+    <button>SUBMIT</button>
 </div>
