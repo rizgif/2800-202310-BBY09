@@ -1,56 +1,6 @@
 <link rel="stylesheet" href="/css/reviewcard.css">
 
-
-<!-- for review card (data coming from database) -->
-<div class="grid-container">
-    <div class="rating">
-        <div class="rating-wrapper">
-            <div class="rating-label">
-                Overall
-            </div>
-            <button class="rating-button">SCORE</button>
-        </div>
-    </div>
-
-    <div class="review-grid">
-        <div class="user_info">user_info</div>
-        <div class="time_stamp">timestamp</div>
-        <div class="user_review">user_review</div>
-
-
-    </div>
-
-    <div class="level">
-        <div class="level-wrapper">
-            <div class="level-label">
-                Difficulty
-            </div>
-            <button class="level-button">LEVEL</button>
-        </div>
-    </div>
-
-    <div class="review-category">Course Content</div>
-    <div class="review-slider">
-        <%- include("templates/slider", { type: "courseContent" }) %>
-    </div>
-    <div class="review-category">Course Structure</div>
-    <div class="review-slider">
-        <%- include("templates/slider", { type: "coursestructure" }) %>
-    </div>
-    <div class="review-category">Teaching Style</div>
-    <div class="review-slider">
-        <%- include("templates/slider", { type: "teachingstyle" }) %>
-    </div>
-    <div class="review-category">Student Support</div>
-    <div class="review-slider">
-        <%- include("templates/slider", { type: "studentsupport" }) %>
-    </div>
-</div>
-
-
-
 <!-- writing a review -->
-
 <form action="/submitReview" method="POST">
     <div class="write-review-grid">
         <div class="user-profile">user </div>
@@ -61,34 +11,28 @@
             <div class="review-section-1">
                 <div class="review-category">Course Content</div>
                 <div class="review-slider">
-                    <%- include("templates/slider", { type: "courseContent" }) %>
+                    <%- include("templates/write-slider", { type: "courseContent" }) %>
                 </div>
             </div>
             <div class="review-section-2">
                 <div class="review-category">Course Structure</div>
                 <div class="review-slider">
-                    <%- include("templates/slider", { type: "courseStructure" }) %>
+                    <%- include("templates/write-slider", { type: "courseStructure" }) %>
                 </div>
             </div>
             <div class="review-section-3">
                 <div class="review-category">Teaching Style</div>
                 <div class="review-slider">
-                    <%- include("templates/slider", { type: "teachingStyle" }) %>
+                    <%- include("templates/write-slider", { type: "teachingStyle" }) %>
                 </div>
             </div>
             <div class="review-section-4">
                 <div class="review-category">Student Support</div>
                 <div class="review-slider">
-                    <%- include("templates/slider", { type: "studentSupport" }) %>
+                    <%- include("templates/write-slider", { type: "studentSupport" }) %>
                 </div>
             </div>
 
-            <div class="review-section-5">
-                <div class="review-category">Difficulty Level</div>
-                <div class="review-slider">
-                    <%- include("templates/slider", { type: "difficultyLevel" }) %>
-                </div>
-            </div>
         </div>
 
         <button class="btn-submit-review" type="submit">SUBMIT</button>

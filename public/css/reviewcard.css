@@ -165,8 +165,7 @@
   .review-section-1,
   .review-section-2,
   .review-section-3,
-  .review-section-4,
-  .review-section-5 {
+  .review-section-4{
     display: grid;
     grid-template-columns: 0.7fr 1fr; /* Two columns */
     grid-gap: 10px;

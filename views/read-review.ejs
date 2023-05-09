@@ -1,0 +1,52 @@
+<link rel="stylesheet" href="/css/reviewcard.css">
+
+
+<!-- read from database -->
+<div class="grid-container">
+    <div class="rating">
+        <div class="rating-wrapper">
+            <div class="rating-label">
+                Overall
+            </div>
+            <button class="rating-button">SCORE</button>
+        </div>
+    </div>
+
+    <div class="review-grid">
+        <div class="user_info">user_info</div>
+        <div class="time_stamp">timestamp</div>
+        <div class="user_review">
+            <%= review[0].review %>
+        </div>
+    </div>
+
+    <div class="level">
+        <div class="level-wrapper">
+            <div class="level-label">
+                Difficulty
+            </div>
+            <button class="level-button">LEVEL</button>
+        </div>
+    </div>
+
+    <div class="review-category">Course Content</div>
+    <div class="review-slider">
+        <%- include("templates/read-slider", { type: "courseContent" , value: sliderValues[0].courseContentSliderValue
+            }) %>
+    </div>
+    <div class="review-category">Course Structure</div>
+    <div class="review-slider">
+        <%- include("templates/read-slider", { type: "courseStructure" , value:
+            sliderValues[0].courseStructureSliderValue }) %>
+    </div>
+    <div class="review-category">Teaching Style</div>
+    <div class="review-slider">
+        <%- include("templates/read-slider", { type: "teachingStyle" , value: sliderValues[0].teachingStyleSliderValue
+            }) %>
+    </div>
+    <div class="review-category">Student Support</div>
+    <div class="review-slider">
+        <%- include("templates/read-slider", { type: "studentSupport" , value: sliderValues[0].studentSupportSliderValue
+            }) %>
+    </div>
+</div>

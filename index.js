@@ -74,27 +74,69 @@ app.get('/login', (req, res) => {
 });
 
 
-app.get('/reviews', (req, res) => {
 
-  // let username = req.session.username || 'test';
-  // res.render("index", {isLoggedIn: isLoggedIn(req), username: username});
-  res.render("review", {
-    req: req
-  });
+app.get('/reviews', async (req, res) => {
+  const reviews = await reviewCollection.find().toArray();
+
+  // Extract the slider values from the reviews
+  const sliderValues = reviews.map(review => ({
+    courseContentSliderValue: review.CourseContentRating,
+    courseStructureSliderValue: review.CourseStructureRating,
+    teachingStyleSliderValue: review.TeachingStyleRating,
+    studentSupportSliderValue: review.StudentSupportRating
+  }));
+
+  const review = reviews.map(review => ({
+    review: review.Review
+  }))
+
+  console.log(sliderValues);
+  console.log(review);
+  // console.log(sliderValues[0].courseStructureSliderValue);
+  // console.log(sliderValues[0].teachingStyleSliderValue);
+
+
+  const renderData = {
+    req: req,
+    sliderValues: sliderValues,
+    review: review
+  };
+
+  res.render("read-review", renderData);
 });
 
+
+app.get('/reviews/write', async (req, res) => {
+  const reviews = await reviewCollection.find().toArray();
+
+  // Extract the slider values from the reviews
+  const sliderValues = reviews.map(review => ({
+    courseContentSliderValue: review.CourseContentRating,
+    courseStructureSliderValue: review.CourseStructureRating,
+    teachingStyleSliderValue: review.TeachingStyleRating,
+    studentSupportSliderValue: review.StudentSupportRating
+  }));
+
+  console.log(sliderValues);
+
+  const renderData = {
+    req: req,
+    sliderValues: sliderValues
+  };
+
+  res.render("write-review", renderData);
+});
+
+//write to database
 app.post('/submitReview', async (req, res) => {
 
   const { review,
     courseContentSliderValue,
     courseStructureSliderValue,
     teachingStyleSliderValue,
-    studentSupportSliderValue,
-    difficultyLevelSliderValue } = req.body;
+    studentSupportSliderValue } = req.body;
 
   console.log(review);
-  // console.log(sliderValues);
-
 
   // Validate the review input
   // const schema = Joi.object({
@@ -114,9 +156,10 @@ app.post('/submitReview', async (req, res) => {
     CourseContentRating: courseContentSliderValue,
     CourseStructureRating: courseStructureSliderValue,
     TeachingStyleRating: teachingStyleSliderValue,
-    StudentSupportRating: studentSupportSliderValue,
-    DifficultyLevelRating: difficultyLevelSliderValue
+    StudentSupportRating: studentSupportSliderValue
   });
+
+
   // console.log('Inserted user review and active index');
   res.status(200).send('Review and active index saved successfully');
 
