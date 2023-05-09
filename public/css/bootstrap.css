@@ -2,3 +2,13 @@
   border-color: var(--color-primary-green) !important;
   background-color: var(--color-primary-green) !important;
 }
+
+.btn-main-login {
+  border-color: var(--color-sand) !important;
+  background-color: var(--color-sand) !important;
+}
+
+.btn-main-search {
+  border-color: var(--color-primary-yellow) !important;
+  background-color: var(--color-primary-yellow) !important;
+}

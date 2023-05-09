@@ -37,7 +37,7 @@ const node_session_secret = process.env.NODE_SESSION_SECRET;
 
 let {database} = include('databaseConnection');
 
-// const userCollection = database.db(mongodb_database).collection('users');
+const userCollection = database.db(mongodb_database).collection('combined_data');
 
 app.set('view engine', 'ejs');
 
@@ -63,10 +63,29 @@ app.use(session({
 
 require("./routes/index.js");
 
+// app.get('/', (req,res) => {
+//   // let username = req.session.username || 'test';
+//   // res.render("index", {isLoggedIn: isLoggedIn(req), username: username});
+//   res.render("index", {isLoggedIn: false});
+// });
+
 app.get('/', (req,res) => {
-  // let username = req.session.username || 'test';
-  // res.render("index", {isLoggedIn: isLoggedIn(req), username: username});
-  res.render("index", {isLoggedIn: false});
+  if (!req.session.authenticated) {
+      res.render("index_beforeLogin");
+  } else {
+      res.render("index_afterLogin");
+  }
+});
+
+app.post('/searchSubmit', async (req,res) => {
+  var courseSearch = req.body.courseSearch;
+
+  const searchResult = await userCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
+  _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, 
+  Course_URL: 1, Organization: 1, Course_Description: 1}).toArray();
+  
+  res.render("searchList", {searchResult: searchResult});
+  // res.redirect('/searchList');
 });
 
 app.get('/login', (req,res) => {
