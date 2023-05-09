@@ -17,7 +17,7 @@ const {
 
 const saltRounds = 12;
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8000;
 
 const app = express();
 
@@ -75,17 +75,27 @@ app.get('/login', (req, res) => {
 
 
 app.get('/reviews', (req, res) => {
+
   // let username = req.session.username || 'test';
   // res.render("index", {isLoggedIn: isLoggedIn(req), username: username});
   res.render("review", {
-    req:req
+    req: req
   });
 });
 
 app.post('/submitReview', async (req, res) => {
-  // console.log(req.body);
-  const { review } = req.body;
+
+  const { review,
+    courseContentSliderValue,
+    courseStructureSliderValue,
+    teachingStyleSliderValue,
+    studentSupportSliderValue,
+    difficultyLevelSliderValue } = req.body;
+
   console.log(review);
+  // console.log(sliderValues);
+
+
   // Validate the review input
   // const schema = Joi.object({
   //   review: Joi.string().max(256).required().messages({
@@ -98,13 +108,20 @@ app.post('/submitReview', async (req, res) => {
   //   return res.status(400).send(error.details[0].message);
   // }
 
-    await reviewCollection.insertOne({ Review: review });
-    // console.log('Inserted user review');
-    res.status(200).send('Review saved successfully');
-  
-
+  // try {
+  await reviewCollection.insertOne({
+    Review: review,
+    CourseContentRating: courseContentSliderValue,
+    CourseStructureRating: courseStructureSliderValue,
+    TeachingStyleRating: teachingStyleSliderValue,
+    StudentSupportRating: studentSupportSliderValue,
+    DifficultyLevelRating: difficultyLevelSliderValue
+  });
+  // console.log('Inserted user review and active index');
+  res.status(200).send('Review and active index saved successfully');
 
 });
+
 
 
 /* === // Pages end === */

@@ -31,19 +31,19 @@
 
     <div class="review-category">Course Content</div>
     <div class="review-slider">
-        <%- include("templates/slider") %>
+        <%- include("templates/slider", { type: "courseContent" }) %>
     </div>
     <div class="review-category">Course Structure</div>
     <div class="review-slider">
-        <%- include("templates/slider") %>
+        <%- include("templates/slider", { type: "coursestructure" }) %>
     </div>
     <div class="review-category">Teaching Style</div>
     <div class="review-slider">
-        <%- include("templates/slider") %>
+        <%- include("templates/slider", { type: "teachingstyle" }) %>
     </div>
     <div class="review-category">Student Support</div>
     <div class="review-slider">
-        <%- include("templates/slider") %>
+        <%- include("templates/slider", { type: "studentsupport" }) %>
     </div>
 </div>
 
@@ -61,40 +61,37 @@
             <div class="review-section-1">
                 <div class="review-category">Course Content</div>
                 <div class="review-slider">
-                    <%- include("templates/slider") %>
+                    <%- include("templates/slider", { type: "courseContent" }) %>
                 </div>
             </div>
             <div class="review-section-2">
                 <div class="review-category">Course Structure</div>
                 <div class="review-slider">
-                    <%- include("templates/slider") %>
+                    <%- include("templates/slider", { type: "courseStructure" }) %>
                 </div>
             </div>
             <div class="review-section-3">
                 <div class="review-category">Teaching Style</div>
                 <div class="review-slider">
-                    <%- include("templates/slider") %>
+                    <%- include("templates/slider", { type: "teachingStyle" }) %>
                 </div>
             </div>
             <div class="review-section-4">
                 <div class="review-category">Student Support</div>
                 <div class="review-slider">
-                    <%- include("templates/slider") %>
+                    <%- include("templates/slider", { type: "studentSupport" }) %>
                 </div>
             </div>
 
             <div class="review-section-5">
                 <div class="review-category">Difficulty Level</div>
                 <div class="review-slider">
-                    <%- include("templates/slider") %>
+                    <%- include("templates/slider", { type: "difficultyLevel" }) %>
                 </div>
             </div>
         </div>
 
-
         <button class="btn-submit-review" type="submit">SUBMIT</button>
-
-
 
     </div>
 </form>
@@ -117,6 +114,7 @@
 
         function updateSlider(slider, activeIndex) {
             const sliderBoxes = slider.querySelectorAll('.slider-box');
+            const hiddenInput = slider.querySelector('input[type="hidden"]');
 
             sliderBoxes.forEach(function (box, index) {
                 if (index <= activeIndex) {
@@ -124,9 +122,13 @@
                 } else {
                     box.classList.remove('active');
                 }
-
-                console.log(activeIndex + 1);
             });
+
+            hiddenInput.value = activeIndex + 1; // Update the hidden input value with the selected index + 1
         }
+
     });
+
+
+
 </script>
