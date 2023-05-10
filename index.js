@@ -100,10 +100,6 @@ app.get('/sample', (req,res) => {
   res.render("sample");
 });
 
-// app.get('/login', (req,res) => {
-//   res.render('login');
-// });
-
 app.post('/loginSubmit', loginValidation, async (req,res) => {
   let email = req.body.email;
 
@@ -143,11 +139,16 @@ app.post('/signupSubmit', signupValidation, async (req,res) => {
   res.redirect('/');
 });
 
-
-app.get('logout', (req,res) => {
+app.get('/logout', (req,res) => {
   req.session.destroy();
-  res.render("/");
+  res.redirect("/");
 });
+
+app.get('/profile', sessionValidation, (req,res) => {
+  let { username, email } = req.session;
+  res.render('profile', {username, email});
+});
+
 
 
 
