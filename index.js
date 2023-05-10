@@ -213,6 +213,12 @@ app.get('/reviews', async (req, res) => {
 
 });
 
+app.get('/reviews/all', async (req, res) => {
+  res.render("allreview");
+});
+
+
+
 app.get('/reviews/write', async (req, res) => {
 
   const username = req.session.username;
