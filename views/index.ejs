@@ -9,41 +9,59 @@
         <% if (isLoggedIn) { %>
         
         <% } else { %>
-            <div class="p-3">
+            <div class="p-3 loginarea-main">
                 <a class="btn btn-main-login btn-lg px-4" href="/login">Login</a>
                 <a class="btn btn-primary btn-lg px-4" href="/signup">Sign up</a>
             </div>
         <% } %>
         
         <div class="col-lg-6 mx-auto logo-main-container">
-            <img class="w-100" src="/image/coursla_main.png" alt="logo-main"/>
-            <!-- <div class="logo-main-background"></div> -->
+            <img src="/image/coursla_main.png" alt="logo-main"/>
+            <p>Finding the perfect course for you</p>
         </div>
-        <div class="row justify-content-center p-2 search-main"> 
+        <div class="row justify-content-center searchbox-main mx-auto"> 
             <div class="col-sm-8">
               <form action="/searchSubmit" method="post" class="form-inline my-2 my-lg-0 d-flex justify-content-center">
                 <div class="form-group mx-2 mb-2" style="width:300px;">
                     <input name="courseSearch" type="text" class="form-control" id="courseSearch" placeholder="Search courses">
                 </div>
-                <button type="submit" class="btn btn-main-search mb-2" style="width:100px;">Search</button>
+                <button type="submit" class="btn btn-main-search mb-2" style="width:50px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
+                    </svg>
+                </button>
               </form>
             </div>
         </div>
 
         <% if (isLoggedIn) { %>
-            <div class="col-lg-6 mx-auto p-3">
+            <div class="col-lg-6 mx-auto p-3 slogan-main">
                 <h3 class="display-7 fw-bold text-body-emphasis">Welcome to the Coursla Family</h3>    
             </div>
             <img class="w-100" src="/image/ads_main.png" alt=""/>
         <% } else { %>
-            <div class="col-lg-6 mx-auto p-3">
+            <div class="col-lg-6 mx-auto p-3 slogan-main">
                 <h1 class="display-5 fw-bold text-body-emphasis">Join the Coursla Family</h1>
                 <p>Love Coursla? Let's make it official.</p>    
             </div>
-            <img class="w-100" src="/image/ads_main.png" alt=""/>
-            <div class="col-lg-6 mx-auto p-2">
-                <a class="btn btn-primary btn-lg px-4 gap-3" style="width: 250px;" href="/signup">Sign up now!</a>
+            <div class="ads-container-main">
+                <div class="item">
+                  <img src="image/rating.png">
+                  <p>Manage and edit your ratings</p>
+                </div>
+                <div class="item">
+                  <img src="image/selective.png">
+                  <p>Filter and select your courses</p>
+                </div>
+                <div class="item">
+                  <img src="image/reviews.png">
+                  <p>See other users’ reviews</p>
+                </div>
             </div>
+            <!-- <img class="w-100" src="/image/ads_main.png" alt=""/> -->
+            <!-- <div class="col-lg-6 mx-auto p-2">
+                <a class="btn btn-primary btn-lg px-4 gap-3" style="width: 250px;" href="/signup">Sign up now!</a>
+            </div> -->
         <% } %>
     </div>
 </div>
