@@ -35,3 +35,10 @@
 .dropdown-item ~ .dropdown-item {
   border-top: 1px solid #ddd;
 }
+
+input.form-control:focus,
+input.form-control:active {
+  outline: 0;
+  box-shadow:none;
+  border: 2px solid var(--color-primary-green);
+}

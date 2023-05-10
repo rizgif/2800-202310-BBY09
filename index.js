@@ -23,7 +23,7 @@ const port = process.env.PORT || 8000;
 const app = express();
 
 
-const expireTime = 1 * 60 * 60 * 1000; //expires after 1 hour  (hours * minutes * seconds * millis)
+const expireTime = 12 * 60 * 60 * 1000; //expires after 12 hour  (hours * minutes * seconds * millis)
 
 
 /* secret information section */
@@ -48,7 +48,7 @@ app.use(express.urlencoded({ extended: false }));
 
 
 var mongoStore = MongoStore.create({
-  mongoUrl: `mongodb+srv://riz:apple@courselaapp.fb2pphc.mongodb.net/sessions`,
+  mongoUrl: `mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/sessions`,
   crypto: {
     secret: mongodb_session_secret
   }
@@ -127,9 +127,8 @@ app.get('/signup', (req, res) => {
 });
 
 app.post('/signup-submit', signupValidation, async (req, res) => {
-  let email = req.body.email;
-  let password = req.body.password;
-  let username = req.body.username;
+  let password = req.body.password1;
+  let passwordConfirm = req.body.password2;
 
   // If inputs are valid, add the member
   let hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -157,6 +156,13 @@ app.get('/profile', sessionValidation, (req,res) => {
   let { username, email } = req.session;
   res.render('profile', {username, email});
 });
+app.get('/change-password', sessionValidation, (req,res) => {
+  res.render('change-password');
+});
+app.get('/change-password-submit', sessionValidation, (req,res) => {
+});
+
+
 
 
 
