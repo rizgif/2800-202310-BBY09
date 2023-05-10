@@ -192,3 +192,100 @@
     justify-content: center;
     align-items: left;
   }
+
+  #s1 {
+    grid-area: s1;
+  }
+  #s2 {
+    grid-area: s2;
+  }
+  #s3 {
+    grid-area: s3;
+  }
+  #s4 {
+    grid-area: s4;
+  }
+
+  .course-content {
+    grid-area: c1;
+  }
+
+  .course-structure {
+    grid-area: c2;
+  }
+
+  .teaching-style {
+    grid-area: c3;
+  }
+
+  .student-support {
+    grid-area: c4;
+  }
+
+/* Mobile view */
+@media only screen and (max-width: 600px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    width: 90vw;
+  }
+
+  .review-grid {
+    grid-column: span 1;
+    /* grid-row: span 2; */
+    padding: 2%;
+}
+
+  .review-grid {
+    display: grid;
+    grid-template-rows: 0.3fr 8fr;
+    grid-template-columns: 0.7fr 2fr 0.7fr;
+    background-color:#98B66E;
+    grid-gap: 10px;
+    grid-template-areas:
+    "a1 a2 a3"
+    "a4 a4 a4";
+    text-align: center;
+    margin: 2%;
+    padding: 2%;
+    height: auto;
+    /* justify-content: center; */
+}
+
+.review-grid2 {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+    grid-template-areas:
+        "c1 s1"
+        "c2 s2"
+        "c3 s3"
+        "c4 s4";
+    text-align: center;
+    margin: 2%;
+    padding: 2%;
+    height: auto;
+    /* justify-content: center; */
+}
+
+.review-category {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    font-weight: bold;
+    justify-content: left;
+    font-size: 18px;
+}
+
+.review-slider {
+    display: flex;
+    /* align-items: center; */
+    justify-content: right;
+  }
+
+  /* Use fallback fonts for better compatibility */
+  body {
+    font-family: Arial, sans-serif;
+  }
+}

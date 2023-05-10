@@ -246,6 +246,34 @@ app.post('/submitReview', async (req, res) => {
 
 });
 
+app.get('/profileReview', async (req, res) => {
+  const reviews = await reviewCollection.find().toArray();
+
+  // Extract the slider values from the reviews
+  const sliderValues = reviews.map(review => ({
+    courseContentSliderValue: review.CourseContentRating,
+    courseStructureSliderValue: review.CourseStructureRating,
+    teachingStyleSliderValue: review.TeachingStyleRating,
+    studentSupportSliderValue: review.StudentSupportRating
+  }));
+
+  const review = reviews.map(review => ({
+    review: review.Review
+  }))
+
+  const currentDate = reviews.map(review => ({
+    currentDate: review.Time
+  }))
+
+  const renderData = {
+    req: req,
+    sliderValues: sliderValues,
+    review: review
+  };
+
+  res.render("profile-review", renderData);
+});
+
 
 
 /* === // Pages end === */
