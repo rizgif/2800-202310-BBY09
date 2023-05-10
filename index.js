@@ -18,7 +18,7 @@ const {
 
 const saltRounds = 12;
 
-const port = process.env.PORT || 8001;
+const port = process.env.PORT || 8000;
 
 const app = express();
 
@@ -93,6 +93,14 @@ app.post('/searchSubmit', async (req, res) => {
   // res.redirect('/searchList');
 });
 
+//Filters 
+
+
+
+
+
+
+
 app.get('/login', (req, res) => {
   res.render("login");
 });
@@ -101,11 +109,7 @@ app.get('/sample', (req, res) => {
   res.render("sample");
 });
 
-// app.get('/login', (req,res) => {
-//   res.render('login');
-// });
-
-app.post('/loginSubmit', loginValidation, async (req, res) => {
+app.post('/loginSubmit', loginValidation, async (req,res) => {
   let email = req.body.email;
 
   const result = await userCollection.find({ email: email }).project({ email: 1, password: 1, username: 1, _id: 1 }).toArray();
@@ -144,11 +148,16 @@ app.post('/signupSubmit', signupValidation, async (req, res) => {
   res.redirect('/');
 });
 
-
-app.get('logout', (req, res) => {
+app.get('/logout', (req,res) => {
   req.session.destroy();
-  res.render("/");
+  res.redirect("/");
 });
+
+app.get('/profile', sessionValidation, (req,res) => {
+  let { username, email } = req.session;
+  res.render('profile', {username, email});
+});
+
 
 
 

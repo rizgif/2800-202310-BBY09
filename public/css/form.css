@@ -21,4 +21,12 @@
     display: flex;
     justify-content: flex-end;
 }
-
+.link-signup {
+    text-align: center;
+}
+.link-signup a {
+    color: var(--color-primary-green) !important;
+}
+.link-signup a:hover {
+    text-decoration: underline;
+}
