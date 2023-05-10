@@ -1,0 +1,86 @@
+<link rel="stylesheet" href="/css/reviewcard.css">
+
+<!-- writing a review -->
+<form action="/submitReview" method="POST">
+    <div class="write-review-grid">
+        <div class="user-profile"><%= username %>  </div>
+        <div class="time-stamp"></div>
+        <textarea name="review" class="write-review" placeholder="Enter your review..."></textarea>
+
+
+        <div class="ratings">
+            <div class="review-section-1">
+                <div class="review-category">Course Content</div>
+                <div class="review-slider">
+                    <%- include("templates/write-slider", { type: "courseContent" }) %>
+                </div>
+            </div>
+            <div class="review-section-2">
+                <div class="review-category">Course Structure</div>
+                <div class="review-slider">
+                    <%- include("templates/write-slider", { type: "courseStructure" }) %>
+                </div>
+            </div>
+            <div class="review-section-3">
+                <div class="review-category">Teaching Style</div>
+                <div class="review-slider">
+                    <%- include("templates/write-slider", { type: "teachingStyle" }) %>
+                </div>
+            </div>
+            <div class="review-section-4">
+                <div class="review-category">Student Support</div>
+                <div class="review-slider">
+                    <%- include("templates/write-slider", { type: "studentSupport" }) %>
+                </div>
+            </div>
+
+        </div>
+
+        <button id="submit-review-btn" class="btn-submit-review" type="submit">SUBMIT</button>
+        <input type="hidden" id="timestamp-input" name="currentDate" value="">
+
+    </div>
+</form>
+
+
+
+<script>
+    // JavaScript code for each slider instance
+    console.log("click event");
+    const sliders = document.querySelectorAll('.slider');
+
+    sliders.forEach(function (slider) {
+        const sliderBoxes = slider.querySelectorAll('.slider-box');
+
+        sliderBoxes.forEach(function (box, index) {
+            box.addEventListener('click', function () {
+                updateSlider(slider, index);
+            });
+        });
+
+        function updateSlider(slider, activeIndex) {
+            const sliderBoxes = slider.querySelectorAll('.slider-box');
+            const hiddenInput = slider.querySelector('input[type="hidden"]');
+
+            sliderBoxes.forEach(function (box, index) {
+                if (index <= activeIndex) {
+                    box.classList.add('active');
+                } else {
+                    box.classList.remove('active');
+                }
+            });
+
+            hiddenInput.value = activeIndex + 1; // Update the hidden input value with the selected index + 1
+        }
+
+    });
+
+    document.getElementById('submit-review-btn').addEventListener('click', function () {
+  // Get the current timestamp
+  var currentDate = new Date().toISOString().split('T')[0];
+
+  // Assign the timestamp value to the hidden input field in the form
+  document.getElementById('timestamp-input').value = currentDate;
+});
+   
+</script>

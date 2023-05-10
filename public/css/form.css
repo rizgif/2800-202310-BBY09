@@ -1,0 +1,32 @@
+/* SignUp, SignIn */
+.form-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.form-wrapper .container {
+    max-width: 500px;
+}
+.form-floating {
+    margin-bottom: 20px;
+}
+.form-signin h1 {
+    margin-bottom: 30px;
+}
+.btn-sign {
+    margin-top: 40px;
+    max-width: 120px;
+}
+.sign-btns-container {
+    display: flex;
+    justify-content: flex-end;
+}
+.link-signup {
+    text-align: center;
+}
+.link-signup a {
+    color: var(--color-primary-green) !important;
+}
+.link-signup a:hover {
+    text-decoration: underline;
+}

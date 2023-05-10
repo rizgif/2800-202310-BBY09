@@ -1,0 +1,37 @@
+.btn-primary,
+.btn-primary:focus,
+.btn-primary:hover {
+  border-color: var(--color-primary-green) !important;
+  background-color: var(--color-primary-green) !important;
+}
+
+.btn-main-login,
+.btn-main-login:focus,
+.btn-main-login:hover {
+  border-color: var(--color-sand) !important;
+  background-color: var(--color-sand) !important;
+}
+
+.btn-main-search,
+.btn-main-search:focus,
+.btn-main-search:hover {
+  border-color: var(--color-primary-yellow) !important;
+  background-color: var(--color-primary-yellow) !important;
+}
+
+
+.dropdown-menu {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 0;
+  padding: 3px 0;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+}
+.dropdown-item {
+  padding: 10px;
+  font-size: 14px;
+  text-align: center;
+}
+.dropdown-item ~ .dropdown-item {
+  border-top: 1px solid #ddd;
+}
