@@ -81,20 +81,34 @@ app.get('/', (req,res) => {
   res.render("index", {isLoggedIn: isLoggedIn(req)});
 });
 
+let searchResult;
+
 app.post('/searchSubmit', async (req,res) => {
   var courseSearch = req.body.courseSearch;
 
-  const searchResult = await datasetCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
+  searchResult = await datasetCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
   _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, 
   Course_URL: 1, Organization: 1, Course_Description: 1}).toArray();
   
-  res.render("searchList", {searchResult: searchResult});
+  res.render("searchList2", {searchResult: searchResult});
   // res.redirect('/searchList');
+
+
 });
 
 //Filters 
 
+app.get('/filterudemy', (req,res) => {
+  res.render("filterudemy", {searchResult: searchResult});
+});
 
+app.get('/filtercoursera', (req,res) => {
+  res.render("filtercoursera", {searchResult: searchResult});
+});
+
+app.get('/filterallcourses', (req,res) => {
+  res.render("filterallcourses", {searchResult: searchResult});
+});
 
 
 
