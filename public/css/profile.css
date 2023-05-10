@@ -1,0 +1,41 @@
+.profile-wrapper section ~ section{
+  margin-top: 36px;
+}
+
+.profile-container-avatar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 26px;
+}
+
+.title-profile {
+  display: inline-block;
+  padding: 10px 16px;
+  font-size: 18px;
+  border-radius: var(--radius-box);
+  background-color: var(--color-parchment);
+}
+.container-info {
+  position: relative;
+  margin-top: 4px;
+  padding: 30px 30px 20px;
+  border-radius: var(--radius-box);
+  background-color: var(--color-bg-gray);
+}
+
+.avatar-img{
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border-gray);
+  overflow: hidden;
+}
+
+.item-row ~ .item-row{
+  margin-top: 15px;
+}
+
+.btn-setting {
+  width: 28px;
+  height: 28px;
+}
