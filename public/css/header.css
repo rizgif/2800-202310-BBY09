@@ -1,12 +1,29 @@
-#navbar {
-  position: sticky;
-  top: 0;
+header {
   display: flex;
-  padding: 1% 4%;
   justify-content: space-between;
   align-items: center;
+  padding: 10px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  margin-right: 20px;
+}
+
+.logo img {
+  width: 120px;
 
 }
+/* 
+#navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;  background-color: #f9f9f9;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+
+} */
 
 nav #i1,
 nav #i2 {
@@ -20,6 +37,18 @@ nav #i2 {
 .nav-links {
   flex: 1;
   text-align: right;
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  color: #333;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 10px;
+  /* transition: all 0.3s ease-in-out; */
 }
 
 .nav-links ul li {
