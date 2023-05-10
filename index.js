@@ -18,7 +18,7 @@ const {
 
 const saltRounds = 12;
 
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 2000;
 
 const app = express();
 
@@ -208,12 +208,13 @@ app.get('/reviews', async (req, res) => {
       studentSupportSliderValue: review.StudentSupportRating
     };
 
+    
     return {
       review: review,
       sliderValue: sliderValue
     };
   });
-
+  // console.log(reviewSliderPairs);
   // console.log(sliderValue);
   res.render("review", {
     req: req,
