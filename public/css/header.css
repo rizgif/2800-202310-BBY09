@@ -86,7 +86,7 @@ nav #i2 {
   .nav-links {
     position: absolute;
     display: none;
-    background: #9acd8b;
+    background: #d9e1d595;
     min-height: 100vh;
     width: 200px;
     top: 0;
@@ -94,7 +94,7 @@ nav #i2 {
     text-align: left;
     z-index: 2;
     color: white;
-    opacity: 0.9;
+ 
   }
 
   nav #i2 {

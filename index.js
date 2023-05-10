@@ -81,6 +81,7 @@ app.get('/', (req, res) => {
   res.render("index", { isLoggedIn: isLoggedIn(req) });
 });
 
+<<<<<<< HEAD
 app.post('/searchSubmit', async (req, res) => {
   var courseSearch = req.body.courseSearch;
 
@@ -90,12 +91,36 @@ app.post('/searchSubmit', async (req, res) => {
   }).toArray();
 
   res.render("searchList", { searchResult: searchResult });
+=======
+let searchResult;
+
+app.post('/searchSubmit', async (req,res) => {
+  var courseSearch = req.body.courseSearch;
+
+  searchResult = await datasetCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
+  _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, 
+  Course_URL: 1, Organization: 1, Course_Description: 1}).toArray();
+  
+  res.render("searchList2", {searchResult: searchResult});
+>>>>>>> feature/Riz_filterprovider
   // res.redirect('/searchList');
+
+
 });
 
 //Filters 
 
+app.get('/filterudemy', (req,res) => {
+  res.render("filterudemy", {searchResult: searchResult});
+});
 
+app.get('/filtercoursera', (req,res) => {
+  res.render("filtercoursera", {searchResult: searchResult});
+});
+
+app.get('/filterallcourses', (req,res) => {
+  res.render("filterallcourses", {searchResult: searchResult});
+});
 
 
 
