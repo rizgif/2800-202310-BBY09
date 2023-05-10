@@ -109,7 +109,7 @@ app.get('/sample', (req, res) => {
   res.render("sample");
 });
 
-app.post('/loginSubmit', loginValidation, async (req,res) => {
+app.post('/login-submit', loginValidation, async (req,res) => {
   let email = req.body.email;
 
   const result = await userCollection.find({ email: email }).project({ email: 1, password: 1, username: 1, _id: 1 }).toArray();
@@ -126,7 +126,7 @@ app.get('/signup', (req, res) => {
   res.render('signup');
 });
 
-app.post('/signupSubmit', signupValidation, async (req, res) => {
+app.post('/signup-submit', signupValidation, async (req, res) => {
   let email = req.body.email;
   let password = req.body.password;
   let username = req.body.username;

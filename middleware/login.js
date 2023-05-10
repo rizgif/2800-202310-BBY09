@@ -39,7 +39,7 @@ const loginValidation = async (req, res, next) => {
     } else {
       errorMessage = validationResult.error.message;
     }
-    res.render('loginSubmit', { errorMessage });
+    res.render('login-submit', { errorMessage });
     return;
   }
 
@@ -51,14 +51,14 @@ const loginValidation = async (req, res, next) => {
   // if the user does not exist
   if (result.length != 1) {
     errorMessage = 'Can not find the user.';
-    res.render('loginSubmit', { errorMessage });
+    res.render('login-submit', { errorMessage });
     return;
   }
 
   // check if the password is correct
   if (!await bcrypt.compare(password, result[0].password)) {
     errorMessage = 'Invalid email/password combination';
-    res.render('loginSubmit', { errorMessage });
+    res.render('login-submit', { errorMessage });
     return;
   }
 
