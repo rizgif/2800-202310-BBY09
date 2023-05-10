@@ -208,12 +208,13 @@ app.get('/reviews', async (req, res) => {
       studentSupportSliderValue: review.StudentSupportRating
     };
 
+    
     return {
       review: review,
       sliderValue: sliderValue
     };
   });
-
+  // console.log(reviewSliderPairs);
   // console.log(sliderValue);
   res.render("review", {
     req: req,
@@ -221,6 +222,12 @@ app.get('/reviews', async (req, res) => {
   });
 
 });
+
+app.get('/reviews/all', async (req, res) => {
+  res.render("allreview");
+});
+
+
 
 app.get('/reviews/write', async (req, res) => {
 
