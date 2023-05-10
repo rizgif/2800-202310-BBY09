@@ -1,10 +1,9 @@
-// TODO: Heesun: I didn't make the structures yet
-console.log('common js')
+const init = () => {
+  loadInputValidation();
+};
+window.addEventListener("load", init);
 
-
-(function () {
-  'use strict'
-
+const loadInputValidation = () => {
   // Fetch all the forms we want to apply custom Bootstrap validation styles to
   var forms = document.querySelectorAll('.needs-validation')
 
@@ -20,4 +19,4 @@ console.log('common js')
         form.classList.add('was-validated')
       }, false)
     })
-})()
+}
