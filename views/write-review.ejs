@@ -3,8 +3,8 @@
 <!-- writing a review -->
 <form action="/submitReview" method="POST">
     <div class="write-review-grid">
-        <div class="user-profile">user </div>
-        <div class="time-stamp">time </div>
+        <div class="user-profile"><%= username %>  </div>
+        <div class="time-stamp"></div>
         <textarea name="review" class="write-review" placeholder="Enter your review..."></textarea>
 
 
@@ -37,7 +37,7 @@
         </div>
 
         <button id="submit-review-btn" class="btn-submit-review" type="submit">SUBMIT</button>
-        <input type="hidden" id="timestamp-input" name="timestamp" value="">
+        <input type="hidden" id="timestamp-input" name="currentDate" value="">
 
     </div>
 </form>
@@ -76,14 +76,11 @@
     });
 
     document.getElementById('submit-review-btn').addEventListener('click', function () {
-        // Get the current timestamp
-        // var timestamp = new Date().toISOString();
-        var currentDate = new Date().toISOString().split('T')[0];
+  // Get the current timestamp
+  var currentDate = new Date().toISOString().split('T')[0];
 
-        // Assign the timestamp value to a hidden input field in the form
-        document.getElementById('timestamp-input').value = currentDate;
-        // console.log(currentDate);
-    });
-
+  // Assign the timestamp value to the hidden input field in the form
+  document.getElementById('timestamp-input').value = currentDate;
+});
    
 </script>

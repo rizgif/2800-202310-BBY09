@@ -15,10 +15,11 @@
     </div>
 
     <div class="review-grid">
-        <div class="user_info">user_info</div>
-        <div class="time_stamp">timestamp</div>
+
+        <div class="user_info"><%= review.username %> </div>
+        <div class="time_stamp"><%= review.Time %></div>
         <div class="user_review">
-            <%= review[0].review %>
+            <%= review.Review %>
         </div>
     </div>
 
@@ -33,22 +34,21 @@
 
     <div class="review-category">Course Content</div>
     <div class="review-slider">
-        <%- include("templates/read-slider", { type: "courseContent" , value: sliderValues[0].courseContentSliderValue
+        <%- include("templates/read-slider", { type: "courseContent" , value: sliderValue.courseContentSliderValue
             }) %>
     </div>
     <div class="review-category">Course Structure</div>
     <div class="review-slider">
-        <%- include("templates/read-slider", { type: "courseStructure" , value:
-            sliderValues[0].courseStructureSliderValue }) %>
+        <%- include("templates/read-slider", { type: "courseStructure" , value: sliderValue.courseStructureSliderValue }) %>
     </div>
     <div class="review-category">Teaching Style</div>
     <div class="review-slider">
-        <%- include("templates/read-slider", { type: "teachingStyle" , value: sliderValues[0].teachingStyleSliderValue
+        <%- include("templates/read-slider", { type: "teachingStyle" , value: sliderValue.teachingStyleSliderValue
             }) %>
     </div>
     <div class="review-category">Student Support</div>
     <div class="review-slider">
-        <%- include("templates/read-slider", { type: "studentSupport" , value: sliderValues[0].studentSupportSliderValue
+        <%- include("templates/read-slider", { type: "studentSupport" , value: sliderValue.studentSupportSliderValue
             }) %>
     </div>
 </div>
