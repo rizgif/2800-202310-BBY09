@@ -1,66 +1,57 @@
 <link rel="stylesheet" href="/css/reviewcard.css">
 
-<% const sum = parseInt(sliderValue.courseContentSliderValue) +
-    parseInt(sliderValue.studentSupportSliderValue) +
-    parseInt(sliderValue.courseStructureSliderValue) +
-    parseInt(sliderValue.teachingStyleSliderValue);
-%>
+<% const sum=parseInt(sliderValue.courseContentSliderValue) + parseInt(sliderValue.studentSupportSliderValue) +
+    parseInt(sliderValue.courseStructureSliderValue) + parseInt(sliderValue.teachingStyleSliderValue); %>
 
-<!-- read from database -->
-<div class="grid-container">
-    <div class="rating">
-        <div class="rating-wrapper">
-            <div class="rating-label">
-                Overall
+    <!-- read from database -->
+    <div class="grid-container">
+        <div class="rating">
+            <div class="rating-wrapper">
+                <div class="rating-label">
+                    Overall
+                </div>
             </div>
-            <button id="ratingButton" class="rating-button">
-                <%= (sum / 4).toFixed(1) %>
-            </button>
         </div>
-    </div>
 
-    <div class="review-grid">
+        <div class="review-grid">
 
-        <div class="user_info">
-            <%= review.username %>
-        </div>
-        <div class="time_stamp">
-            <%= review.Time %>
-        </div>
-        <div class="user_review">
-            <%= review.Review %>
-        </div>
-    </div>
-
-    <div class="level">
-        <div class="level-wrapper">
-            <div class="level-label">
-                Difficulty
+            <div class="user_info">
+                <%= review.username %>
             </div>
-            <button class="level-button">LEVEL</button>
+            <div class="time_stamp">
+                <%= review.Time %>
+            </div>
+            <div class="user_review">
+                <%= review.Review %>
+            </div>
+        </div>
+
+        <div class="level">
+            <div class="level-wrapper">
+                <button id="ratingButton" class="rating-button">
+                    <%= (sum / 4).toFixed(1) %>
+                </button>
+            </div>
+        </div>
+
+        <div class="review-category">Course Content</div>
+        <div class="review-slider">
+            <%- include("templates/read-slider", { type: "courseContent" , value: sliderValue.courseContentSliderValue
+                }) %>
+        </div>
+        <div class="review-category">Course Structure</div>
+        <div class="review-slider">
+            <%- include("templates/read-slider", { type: "courseStructure" , value:
+                sliderValue.courseStructureSliderValue }) %>
+        </div>
+        <div class="review-category">Teaching Style</div>
+        <div class="review-slider">
+            <%- include("templates/read-slider", { type: "teachingStyle" , value: sliderValue.teachingStyleSliderValue
+                }) %>
+        </div>
+        <div class="review-category">Student Support</div>
+        <div class="review-slider">
+            <%- include("templates/read-slider", { type: "studentSupport" , value: sliderValue.studentSupportSliderValue
+                }) %>
         </div>
     </div>
-
-    <div class="review-category">Course Content</div>
-    <div class="review-slider">
-        <%- include("templates/read-slider", { type: "courseContent" , value: sliderValue.courseContentSliderValue }) %>
-    </div>
-    <div class="review-category">Course Structure</div>
-    <div class="review-slider">
-        <%- include("templates/read-slider", { type: "courseStructure" , value: sliderValue.courseStructureSliderValue
-            }) %>
-    </div>
-    <div class="review-category">Teaching Style</div>
-    <div class="review-slider">
-        <%- include("templates/read-slider", { type: "teachingStyle" , value: sliderValue.teachingStyleSliderValue }) %>
-    </div>
-    <div class="review-category">Student Support</div>
-    <div class="review-slider">
-        <%- include("templates/read-slider", { type: "studentSupport" , value: sliderValue.studentSupportSliderValue })
-            %>
-    </div>
-</div>
-
-
-
-
