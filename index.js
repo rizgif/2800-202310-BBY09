@@ -138,12 +138,12 @@ app.post('/signupSubmit', signupValidation, async (req,res) => {
   res.redirect('/');
 });
 
-app.get('logout', (req,res) => {
+app.get('/logout', (req,res) => {
   req.session.destroy();
-  res.render("/");
+  res.redirect("/");
 });
 
-app.get('/profile', (req,res) => {
+app.get('/profile', sessionValidation, (req,res) => {
   let { username, email } = req.session;
   res.render('profile', {username, email});
 });
