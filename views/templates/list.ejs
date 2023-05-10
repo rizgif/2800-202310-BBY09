@@ -1,22 +1,36 @@
 
-<div class="cardcontent">
-    <div class="image-container">
-        <img  src="/image/udemy.png" alt="Image Description">
-        <img src="/image/bookmark.png" alt="Image Description">
-        
-    </div>
-    <div class="list-container">
-
-
-    
-    <li>Title: <%= result.Title %></li>
-    <li>Provider: <%= result.Provider %>
+    <!-- <li>Title: <%= result.Title %></li> -->
+    <!-- <li>Provider: <%= result.Provider %>
     <li>Difficulty: <%= result.Course_Difficulty %>
     <li>Rating: <%= result.Course_Rating %></li>
     <li> URL: <%= result.Course_URL %></li>
     <li>Organization: <%= result.Organization %></li>
-    <li>Description: <%= result.Course_Description %></li>
-</div>
-</br></br>
+    <li>Description: <%= result.Course_Description %></li> -->
 
+
+<div class="CourseCard-StyledCourseCard">
+    <div class="Coursecard-InfoRatingWrapper">
+    
+        <div class="CourseCard-NumRatingWrapper-syjs0d-2 joEEbw">
+            <div class="CardNumRating-StyledCardNumRating">
+                 
+                 <div class="CardNumRating-CardNumRatingNumber">
+                    <img  src="/image/udemy.png" alt="Image Description">
+
+                 </div>
+          
+            </div>
+        </div>
+    
+        <div class="CourseCard_CardInfo">
+            <div class="Card-CourseName"><%= result.Title %></div>
+            <div class="Card-CourseRating"><b>Rating:</b> <%= result.Course_Rating %></div>
+            <div class="Card-CourseDifficulty"><b>Level:</b> <%= result.Course_Difficulty %></div>
+    
+        </div>
+    </div>
+
+    <button class="Course-Bookmark" type="button">
+        <img src="/image/bookmark.png" alt="Bookmark" data-tooltip="true" data-tip="Save Course" data-for="GLOBAL_TOOLTIP" currentitem="false">
+    </button>
 </div>
