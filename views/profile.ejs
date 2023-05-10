@@ -1,9 +1,37 @@
 <%- include('templates/header') %>
-<div class="container">
-  <div class="col-lg-6 mx-auto p-3">
-    <h1 class="display-5 fw-bold text-body-emphasis">Join the Coursla Family</h1>
-    <p>Love Coursla? Let's make it official.</p>
-    <img style="width: 300px" src="/image/angry.jpg" alt=""/>
-</div>
-</div>
+<main class="profile-wrapper container">
+  <section class="profile-section-info">
+    <div class="profile-container-avatar">
+      <%- include("templates/profile-avatar") %>
+    </div>
+  
+    <h2 class="title-profile">Personal information</h2>
+  
+    <div class="container-info">
+      <div class="item-row">
+        Name: <%= username %>
+      </div>
+      <div class="item-row">
+        Email: <%= email %>
+      </div>
+      <div class="d-flex justify-content-end">
+        <div class="dropdown">
+          <button class="btn btn-reset btn-setting" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="/image/setting.png" alt="Setting"/>
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#">Edit profile</a>
+            <a class="dropdown-item" href="#">Change password</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="title-profile">My Reviews</h2>
+    
+  </section>
+
+</main>
 <%- include("templates/footer") %>

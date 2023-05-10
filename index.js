@@ -99,10 +99,6 @@ app.get('/sample', (req,res) => {
   res.render("sample");
 });
 
-// app.get('/login', (req,res) => {
-//   res.render('login');
-// });
-
 app.post('/loginSubmit', loginValidation, async (req,res) => {
   let email = req.body.email;
 
@@ -148,7 +144,8 @@ app.get('logout', (req,res) => {
 });
 
 app.get('/profile', (req,res) => {
-  res.render('profile');
+  let { username, email } = req.session;
+  res.render('profile', {username, email});
 });
 
 

@@ -1,5 +1,6 @@
 @import url("/css/hamburger.css");
 @import url("/css/form.css");
+@import url("/css/profile.css");
 
 /* fonts */
 @font-face {
@@ -30,13 +31,18 @@
 }
   
 :root {
-    --color-primary-green: #96c15b;
-    --color-sub-green: #C5E5A5;
+    --color-dark-green: #386641;
+    --color-primary-green: #6A994E;
+    --color-yellow-green: #A7C957;
     --color-primary-yellow: #F9D876;
-    --color-sub-yellow: #FBE39D;
+    --color-primary-red: #BC4749;
+    --color-parchment: #F2E8CF;
     --color-sand: #D7D3C1;
   
     --color-divider: #eee;
+    
+    --color-bg-gray: #e9ecef;
+    --color-border-gray: #ccc;
   
     --color-text-gray: rgb(147, 147, 147);
     --color-placeholder: rgb(172, 172, 172);
@@ -44,6 +50,8 @@
   
     --height-header: 50px;
     --height-nav: 60px;
+
+    --radius-box: 14px;
 }
 
 /* Reset */
@@ -73,6 +81,24 @@ textarea {
   resize: none;
 }
 
+button,
+.btn-reset {
+    display: inline-block;
+    border: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    text-decoration: none;
+    font-family: sans-serif;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    color: inherit;
+    text-align: center;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
 /* Common */
 .wrapper {
     padding-top: 120px;
@@ -85,4 +111,7 @@ textarea {
     display: block;
     margin: 30px 0;
     border-top: 1px solid var(--color-divider);
+}
+.btn-icon {
+
 }
