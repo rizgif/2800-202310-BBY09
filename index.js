@@ -92,6 +92,14 @@ app.post('/searchSubmit', async (req,res) => {
   // res.redirect('/searchList');
 });
 
+//Filters 
+
+
+
+
+
+
+
 app.get('/login', (req, res) => {
   res.render("login");
 });

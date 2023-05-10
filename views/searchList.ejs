@@ -16,14 +16,14 @@
       Provider
     </button>
     <ul class="dropdown-menu">
-      <li><a class="dropdown-item" href="#">Udemy</a></li>
-      <li><a class="dropdown-item" href="#">Coursera</a></li>
+      <li><a class="dropdown-item" href="#" data-value="Udemy">Udemy</a></li>
+      <li><a class="dropdown-item" href="#" data-value="Coursera">Coursera</a></li>
     </ul>
     </div>
 
     <div class="filter-btn">
     <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-        Difficulty
+        Level
       </button>
       <ul class="dropdown-menu">
         <li><a class="dropdown-item" href="#">All Levels</a></li>
@@ -55,9 +55,13 @@
     <%- include('templates/list', {result: searchResult[i]})  %>
 <% } %>
 
+<script>
+$('.dropdown-item').on('click', function() {
+  var selectedOption = $(this).data('value');
+  $('#selected-option').val(selectedOption);
+});
 
-
-  
+</script>
 
      
 

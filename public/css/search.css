@@ -58,6 +58,8 @@ h2 {
     width: fit-content;
     align-self: flex-start;
     display: flex;
+	nav-index: 2;
+	position: relative;
 
 }
 
@@ -77,3 +79,11 @@ h2 {
     flex-direction: column;
 
 }
+
+/* .CardNumRating-CardNumRatingNumber {
+	position: relative;
+	nav-index: 1;
+	width: 200px;;
+	display: block;
+	margin: 0 auto;
+} */
