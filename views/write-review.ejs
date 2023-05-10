@@ -3,8 +3,8 @@
 <!-- writing a review -->
 <form action="/submitReview" method="POST">
     <div class="write-review-grid">
-        <div class="user-profile">user </div>
-        <div class="time-stamp">time </div>
+        <div class="user-profile"><%= username %>  </div>
+        <div class="time-stamp"></div>
         <textarea name="review" class="write-review" placeholder="Enter your review..."></textarea>
 
 
@@ -82,7 +82,5 @@
   // Assign the timestamp value to the hidden input field in the form
   document.getElementById('timestamp-input').value = currentDate;
 });
-
-
    
 </script>
