@@ -152,7 +152,8 @@ app.get('logout', (req,res) => {
 
 
 app.get('/reviews', async (req, res) => {
-  const reviews = await reviewCollection.find().toArray();
+
+    const reviews = await reviewCollection.find().toArray();
 
   // Extract the slider values from the reviews
   const sliderValues = reviews.map(review => ({
@@ -170,10 +171,16 @@ app.get('/reviews', async (req, res) => {
     currentDate: review.Time
   }))
 
+  const username = reviews.map(review => ({
+    username: review.username
+  }))
+
   const renderData = {
     req: req,
     sliderValues: sliderValues,
-    review: review
+    review: review,
+    currentDate: currentDate,
+    username: username
   };
 
   res.render("read-review", renderData);
@@ -181,6 +188,13 @@ app.get('/reviews', async (req, res) => {
 
 
 app.get('/reviews/write', async (req, res) => {
+
+  const userInfo = {
+    username: req.session.username, // Replace 'username' with the actual field name
+    email: req.session.email // Replace 'email' with the actual field name
+  };
+
+  console.log(userInfo);
   const reviews = await reviewCollection.find().toArray();
 
   // Extract the slider values from the reviews
@@ -200,7 +214,8 @@ app.get('/reviews/write', async (req, res) => {
   const renderData = {
     req: req,
     sliderValues: sliderValues,
-    currentDate: currentDate
+    userInfo: userInfo
+    // currentDate: currentDate
   };
 
   res.render("write-review", renderData);
@@ -216,8 +231,9 @@ app.post('/submitReview', async (req, res) => {
     studentSupportSliderValue, 
     currentDate} = req.body;
 
-  console.log(currentDate);
-
+  const username = req.session.username; // Replace 'username' with the actual field name
+  const email = req.session.email;
+  
   // Validate the review input
   // const schema = Joi.object({
   //   review: Joi.string().max(256).required().messages({
@@ -237,16 +253,14 @@ app.post('/submitReview', async (req, res) => {
     CourseStructureRating: courseStructureSliderValue,
     TeachingStyleRating: teachingStyleSliderValue,
     StudentSupportRating: studentSupportSliderValue,
-    Time: currentDate
+    Time: currentDate,
+    username: username,
+    email: email
   });
-
 
   // console.log('Inserted user review and active index');
   res.status(200).send('Review and active index saved successfully');
-
 });
-
-
 
 /* === // Pages end === */
 
