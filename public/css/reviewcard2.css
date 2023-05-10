@@ -3,7 +3,7 @@
 
 .grid-container {
     display: grid;
-    grid-template-columns: 0.5fr 1fr 0.6fr 1fr;
+    grid-template-columns: 0.6fr 1fr 0.6fr 1fr;
     grid-template-rows: 0.5fr 1fr 0.7fr 0.7fr;
     grid-gap: 10px;
     margin-top: 5%;
@@ -26,39 +26,30 @@
     font-size: 24px;
   } */
 
-.rating {
-    margin-top: 10%;
-    display: flex;
-    /* flex-direction: column; */
-    justify-content: center;
-    align-items: center;
-
-}
-
-
+.rating-wrapper,
 .level-wrapper {
+    margin-top: 2%;
     display: flex;
-    /* flex-direction: column; */
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
 }
 
-.rating-label {
+.rating-label,
+.level-label {
     margin-bottom: 5px;
     font-weight: bold;
-    font-size: 20px;
 }
 
-.rating-button {
+.rating-button,
+.level-button {
     background-color: #98B66E;
     border: none;
     padding: 4%;
-    font-size: 20px;
-    width: 70px;
+    font-size: 16px;
+    margin: 5%;
     color: white;
     cursor: pointer;
     border-radius: 5px;
-    font-weight:bold;
 }
 
 .review-category {
@@ -67,7 +58,6 @@
     text-align: center;
     font-weight: bold;
     justify-content: center;
-    font-size: 20px;
 }
 
 .review-grid {
@@ -78,9 +68,9 @@
 
 .review-grid {
     display: grid;
-    grid-template-rows: 0.5fr 1fr;
+    grid-template-rows: 0.6fr 1fr;
     grid-template-columns: 0.7fr 2fr 0.7fr;
-    background-color: white;
+    background-color:#98B66E;
     grid-gap: 10px;
     grid-template-areas:
         "a1 a2 a3"
@@ -90,33 +80,23 @@
     padding: 2%;
     height: auto;
     /* justify-content: center; */
-    border-radius: 10px;
 }
 
 
 .user_info {
     grid-area: a1;
-    background-color: #D7D3C1;
-    margin-left: 2%;
-    align-items: left;
-    /* text-align: left; */
+    background-color: white;
+
 }
 
 .time_stamp {
-    background-color: #D7D3C1;
+    background-color: white;
     grid-area: a3;
-    align-items: right;
-    text-align: right;
 }
 
 .user_review {
     background-color: white;
     grid-area: a4;
-    padding-top: 1%;
-    padding-bottom: 5%;
-    padding-left: 2%;
-    text-align: left;
-    border-radius: 15px;
 
 }
 
@@ -146,8 +126,8 @@
     padding: 2%;
 }
 
-.time-stamp {
-    grid-column: 3;
+.time-stamp{
+    grid-column:3;
     grid-row: 1;
     margin: 2%;
     padding: 2%;
@@ -180,7 +160,6 @@
     background-color: #98B66E;
     color: white;
 }
-
 .ratings {
     display: grid;
     grid-template-columns: 1fr;
@@ -188,36 +167,125 @@
     width: 80vw;
     /* align-items: center;
     justify-items: center; */
-}
-
-.review-section-1,
-.review-section-2,
-.review-section-3,
-.review-section-4 {
+  }
+  
+  .review-section-1,
+  .review-section-2,
+  .review-section-3,
+  .review-section-4{
     display: grid;
-    grid-template-columns: 0.7fr 1fr;
-    /* Two columns */
+    grid-template-columns: 0.7fr 1fr; /* Two columns */
     grid-gap: 10px;
     justify-items: center;
     align-items: center;
-}
-
-.ratings .review-category {
+  }
+  
+  .ratings  .review-category {
     font-size: 25px;
     text-align: right;
     font-weight: bold;
-}
-
-.ratings .review-slider {
+  }
+  
+  .ratings  .review-slider {
     height: 60px;
     display: flex;
-<<<<<<< HEAD
     justify-content: center;
     align-items: left;
   }
-=======
 
-    justify-content: right;
-    align-items: center;
+  #s1 {
+    grid-area: s1;
+  }
+  #s2 {
+    grid-area: s2;
+  }
+  #s3 {
+    grid-area: s3;
+  }
+  #s4 {
+    grid-area: s4;
+  }
+
+  .course-content {
+    grid-area: c1;
+  }
+
+  .course-structure {
+    grid-area: c2;
+  }
+
+  .teaching-style {
+    grid-area: c3;
+  }
+
+  .student-support {
+    grid-area: c4;
+  }
+
+/* Mobile view */
+@media only screen and (max-width: 600px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    width: 90vw;
+  }
+
+  .review-grid {
+    grid-column: span 1;
+    /* grid-row: span 2; */
+    padding: 2%;
 }
->>>>>>> 7b1d8f2ce2ec646a729ada3fe4ed17d2fab97565
+
+  .review-grid {
+    display: grid;
+    grid-template-rows: 0.3fr 8fr;
+    grid-template-columns: 0.7fr 2fr 0.7fr;
+    background-color:#98B66E;
+    grid-gap: 10px;
+    grid-template-areas:
+    "a1 a2 a3"
+    "a4 a4 a4";
+    text-align: center;
+    margin: 2%;
+    padding: 2%;
+    height: auto;
+    /* justify-content: center; */
+}
+
+.review-grid2 {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+    grid-template-areas:
+        "c1 s1"
+        "c2 s2"
+        "c3 s3"
+        "c4 s4";
+    text-align: center;
+    margin: 2%;
+    padding: 2%;
+    height: auto;
+    /* justify-content: center; */
+}
+
+.review-category {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    font-weight: bold;
+    justify-content: left;
+    font-size: 18px;
+}
+
+.review-slider {
+    display: flex;
+    /* align-items: center; */
+    justify-content: right;
+  }
+
+  /* Use fallback fonts for better compatibility */
+  body {
+    font-family: Arial, sans-serif;
+  }
+}

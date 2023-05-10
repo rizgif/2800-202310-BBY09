@@ -208,12 +208,13 @@ app.get('/reviews', async (req, res) => {
       studentSupportSliderValue: review.StudentSupportRating
     };
 
+    
     return {
       review: review,
       sliderValue: sliderValue
     };
   });
-
+  // console.log(reviewSliderPairs);
   // console.log(sliderValue);
   res.render("review", {
     req: req,
@@ -221,6 +222,12 @@ app.get('/reviews', async (req, res) => {
   });
 
 });
+
+app.get('/reviews/all', async (req, res) => {
+  res.render("allreview");
+});
+
+
 
 app.get('/reviews/write', async (req, res) => {
 
@@ -295,6 +302,39 @@ app.post('/submitReview', async (req, res) => {
   res.redirect('/reviews');
 });
 
+<<<<<<< HEAD
+app.get('/profileReview', async (req, res) => {
+  const reviews = await reviewCollection.find().toArray();
+
+  // Extract the slider values from the reviews
+  const sliderValues = reviews.map(review => ({
+    courseContentSliderValue: review.CourseContentRating,
+    courseStructureSliderValue: review.CourseStructureRating,
+    teachingStyleSliderValue: review.TeachingStyleRating,
+    studentSupportSliderValue: review.StudentSupportRating
+  }));
+
+  const review = reviews.map(review => ({
+    review: review.Review
+  }))
+
+  const currentDate = reviews.map(review => ({
+    currentDate: review.Time
+  }))
+
+  const renderData = {
+    req: req,
+    sliderValues: sliderValues,
+    review: review
+  };
+
+  res.render("profile-review", renderData);
+});
+
+
+
+=======
+>>>>>>> 7b1d8f2ce2ec646a729ada3fe4ed17d2fab97565
 /* === // Pages end === */
 
 app.use(express.static(__dirname + "/public"));
