@@ -1,9 +1,11 @@
-<link rel="stylesheet" href="/css/reviewcard.css">
+<link rel="stylesheet" href="/css/write-review-card.css">
 
 <!-- writing a review -->
 <form action="/submitReview" method="POST">
     <div class="write-review-grid">
-        <div class="user-profile"><%= username %>  </div>
+        <div class="user-profile">
+            <%= username %>
+        </div>
         <div class="time-stamp"></div>
         <textarea name="review" class="write-review" placeholder="Enter your review..."></textarea>
 
@@ -76,11 +78,11 @@
     });
 
     document.getElementById('submit-review-btn').addEventListener('click', function () {
-  // Get the current timestamp
-  var currentDate = new Date().toISOString().split('T')[0];
+        // Get the current timestamp
+        var currentDate = new Date().toISOString().split('T')[0];
 
-  // Assign the timestamp value to the hidden input field in the form
-  document.getElementById('timestamp-input').value = currentDate;
-});
-   
+        // Assign the timestamp value to the hidden input field in the form
+        document.getElementById('timestamp-input').value = currentDate;
+    });
+
 </script>

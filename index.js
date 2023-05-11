@@ -286,7 +286,7 @@ app.post('/submitReview', async (req, res) => {
   });
 
   // console.log('Inserted user review and active index');
-  res.status(200).send('Review and active index saved successfully');
+  // res.status(200).send('Review and active index saved successfully');
   res.redirect('/reviews');
 });
 
