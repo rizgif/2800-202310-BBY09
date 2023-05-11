@@ -19,7 +19,7 @@ const {
 
 const saltRounds = 12;
 
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 8001;
 
 const app = express();
 
