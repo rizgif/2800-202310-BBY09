@@ -1,7 +1,24 @@
 <%- include("templates/header") %>
 <section class="profile-section-info">
     <div class="profile-container-avatar">
-        <%- include("templates/profile-avatar") %>
+        <%- include("templates/profile-avatar", {avatar}) %>
+
+        <div class="add-photo">
+            <input id="upload-images" type="file" accept="image/jpeg, image/png, image/jpg" hidden>
+            <label for="upload-images">
+                <a type="button" class="btn btn-add-photo" aria-label="add photos">
+              <span class="material-symbols-outlined">
+                add_a_photo
+              </span>
+                    <p>
+                        Add Photos <br />
+                        (<i class="add-photo-number">0</i>/5)
+                    </p>
+                </a>
+            </label>
+            <output id="upload-output">
+            </output>
+        </div>
     </div>
     <div class="container">
         <main class="form-signin w-100 m-auto">
