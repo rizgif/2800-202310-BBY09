@@ -4,6 +4,8 @@
       <% let studentSupportSum=0; %>
         <% let num=0; %>
 
+        <% console.log("username: " , username) %>
+        <!-- need to connect the course collection -->
           <% if (whichCourse) { %>
             <% reviewSliderPairs.forEach(pair=> { %>
               <%- include("read-review", { review: pair.review, sliderValue: pair.sliderValue }) %>
@@ -13,7 +15,7 @@
                       <% studentSupportSum +=parseInt(pair.sliderValue.studentSupportSliderValue); %>
                         <% num ++; %>
                           <% }) %>
-                            <%- include("allreviews", { courseContentSum: courseContentSum, courseStructureSum:
+                            <%- include("all-reviews", { courseContentSum: courseContentSum, courseStructureSum:
                               courseStructureSum, teachingStyleSum: teachingStyleSum, studentSupportSum:
                               studentSupportSum, num: num }) %>
                               <% } %>

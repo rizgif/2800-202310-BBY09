@@ -191,6 +191,7 @@ app.get('logout', (req, res) => {
 app.get('/reviews', async (req, res) => {
   const reviews = await reviewCollection.find().toArray();
 
+  const username = req.session.username;
   const reviewSliderPairs= reviews.map(review => {
     const sliderValue = {
       courseContentSliderValue: review.CourseContentRating,
@@ -209,7 +210,8 @@ app.get('/reviews', async (req, res) => {
   res.render("review", {
     req: req,
     reviewSliderPairs: reviewSliderPairs,
-    whichCourse: true
+    whichCourse: true,
+    username: username
   });
 
 });
