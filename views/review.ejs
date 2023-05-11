@@ -1,5 +1,19 @@
-<% reviewSliderPairs.forEach(pair => { %>
-    <%- include("read-review", { review: pair.review, sliderValue: pair.sliderValue }) %>
-  <% }) %>
-  
+<% let courseContentSum=0; %>
+  <% let courseStructureSum=0; %>
+    <% let teachingStyleSum=0; %>
+      <% let studentSupportSum=0; %>
+        <% let num=0; %>
 
+          <% if (whichCourse) { %>
+            <% reviewSliderPairs.forEach(pair=> { %>
+              <%- include("read-review", { review: pair.review, sliderValue: pair.sliderValue }) %>
+                <% courseContentSum +=parseInt(pair.sliderValue.courseContentSliderValue); %>
+                  <% courseStructureSum +=parseInt(pair.sliderValue.courseStructureSliderValue); %>
+                    <% teachingStyleSum +=parseInt(pair.sliderValue.teachingStyleSliderValue); %>
+                      <% studentSupportSum +=parseInt(pair.sliderValue.studentSupportSliderValue); %>
+                        <% num ++; %>
+                          <% }) %>
+                            <%- include("allreviews", { courseContentSum: courseContentSum, courseStructureSum:
+                              courseStructureSum, teachingStyleSum: teachingStyleSum, studentSupportSum:
+                              studentSupportSum, num: num }) %>
+                              <% } %>

@@ -208,14 +208,12 @@ app.get('/reviews', async (req, res) => {
   // console.log(sliderValue);
   res.render("review", {
     req: req,
-    reviewSliderPairs: reviewSliderPairs
+    reviewSliderPairs: reviewSliderPairs,
+    whichCourse: true
   });
 
 });
 
-app.get('/reviews/all', async (req, res) => {
-  res.render("allreview");
-});
 
 
 
