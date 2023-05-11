@@ -1,13 +1,11 @@
 <%- include("templates/header") %>
-<div class="form-wrapper signin">
-    <div class="container">
-      <main class="form-signin w-100 m-auto">
-          <form action='/loginSubmit' method='post'>
+<main class="form-wrapper ">
+          <form action='/login-submit' method='post'>
               <h1 class="h3 fw-normal">Log in</h1>
 
               <div class="form-floating">
-                  <input name="email" type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                  <label for="floatingInput">Email address</label>
+                  <input name="id" type="id" class="form-control" id="floatingInput" placeholder="ID">
+                  <label for="floatingInput">ID</label>
               </div>
               <div class="form-floating">
                   <input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
@@ -15,14 +13,12 @@
               </div>
 
               <div class="sign-btns-container">
-                <button class="w-100 btn btn-lg btn-primary btn-md" type="submit">Sign in</button>
+                <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
               </div>
           </form>
-      </main>
 
       <span class="hr"></span>
       <p class="link-signup">Don't have an account? <a href="/signup">Sign up</a></p>
-  </div>
-</div>
+  </main>
 
 <%- include("templates/footer") %>

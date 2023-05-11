@@ -1,42 +1,63 @@
-<%- include("templates/header") %>
-<div class="px-4 text-center">
+<% if (isLoggedIn) { %>
+    <%- include("templates/header") %>
+<% } else { %>
+    <%- include("templates/header-beforeLogin") %>
+<% } %>
+
+<div class="text-center">
     <div class="col-lg-6 mx-auto">
         <% if (isLoggedIn) { %>
-            
+        
         <% } else { %>
-            <a class="btn btn-main-login btn-lg px-4" href="/login">Login</a>
-            <a class="btn btn-primary btn-lg px-4" href="/signup">Sign up</a>
+            <div class="p-3 loginarea-main">
+                <a class="btn btn-main-login btn-lg px-4" href="/login">Login</a>
+                <a class="btn btn-primary btn-lg px-4" href="/signup">Sign up</a>
+            </div>
         <% } %>
         
-        <div class="col-lg-6 mx-auto p-2">
-            <img class="w-100" src="/image/coursla_main.png" alt=""/>
+        <div class="mx-auto logo-main-container">
+            <img src="/image/coursla_main.png" alt="logo-main"/>
+            <p>Finding the perfect course for you</p>
         </div>
-        <div class="row justify-content-center">
+        <div class="row justify-content-center searchbox-main mx-auto"> 
             <div class="col-sm-8">
               <form action="/searchSubmit" method="post" class="form-inline my-2 my-lg-0 d-flex justify-content-center">
                 <div class="form-group mx-2 mb-2" style="width:300px;">
                     <input name="courseSearch" type="text" class="form-control" id="courseSearch" placeholder="Search courses">
                 </div>
-                <button type="submit" class="btn btn-main-search mb-2">Search</button>
+                <button type="submit" class="btn btn-main-search mb-2" style="width:50px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
+                    </svg>
+                </button>
               </form>
             </div>
         </div>
 
         <% if (isLoggedIn) { %>
-            <div class="col-lg-6 mx-auto p-3">
-                <h1 class="display-5 fw-bold text-body-emphasis">Welcome the Coursla Family</h1>
-                <img style="width: 300px" src="/image/angry.jpg" alt=""/>
+            <div class="mx-auto p-3 slogan-main">
+                <h3 class="display-7 fw-bold text-body-emphasis">Welcome to the Coursla Family</h3>    
             </div>
         <% } else { %>
-            <div class="col-lg-6 mx-auto p-3">
+            <div class=" mx-auto p-3 slogan-main">
                 <h1 class="display-5 fw-bold text-body-emphasis">Join the Coursla Family</h1>
-                <p>Love Coursla? Let's make it official.</p>
-                <img style="width: 300px" src="/image/angry.jpg" alt=""/>
-            </div>
-            <div class="col-lg-6 mx-auto p-4">
-                <a class="btn btn-primary btn-lg px-4 gap-3" style="width: 250px;" href="#">Sign up now!</a>
-            </div>
+                <p>Love Coursla? Let's make it official.</p> 
         <% } %>
+            </div>
+            <div class="ads-container-main">
+                <div class="item">
+                  <img src="image/rating.png">
+                  <p>Manage and edit your ratings</p>
+                </div>
+                <div class="item">
+                  <img src="image/selective.png">
+                  <p>Filter and select your courses</p>
+                </div>
+                <div class="item">
+                  <img src="image/reviews.png">
+                  <p>See other users’ reviews</p>
+                </div>
+            </div>
     </div>
 </div>
 <%- include("templates/footer") %>
