@@ -1,4 +1,8 @@
-<%- include("templates/header") %>
+<% if (isLoggedIn) { %>
+    <%- include("templates/header") %>
+<% } else { %>
+    <%- include("templates/header-beforeLogin") %>
+<% } %>
 <div class="px-4 text-center">
     <div class="col-lg-6 mx-auto">
         <a class="btn btn-main-login btn-lg px-4" href="#">Login</a>
