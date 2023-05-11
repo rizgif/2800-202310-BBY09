@@ -48,6 +48,7 @@
     --color-text-gray: rgb(147, 147, 147);
     --color-placeholder: rgb(172, 172, 172);
     --color-disabled:rgb(129, 129, 129);
+    --color-readonly:rgb(235, 235, 235);
   
     --height-header: 50px;
     --height-nav: 60px;

@@ -49,7 +49,7 @@ app.use(express.urlencoded({ extended: false }));
 
 
 var mongoStore = MongoStore.create({
-  mongoUrl: `mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/sessions`,
+  mongoUrl: `mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/${mongodb_database}`,
   crypto: {
     secret: mongodb_session_secret
   }
@@ -73,12 +73,18 @@ require("./routes/index.js");
 //   res.render("index", {isLoggedIn: false});
 // });
 
-app.get('/', (req, res) => {
+app.get('/', async(req, res) => {
   // if (!req.session.authenticated) {
   //     res.render("index_beforeLogin");
   // } else {
   //     res.render("index_afterLogin");
   // }
+
+  if (req.session.authenticated && !req.session.uid) {
+    const result = await userCollection.find({ email: req.session.email }).project({ _id: 1 }).toArray();
+    req.session.uid = result[0]._id;
+
+  }
   res.render("index", { isLoggedIn: isLoggedIn(req) });
 });
 
@@ -188,7 +194,20 @@ app.post('/change-password-submit', sessionValidation, async(req,res) => {
 });
 
 app.get('/edit-profile', sessionValidation, async (req,res) => {
-  res.render("edit-profile");
+  let email = req.session.email;
+  let username = req.session.username;
+  res.render("edit-profile", {email, username});
+});
+app.post('/edit-profile-submit', sessionValidation, async(req,res) => {
+  let username = req.body.username;
+  let uid = req.session.uid;
+
+  if (username) {
+    await userCollection.updateOne({_id: new ObjectId(uid)}, {$set: {username}});
+    req.session.username= username;
+  }
+
+  res.redirect("/profile");
 });
 
 
