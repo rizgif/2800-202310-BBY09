@@ -151,6 +151,13 @@ app.post('/signup-submit', signupValidation, async (req, res) => {
   let username = req.body.username;
   let email = req.body.email;
 
+  // check if the id already exists
+  const idCheck = await userCollection.find({ id: id }).project({ _id: 1, password: 1 }).toArray();
+  if (idCheck.length > 0) {
+    res.render('signup-submit', { signupFail: true, errorMessage: `This ID already exists. \n Please choose a different user id.` });
+    return;
+  }
+
   // If inputs are valid, add the member
   let hashedPassword = await bcrypt.hash(password, saltRounds);
 

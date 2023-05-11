@@ -1,15 +1,21 @@
 <%- include("templates/header") %>
 <main class="form-wrapper">
-      <form action='/login-submit' method='post'>
+      <form action='/login-submit' method='post' class="needs-validation" novalidate>
           <h1 class="h3 fw-normal">Log in</h1>
 
           <div class="form-floating">
-              <input name="id" type="id" class="form-control" id="floatingInput" placeholder="ID">
-              <label for="floatingInput">ID</label>
+              <input name="id" type="id" class="form-control" id="id" placeholder="ID" required>
+              <label for="id">ID</label>
+              <div class="invalid-feedback">
+                  Please enter your id.
+              </div>
           </div>
           <div class="form-floating">
-              <input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
-              <label for="floatingPassword">Password</label>
+              <input name="password" type="password" class="form-control" id="password" placeholder="Password" required>
+              <label for="password">Password</label>
+              <div class="invalid-feedback">
+                  Please enter your password.
+              </div>
           </div>
 
           <div class="sign-btns-container">

@@ -4,17 +4,17 @@ const Joi = require("joi");
 require("../utils.js");
 
 const errorMessages = {
-  emptyUserName: 'Please provide a user name',
-  emptyEmail: 'Please provide an email address',
   emptyID: 'Please provide an id',
   emptyPassword: 'Please provide a password',
+  emptyEmail: 'Please provide an email address',
+  emptyUserName: 'Please provide a user name',
 }
 
 const signupScheme = Joi.object({
-  username: Joi.string().alphanum().min(2).max(20).required(),
-  email: Joi.string().email().required(),
   id: Joi.string().min(2).max(20).required(),
-  password: Joi.string().min(2).max(20).required()
+  password: Joi.string().min(2).max(20).required(),
+  email: Joi.string().email().required(),
+  username: Joi.string().alphanum().min(2).max(20).required(),
 });
 
 const signupValidation = async (req, res, next) => {
@@ -29,14 +29,14 @@ const signupValidation = async (req, res, next) => {
 
   // if there is an empty input or error
   if (validationResult.error != null) {
-    if (username.length < 1) {
-      errorMessage = errorMessages.emptyUserName;
-    } else if (email.length < 1) {
-      errorMessage = errorMessages.emptyEmail;
+    if (id.length < 1) {
+      errorMessage = errorMessages.emptyID;
     } else if (password.length < 1) {
       errorMessage = errorMessages.emptyPassword;
-    } else if (id.length < 1) {
-      errorMessage = errorMessages.emptyID;
+    } else if (email.length < 1) {
+      errorMessage = errorMessages.emptyEmail;
+    } else if (username.length < 1) {
+      errorMessage = errorMessages.emptyUserName;
     } else {
       errorMessage = validationResult.error.message;
     }
