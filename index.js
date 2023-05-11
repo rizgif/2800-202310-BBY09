@@ -4,6 +4,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const bcrypt = require('bcrypt');
 const Joi = require("joi");
+const {ObjectId} = require("mongodb");
 
 require("./utils.js");
 
@@ -23,7 +24,7 @@ const port = process.env.PORT || 8000;
 const app = express();
 
 
-const expireTime = 1 * 60 * 60 * 1000; //expires after 1 hour  (hours * minutes * seconds * millis)
+const expireTime = 12 * 60 * 60 * 1000; //expires after 12 hour  (hours * minutes * seconds * millis)
 
 
 /* secret information section */
@@ -48,7 +49,7 @@ app.use(express.urlencoded({ extended: false }));
 
 
 var mongoStore = MongoStore.create({
-  mongoUrl: `mongodb+srv://riz:apple@courselaapp.fb2pphc.mongodb.net/sessions`,
+  mongoUrl: `mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/${mongodb_database}`,
   crypto: {
     secret: mongodb_session_secret
   }
@@ -72,12 +73,18 @@ require("./routes/index.js");
 //   res.render("index", {isLoggedIn: false});
 // });
 
-app.get('/', (req, res) => {
+app.get('/', async(req, res) => {
   // if (!req.session.authenticated) {
   //     res.render("index_beforeLogin");
   // } else {
   //     res.render("index_afterLogin");
   // }
+
+  if (req.session.authenticated && !req.session.uid) {
+    const result = await userCollection.find({ email: req.session.email }).project({ _id: 1 }).toArray();
+    req.session.uid = result[0]._id;
+
+  }
   res.render("index", { isLoggedIn: isLoggedIn(req) });
 });
 
@@ -95,6 +102,33 @@ app.post('/searchSubmit', async (req,res) => {
 
 
 });
+//
+// <<<<<<< HEAD
+// app.post('/searchSubmit', async (req, res) => {
+//   var courseSearch = req.body.courseSearch;
+//
+//   const searchResult = await datasetCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
+//     _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1,
+//     Course_URL: 1, Organization: 1, Course_Description: 1
+//   }).toArray();
+//
+//   res.render("searchList", { searchResult: searchResult });
+// =======
+// let searchResult;
+//
+// app.post('/searchSubmit', async (req,res) => {
+//   var courseSearch = req.body.courseSearch;
+//
+//   searchResult = await datasetCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
+//   _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1,
+//   Course_URL: 1, Organization: 1, Course_Description: 1}).toArray();
+//
+//   res.render("searchList2", {searchResult: searchResult});
+// >>>>>>> feature/Riz_filterprovider
+//   // res.redirect('/searchList');
+//
+//
+// });
 
 //Filters 
 
@@ -122,11 +156,11 @@ app.get('/sample', (req, res) => {
   res.render("sample");
 });
 
-app.post('/loginSubmit', loginValidation, async (req,res) => {
+app.post('/login-submit', loginValidation, async (req,res) => {
   let email = req.body.email;
 
   const result = await userCollection.find({ email: email }).project({ email: 1, password: 1, username: 1, _id: 1 }).toArray();
-
+  req.session.uid = result[0]._id;
   req.session.authenticated = true;
   req.session.email = email;
   req.session.username = result[0].username;
@@ -139,7 +173,7 @@ app.get('/signup', (req, res) => {
   res.render('signup');
 });
 
-app.post('/signupSubmit', signupValidation, async (req, res) => {
+app.post('/signup-submit', signupValidation, async (req, res) => {
   let email = req.body.email;
   let password = req.body.password;
   let username = req.body.username;
@@ -170,6 +204,53 @@ app.get('/profile', sessionValidation, (req,res) => {
   let { username, email } = req.session;
   res.render('profile', {username, email});
 });
+
+app.get('/change-password', sessionValidation, async (req,res) => {
+  const message = req.query.message || '';
+  res.render('change-password', { message });
+});
+
+app.post('/change-password-submit', sessionValidation, async(req,res) => {
+  console.log('change password submit');
+  /* Check the old password */
+  let email = req.session.email;
+  let newPassword = req.body.password1;
+  let oldPassword = req.body.oldPassword;
+
+  // check if the password is correct
+  const result = await userCollection.find({ email: email }).project({ _id: 1, password: 1 }).toArray();
+  if (!await bcrypt.compare(oldPassword, result[0].password)) {
+    res.redirect("/change-password?message=Old%20password%20is%20incorrect");
+    return;
+  }
+
+  /* update the new password */
+  // If inputs are valid, add the member
+  let hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+  let uid = result[0]._id;
+  await userCollection.updateOne({_id: new ObjectId(uid)}, {$set: {password: hashedPassword}});
+  console.log('password is changed')
+  res.redirect("/profile");
+});
+
+app.get('/edit-profile', sessionValidation, async (req,res) => {
+  let email = req.session.email;
+  let username = req.session.username;
+  res.render("edit-profile", {email, username});
+});
+app.post('/edit-profile-submit', sessionValidation, async(req,res) => {
+  let username = req.body.username;
+  let uid = req.session.uid;
+
+  if (username) {
+    await userCollection.updateOne({_id: new ObjectId(uid)}, {$set: {username}});
+    req.session.username= username;
+  }
+
+  res.redirect("/profile");
+});
+
+
 
 
 
@@ -345,6 +426,39 @@ app.get('/profileReview', async (req, res) => {
 
 
 
+// <<<<<<< HEAD
+// app.get('/profileReview', async (req, res) => {
+//   const reviews = await reviewCollection.find().toArray();
+//
+//   // Extract the slider values from the reviews
+//   const sliderValues = reviews.map(review => ({
+//     courseContentSliderValue: review.CourseContentRating,
+//     courseStructureSliderValue: review.CourseStructureRating,
+//     teachingStyleSliderValue: review.TeachingStyleRating,
+//     studentSupportSliderValue: review.StudentSupportRating
+//   }));
+//
+//   const review = reviews.map(review => ({
+//     review: review.Review
+//   }))
+//
+//   const currentDate = reviews.map(review => ({
+//     currentDate: review.Time
+//   }))
+//
+//   const renderData = {
+//     req: req,
+//     sliderValues: sliderValues,
+//     review: review
+//   };
+//
+//   res.render("profile-review", renderData);
+// });
+//
+//
+//
+// =======
+// >>>>>>> 7b1d8f2ce2ec646a729ada3fe4ed17d2fab97565
 /* === // Pages end === */
 
 app.use(express.static(__dirname + "/public"));

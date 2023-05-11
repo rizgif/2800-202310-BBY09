@@ -35,7 +35,7 @@ const signupValidation = async (req, res, next) => {
     } else {
       errorMessage = validationResult.error.message;
     }
-    res.render('signupSubmit', { signupFail: true, errorMessage });
+    res.render('signup-submit', { signupFail: true, errorMessage });
     return;
   }
 
