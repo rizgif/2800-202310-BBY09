@@ -1,4 +1,8 @@
-<%- include("templates/header") %>
+<% if (isLoggedIn) { %>
+    <%- include("templates/header") %>
+<% } else { %>
+    <%- include("templates/header-beforeLogin") %>
+<% } %>
 <section class="profile-section-info">
     <div class="profile-container-avatar">
         <%- include("templates/profile-avatar", {avatar}) %>

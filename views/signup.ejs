@@ -1,5 +1,9 @@
-<%- include("templates/header") %>
-<main class="form-wrapper">
+<% if (isLoggedIn) { %>
+    <%- include("templates/header") %>
+<% } else { %>
+    <%- include("templates/header-beforeLogin") %>
+<% } %>
+<div class="form-wrapper signin">
     <div class="container">
         <main class="form-signup w-100 m-auto">
             <form action='/signup-submit' method='post'>
