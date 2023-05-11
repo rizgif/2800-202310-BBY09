@@ -104,8 +104,14 @@ button,
 
 /* Common */
 .wrapper {
-    padding-top: 120px;
+    max-width: 500px;
+    margin: 0 auto;
+    padding-top: 60px;
     padding-bottom: 100px;
+}
+.wrapper > main
+{
+    padding-top: 40px;
 }
 .btn-md {
     max-width: 200px;
