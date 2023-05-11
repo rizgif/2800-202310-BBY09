@@ -1,5 +1,8 @@
-
-<%- include("templates/header-main") %>
+<% if (isLoggedIn) { %>
+    <%- include("templates/header") %>
+  <% } else { %>
+    <%- include("templates/header-beforeLogin") %>
+  <% } %>
 
 <div class="text-center">
     <div class="col-lg-6 mx-auto">
@@ -12,7 +15,7 @@
             </div>
         <% } %>
         
-        <div class="mx-auto logo-main-container">
+        <div class="col-lg-6 mx-auto logo-main-container">
             <img src="/image/coursla_main.png" alt="logo-main"/>
             <p>Finding the perfect course for you</p>
         </div>
@@ -32,11 +35,11 @@
         </div>
 
         <% if (isLoggedIn) { %>
-            <div class="mx-auto p-3 slogan-main">
+            <div class="col-lg-6 mx-auto p-3 slogan-main">
                 <h3 class="display-7 fw-bold text-body-emphasis">Welcome to the Coursla Family</h3>    
             </div>
         <% } else { %>
-            <div class=" mx-auto p-3 slogan-main">
+            <div class="col-lg-6 mx-auto p-3 slogan-main">
                 <h1 class="display-5 fw-bold text-body-emphasis">Join the Coursla Family</h1>
                 <p>Love Coursla? Let's make it official.</p> 
         <% } %>
