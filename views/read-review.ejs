@@ -2,7 +2,7 @@
 
 <% const sum=parseInt(sliderValue.courseContentSliderValue) + parseInt(sliderValue.studentSupportSliderValue) +
     parseInt(sliderValue.courseStructureSliderValue) + parseInt(sliderValue.teachingStyleSliderValue); %>
-
+<% console.log(username) %>
     <!-- read from database -->
     <div class="grid-container">
         <div class="rating">
@@ -17,17 +17,18 @@
 
             <div class="user_info">
                 <%= review.username %>
-                    
+
             </div>
             <div class="time_stamp">
                 <%= review.Time %>
             </div>
             <div class="user_review">
                 <%= review.Review %>
-                <% if (review.username === username) { %>
+                <% if (review.username===username) { %>
                     <%- include("edit-review") %>
                         <% } %>
             </div>
+         
         </div>
 
         <div class="level">
