@@ -399,67 +399,27 @@ app.post('/submitReview', async (req, res) => {
 app.get('/profileReview', async (req, res) => {
   const reviews = await reviewCollection.find().toArray();
 
-  // Extract the slider values from the reviews
-  const sliderValues = reviews.map(review => ({
-    courseContentSliderValue: review.CourseContentRating,
-    courseStructureSliderValue: review.CourseStructureRating,
-    teachingStyleSliderValue: review.TeachingStyleRating,
-    studentSupportSliderValue: review.StudentSupportRating
-  }));
+  const reviewSliderPairs= reviews.map(review => {
+    const sliderValue = {
+      courseContentSliderValue: review.CourseContentRating,
+      courseStructureSliderValue: review.CourseStructureRating,
+      teachingStyleSliderValue: review.TeachingStyleRating,
+      studentSupportSliderValue: review.StudentSupportRating
+    };
 
-  const review = reviews.map(review => ({
-    review: review.Review
-  }))
+    
+    return {
+      review: review,
+      sliderValue: sliderValue
+    };
+  });
 
-  const currentDate = reviews.map(review => ({
-    currentDate: review.Time
-  }))
-
-  const renderData = {
+  res.render("profile-review", {
     req: req,
-    sliderValues: sliderValues,
-    review: review
-  };
+    reviewSliderPairs: reviewSliderPairs
+  });
 
-  res.render("profile-review", renderData);
 });
-
-
-
-// <<<<<<< HEAD
-// app.get('/profileReview', async (req, res) => {
-//   const reviews = await reviewCollection.find().toArray();
-//
-//   // Extract the slider values from the reviews
-//   const sliderValues = reviews.map(review => ({
-//     courseContentSliderValue: review.CourseContentRating,
-//     courseStructureSliderValue: review.CourseStructureRating,
-//     teachingStyleSliderValue: review.TeachingStyleRating,
-//     studentSupportSliderValue: review.StudentSupportRating
-//   }));
-//
-//   const review = reviews.map(review => ({
-//     review: review.Review
-//   }))
-//
-//   const currentDate = reviews.map(review => ({
-//     currentDate: review.Time
-//   }))
-//
-//   const renderData = {
-//     req: req,
-//     sliderValues: sliderValues,
-//     review: review
-//   };
-//
-//   res.render("profile-review", renderData);
-// });
-//
-//
-//
-// =======
-// >>>>>>> 7b1d8f2ce2ec646a729ada3fe4ed17d2fab97565
-/* === // Pages end === */
 
 app.use(express.static(__dirname + "/public"));
 
