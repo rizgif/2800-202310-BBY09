@@ -1,16 +1,11 @@
-<<<<<<< HEAD
-<%- include("templates/header") %>
-<main class="form-wrapper">
-=======
 <% if (isLoggedIn) { %>
     <%- include("templates/header") %>
 <% } else { %>
     <%- include("templates/header-beforeLogin") %>
 <% } %>
 <div class="form-wrapper signin">
->>>>>>> feature/Riz_header_prelogin
     <div class="container">
-        <main class="form-signup w-100 m-auto">
+        <div class="form-signup w-100 m-auto">
             <form action='/signup-submit' method='post' class="needs-validation" novalidate>
                 <h1 class="h3 fw-normal">Create user</h1>
 
@@ -48,7 +43,7 @@
 
                 <button class="w-100 btn btn-lg btn-primary" type="submit">Sign up</button>
             </form>
-        </main>
+        </div>
     </div>
 </main>
 <%- include("templates/footer") %>
