@@ -1,5 +1,8 @@
-
-<%- include("templates/header-main") %>
+<% if (isLoggedIn) { %>
+    <%- include("templates/header") %>
+  <% } else { %>
+    <%- include("templates/header-beforeLogin") %>
+  <% } %>
 
 <div class="text-center">
     <div class="col-lg-6 mx-auto">

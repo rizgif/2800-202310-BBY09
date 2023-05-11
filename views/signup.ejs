@@ -1,4 +1,8 @@
-<%- include("templates/header") %>
+<% if (isLoggedIn) { %>
+    <%- include("templates/header") %>
+<% } else { %>
+    <%- include("templates/header-beforeLogin") %>
+<% } %>
 <div class="form-wrapper signin">
     <div class="container">
         <main class="form-signup w-100 m-auto">

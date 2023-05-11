@@ -94,8 +94,8 @@ app.post('/searchSubmit', async (req,res) => {
   _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, 
   Course_URL: 1, Organization: 1, Course_Description: 1}).toArray();
   
-  res.render("searchList2", {searchResult: searchResult});
-  // res.redirect('/searchList');
+  res.render("searchList2", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+
 
 
 });
@@ -103,15 +103,15 @@ app.post('/searchSubmit', async (req,res) => {
 //Filters 
 
 app.get('/filterudemy', (req,res) => {
-  res.render("filterudemy", {searchResult: searchResult});
+  res.render("filterudemy", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
 });
 
 app.get('/filtercoursera', (req,res) => {
-  res.render("filtercoursera", {searchResult: searchResult});
+  res.render("filtercoursera",{searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
 });
 
 app.get('/filterallcourses', (req,res) => {
-  res.render("filterallcourses", {searchResult: searchResult});
+  res.render("filterallcourses", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
 });
 
 
@@ -119,7 +119,7 @@ app.get('/filterallcourses', (req,res) => {
 
 
 app.get('/login', (req, res) => {
-  res.render("login");
+  res.render("login",{ isLoggedIn: isLoggedIn(req) });
 });
 
 app.get('/sample', (req, res) => {
@@ -137,11 +137,11 @@ app.post('/login-submit', loginValidation, async (req,res) => {
   req.session.avatar = result[0].avatar;
   req.session.cookie.maxAge = expireTime;
 
-  res.redirect('/');
+  res.render('index-afterLogin',{ isLoggedIn: isLoggedIn(req) });
 });
 
 app.get('/signup', (req, res) => {
-  res.render('signup');
+  res.render('signup',{ isLoggedIn: isLoggedIn(req) });
 });
 
 app.post('/signup-submit', signupValidation, async (req, res) => {
@@ -174,7 +174,7 @@ app.get('/logout', (req,res) => {
 
 app.get('/profile', sessionValidation, (req,res) => {
   let { username, email, avatar } = req.session;
-  res.render('profile', {username, email, avatar});
+  res.render('profile', {username, email, avatar, isLoggedIn: isLoggedIn(req) });
 });
 
 app.get('/change-password', sessionValidation, async (req,res) => {
