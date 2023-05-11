@@ -102,33 +102,6 @@ app.post('/searchSubmit', async (req,res) => {
 
 
 });
-//
-// <<<<<<< HEAD
-// app.post('/searchSubmit', async (req, res) => {
-//   var courseSearch = req.body.courseSearch;
-//
-//   const searchResult = await datasetCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
-//     _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1,
-//     Course_URL: 1, Organization: 1, Course_Description: 1
-//   }).toArray();
-//
-//   res.render("searchList", { searchResult: searchResult });
-// =======
-// let searchResult;
-//
-// app.post('/searchSubmit', async (req,res) => {
-//   var courseSearch = req.body.courseSearch;
-//
-//   searchResult = await datasetCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
-//   _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1,
-//   Course_URL: 1, Organization: 1, Course_Description: 1}).toArray();
-//
-//   res.render("searchList2", {searchResult: searchResult});
-// >>>>>>> feature/Riz_filterprovider
-//   // res.redirect('/searchList');
-//
-//
-// });
 
 //Filters 
 
@@ -249,47 +222,6 @@ app.post('/edit-profile-submit', sessionValidation, async(req,res) => {
 
   res.redirect("/profile");
 });
-
-
-
-
-
-
-// app.get('/reviews', async (req, res) => {
-
-//   const reviews = await reviewCollection.find().toArray();
-
-//   // Extract the slider values from the reviews
-//   const sliderValues = reviews.map(review => ({
-//     courseContentSliderValue: review.CourseContentRating,
-//     courseStructureSliderValue: review.CourseStructureRating,
-//     teachingStyleSliderValue: review.TeachingStyleRating,
-//     studentSupportSliderValue: review.StudentSupportRating
-//   }));
-
-//   const review = reviews.map(review => ({
-//     review: review.Review
-//   }))
-
-//   const currentDate = reviews.map(review => ({
-//     currentDate: review.Time
-//   }))
-
-//   const username = reviews.map(review => ({
-//     username: review.username
-//   }))
-
-//   const renderData = {
-//     req: req,
-//     sliderValues: sliderValues,
-//     review: review,
-//     currentDate: currentDate,
-//     username: username,
-//     reviews: reviews
-//   };
-
-//   res.render("review", renderData);
-// });
 
 app.get('/reviews', async (req, res) => {
   const reviews = await reviewCollection.find().toArray();
