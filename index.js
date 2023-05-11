@@ -94,8 +94,8 @@ app.post('/searchSubmit', async (req,res) => {
   _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, 
   Course_URL: 1, Organization: 1, Course_Description: 1}).toArray();
   
-  res.render("searchList2", {searchResult: searchResult});
-  // res.redirect('/searchList');
+  res.render("searchList2", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+
 
 
 });
@@ -103,15 +103,15 @@ app.post('/searchSubmit', async (req,res) => {
 //Filters 
 
 app.get('/filterudemy', (req,res) => {
-  res.render("filterudemy", {searchResult: searchResult});
+  res.render("filterudemy", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
 });
 
 app.get('/filtercoursera', (req,res) => {
-  res.render("filtercoursera", {searchResult: searchResult});
+  res.render("filtercoursera",{searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
 });
 
 app.get('/filterallcourses', (req,res) => {
-  res.render("filterallcourses", {searchResult: searchResult});
+  res.render("filterallcourses", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
 });
 
 
@@ -119,7 +119,7 @@ app.get('/filterallcourses', (req,res) => {
 
 
 app.get('/login', (req, res) => {
-  res.render("login");
+  res.render("login",{ isLoggedIn: isLoggedIn(req) });
 });
 
 app.get('/sample', (req, res) => {
@@ -127,36 +127,39 @@ app.get('/sample', (req, res) => {
 });
 
 app.post('/login-submit', loginValidation, async (req,res) => {
-  let email = req.body.email;
+  let id = req.body.id;
 
-  const result = await userCollection.find({ email: email }).project({ email: 1, password: 1, username: 1, avatar: 1, _id: 1 }).toArray();
+  const result = await userCollection.find({ id: id }).project({ email: 1, password: 1, username: 1, avatar: 1, _id: 1 }).toArray();
   req.session.uid = result[0]._id;
   req.session.authenticated = true;
-  req.session.email = email;
+  req.session.id = id;
+  req.session.email = result[0].email;
   req.session.username = result[0].username;
   req.session.avatar = result[0].avatar;
   req.session.cookie.maxAge = expireTime;
 
-  res.redirect('/');
+  res.render('index-afterLogin',{ isLoggedIn: isLoggedIn(req) });
 });
 
 app.get('/signup', (req, res) => {
-  res.render('signup');
+  res.render('signup',{ isLoggedIn: isLoggedIn(req) });
 });
 
 app.post('/signup-submit', signupValidation, async (req, res) => {
-  let email = req.body.email;
+  let id = req.body.id;
   let password = req.body.password;
   let username = req.body.username;
+  let email = req.body.email;
 
   // If inputs are valid, add the member
   let hashedPassword = await bcrypt.hash(password, saltRounds);
 
-  await userCollection.insertOne({ username: username, email: email, password: hashedPassword, user_type: 'user' });
+  await userCollection.insertOne({ id: id, username: username, email: email, password: hashedPassword, user_type: 'user' });
   console.log("Inserted user");
 
   // Create a session
   req.session.authenticated = true;
+  req.session.id = id;
   req.session.email = email;
   req.session.username = username;
   req.session.user_type = 'user';
@@ -174,7 +177,7 @@ app.get('/logout', (req,res) => {
 
 app.get('/profile', sessionValidation, (req,res) => {
   let { username, email, avatar } = req.session;
-  res.render('profile', {username, email, avatar});
+  res.render('profile', {username, email, avatar, isLoggedIn: isLoggedIn(req) });
 });
 
 app.get('/change-password', sessionValidation, async (req,res) => {

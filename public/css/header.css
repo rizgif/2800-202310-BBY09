@@ -3,6 +3,7 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 10px;
+  height: 60px;
   background-color: #fff;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -24,7 +25,6 @@ header {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 
 } */
-
 nav #i1,
 nav #i2 {
   width: 40px;
@@ -33,11 +33,14 @@ nav #i2 {
   display: none;
   cursor: pointer;
 }
-
+.nav-links ul {
+  margin-bottom: 0;
+}
 .nav-links {
   flex: 1;
   text-align: right;
   display: flex;
+  align-items: center;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -62,7 +65,6 @@ nav #i2 {
 .nav-links ul li a:hover {
   display: block;
   transition: 0.2s;
-  font-weight: bold;
   cursor: pointer;
 }
 
@@ -71,9 +73,10 @@ nav #i2 {
 }
 
 .nav-links ul li a {
+  font-weight: 400;
   color: #000000;
   text-decoration: none;
-  font-size: 24px;
+  font-size: 18px;
 }
 
 
