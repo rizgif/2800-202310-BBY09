@@ -127,12 +127,13 @@ app.get('/sample', (req, res) => {
 });
 
 app.post('/login-submit', loginValidation, async (req,res) => {
-  let email = req.body.email;
+  let id = req.body.id;
 
-  const result = await userCollection.find({ email: email }).project({ email: 1, password: 1, username: 1, avatar: 1, _id: 1 }).toArray();
+  const result = await userCollection.find({ id: id }).project({ email: 1, password: 1, username: 1, avatar: 1, _id: 1 }).toArray();
   req.session.uid = result[0]._id;
   req.session.authenticated = true;
-  req.session.email = email;
+  req.session.id = id;
+  req.session.email = result[0].email;
   req.session.username = result[0].username;
   req.session.avatar = result[0].avatar;
   req.session.cookie.maxAge = expireTime;
@@ -145,18 +146,20 @@ app.get('/signup', (req, res) => {
 });
 
 app.post('/signup-submit', signupValidation, async (req, res) => {
-  let email = req.body.email;
+  let id = req.body.id;
   let password = req.body.password;
   let username = req.body.username;
+  let email = req.body.email;
 
   // If inputs are valid, add the member
   let hashedPassword = await bcrypt.hash(password, saltRounds);
 
-  await userCollection.insertOne({ username: username, email: email, password: hashedPassword, user_type: 'user' });
+  await userCollection.insertOne({ id: id, username: username, email: email, password: hashedPassword, user_type: 'user' });
   console.log("Inserted user");
 
   // Create a session
   req.session.authenticated = true;
+  req.session.id = id;
   req.session.email = email;
   req.session.username = username;
   req.session.user_type = 'user';
