@@ -17,12 +17,16 @@
 
             <div class="user_info">
                 <%= review.username %>
+                    
             </div>
             <div class="time_stamp">
                 <%= review.Time %>
             </div>
             <div class="user_review">
                 <%= review.Review %>
+                <% if (review.username === username) { %>
+                    <%- include("edit-review") %>
+                        <% } %>
             </div>
         </div>
 
