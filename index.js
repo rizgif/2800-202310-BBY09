@@ -88,6 +88,7 @@ app.get('/', async(req, res) => {
   res.render("index", { isLoggedIn: isLoggedIn(req) });
 });
 
+<<<<<<< HEAD
 app.post('/searchSubmit', async (req, res) => {
   var courseSearch = req.body.courseSearch;
 
@@ -97,12 +98,36 @@ app.post('/searchSubmit', async (req, res) => {
   }).toArray();
 
   res.render("searchList", { searchResult: searchResult });
+=======
+let searchResult;
+
+app.post('/searchSubmit', async (req,res) => {
+  var courseSearch = req.body.courseSearch;
+
+  searchResult = await datasetCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
+  _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, 
+  Course_URL: 1, Organization: 1, Course_Description: 1}).toArray();
+  
+  res.render("searchList2", {searchResult: searchResult});
+>>>>>>> feature/Riz_filterprovider
   // res.redirect('/searchList');
+
+
 });
 
 //Filters 
 
+app.get('/filterudemy', (req,res) => {
+  res.render("filterudemy", {searchResult: searchResult});
+});
 
+app.get('/filtercoursera', (req,res) => {
+  res.render("filtercoursera", {searchResult: searchResult});
+});
+
+app.get('/filterallcourses', (req,res) => {
+  res.render("filterallcourses", {searchResult: searchResult});
+});
 
 
 
@@ -262,12 +287,13 @@ app.get('/reviews', async (req, res) => {
       studentSupportSliderValue: review.StudentSupportRating
     };
 
+    
     return {
       review: review,
       sliderValue: sliderValue
     };
   });
-
+  // console.log(reviewSliderPairs);
   // console.log(sliderValue);
   res.render("review", {
     req: req,
@@ -275,6 +301,12 @@ app.get('/reviews', async (req, res) => {
   });
 
 });
+
+app.get('/reviews/all', async (req, res) => {
+  res.render("allreview");
+});
+
+
 
 app.get('/reviews/write', async (req, res) => {
 
@@ -349,6 +381,39 @@ app.post('/submitReview', async (req, res) => {
   res.redirect('/reviews');
 });
 
+<<<<<<< HEAD
+app.get('/profileReview', async (req, res) => {
+  const reviews = await reviewCollection.find().toArray();
+
+  // Extract the slider values from the reviews
+  const sliderValues = reviews.map(review => ({
+    courseContentSliderValue: review.CourseContentRating,
+    courseStructureSliderValue: review.CourseStructureRating,
+    teachingStyleSliderValue: review.TeachingStyleRating,
+    studentSupportSliderValue: review.StudentSupportRating
+  }));
+
+  const review = reviews.map(review => ({
+    review: review.Review
+  }))
+
+  const currentDate = reviews.map(review => ({
+    currentDate: review.Time
+  }))
+
+  const renderData = {
+    req: req,
+    sliderValues: sliderValues,
+    review: review
+  };
+
+  res.render("profile-review", renderData);
+});
+
+
+
+=======
+>>>>>>> 7b1d8f2ce2ec646a729ada3fe4ed17d2fab97565
 /* === // Pages end === */
 
 app.use(express.static(__dirname + "/public"));
