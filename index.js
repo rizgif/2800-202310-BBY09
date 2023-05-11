@@ -65,7 +65,10 @@ app.use(session({
 
 /* === Pages === */
 
+// TODO:
 require("./routes/index.js");
+
+const routePath = "./views/html";
 
 // app.get('/', (req,res) => {
 //   // let username = req.session.username || 'test';
@@ -159,11 +162,12 @@ app.get('/sample', (req, res) => {
 app.post('/login-submit', loginValidation, async (req,res) => {
   let email = req.body.email;
 
-  const result = await userCollection.find({ email: email }).project({ email: 1, password: 1, username: 1, _id: 1 }).toArray();
+  const result = await userCollection.find({ email: email }).project({ email: 1, password: 1, username: 1, avatar: 1, _id: 1 }).toArray();
   req.session.uid = result[0]._id;
   req.session.authenticated = true;
   req.session.email = email;
   req.session.username = result[0].username;
+  req.session.avatar = result[0].avatar;
   req.session.cookie.maxAge = expireTime;
 
   res.redirect('/');
@@ -189,6 +193,7 @@ app.post('/signup-submit', signupValidation, async (req, res) => {
   req.session.email = email;
   req.session.username = username;
   req.session.user_type = 'user';
+  req.session.avatar = null;
   req.session.cookie.maxAge = expireTime;
 
   // redirect the user to the / page.
@@ -201,13 +206,14 @@ app.get('/logout', (req,res) => {
 });
 
 app.get('/profile', sessionValidation, (req,res) => {
-  let { username, email } = req.session;
-  res.render('profile', {username, email});
+  let { username, email, avatar } = req.session;
+  res.render('profile', {username, email, avatar});
 });
 
 app.get('/change-password', sessionValidation, async (req,res) => {
   const message = req.query.message || '';
-  res.render('change-password', { message });
+  const avatar = req.session.avatar;
+  res.render('change-password', { message, avatar });
 });
 
 app.post('/change-password-submit', sessionValidation, async(req,res) => {
@@ -236,15 +242,18 @@ app.post('/change-password-submit', sessionValidation, async(req,res) => {
 app.get('/edit-profile', sessionValidation, async (req,res) => {
   let email = req.session.email;
   let username = req.session.username;
-  res.render("edit-profile", {email, username});
+  let avatar = req.session.avatar;
+  res.render("edit-profile", {email, username, avatar});
 });
 app.post('/edit-profile-submit', sessionValidation, async(req,res) => {
   let username = req.body.username;
+  let avatar = req.body.avatar;
   let uid = req.session.uid;
 
   if (username) {
-    await userCollection.updateOne({_id: new ObjectId(uid)}, {$set: {username}});
+    await userCollection.updateOne({_id: new ObjectId(uid)}, {$set: {username, avatar}});
     req.session.username= username;
+    req.session.avatar = avatar;
   }
 
   res.redirect("/profile");
