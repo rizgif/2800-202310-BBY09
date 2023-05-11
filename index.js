@@ -158,22 +158,37 @@ app.get('/profile', sessionValidation, (req,res) => {
   let { username, email } = req.session;
   res.render('profile', {username, email});
 });
+
 app.get('/change-password', sessionValidation, async (req,res) => {
-  res.render("change-password");
+  const message = req.query.message || '';
+  res.render('change-password', { message });
 });
+
 app.post('/change-password-submit', sessionValidation, async(req,res) => {
+  console.log('change password submit');
+  /* Check the old password */
   let email = req.session.email;
-  const result = await userCollection.find({ email: email }).project({ _id: 1 }).toArray();
-  let uid = result[0]._id;
+  let newPassword = req.body.password1;
+  let oldPassword = req.body.oldPassword;
 
-  let password = req.body.password2;
+  // check if the password is correct
+  const result = await userCollection.find({ email: email }).project({ _id: 1, password: 1 }).toArray();
+  if (!await bcrypt.compare(oldPassword, result[0].password)) {
+    res.redirect("/change-password?message=Old%20password%20is%20incorrect");
+    return;
+  }
 
+  /* update the new password */
   // If inputs are valid, add the member
-  let hashedPassword = await bcrypt.hash(password, saltRounds);
-
+  let hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+  let uid = result[0]._id;
   await userCollection.updateOne({_id: new ObjectId(uid)}, {$set: {password: hashedPassword}});
   console.log('password is changed')
   res.redirect("/profile");
+});
+
+app.get('/edit-profile', sessionValidation, async (req,res) => {
+  res.render("edit-profile");
 });
 
 
