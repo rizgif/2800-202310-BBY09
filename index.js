@@ -77,12 +77,6 @@ const routePath = "./views/html";
 // });
 
 app.get('/', async(req, res) => {
-  // if (!req.session.authenticated) {
-  //     res.render("index_beforeLogin");
-  // } else {
-  //     res.render("index_afterLogin");
-  // }
-
   if (req.session.authenticated && !req.session.uid) {
     const result = await userCollection.find({ email: req.session.email }).project({ _id: 1 }).toArray();
     req.session.uid = result[0]._id;
