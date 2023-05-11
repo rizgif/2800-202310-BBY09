@@ -81,17 +81,6 @@ app.get('/', (req, res) => {
   res.render("index", { isLoggedIn: isLoggedIn(req) });
 });
 
-<<<<<<< HEAD
-app.post('/searchSubmit', async (req, res) => {
-  var courseSearch = req.body.courseSearch;
-
-  const searchResult = await datasetCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
-    _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1,
-    Course_URL: 1, Organization: 1, Course_Description: 1
-  }).toArray();
-
-  res.render("searchList", { searchResult: searchResult });
-=======
 let searchResult;
 
 app.post('/searchSubmit', async (req,res) => {
@@ -102,7 +91,6 @@ app.post('/searchSubmit', async (req,res) => {
   Course_URL: 1, Organization: 1, Course_Description: 1}).toArray();
   
   res.render("searchList2", {searchResult: searchResult});
->>>>>>> feature/Riz_filterprovider
   // res.redirect('/searchList');
 
 
@@ -327,7 +315,6 @@ app.post('/submitReview', async (req, res) => {
   res.redirect('/reviews');
 });
 
-<<<<<<< HEAD
 app.get('/profileReview', async (req, res) => {
   const reviews = await reviewCollection.find().toArray();
 
@@ -358,8 +345,6 @@ app.get('/profileReview', async (req, res) => {
 
 
 
-=======
->>>>>>> 7b1d8f2ce2ec646a729ada3fe4ed17d2fab97565
 /* === // Pages end === */
 
 app.use(express.static(__dirname + "/public"));
