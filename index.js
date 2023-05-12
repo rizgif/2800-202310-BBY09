@@ -44,6 +44,7 @@ const email_password = process.env.EMAIL_PASSWORD;
 let { database } = include('databaseConnection');
 
 const userCollection = database.db(mongodb_database).collection('users');
+const bookmarkCollection = database.db(mongodb_database).collection('bookmarks');
 const datasetCollection = database.db(mongodb_database).collection('courses');
 const reviewCollection = database.db(mongodb_database).collection('reviews');
 const tokenCollection = database.db(mongodb_database).collection('tokens');

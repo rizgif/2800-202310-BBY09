@@ -56,13 +56,12 @@ const loadInputValidation = () => {
 //   });
 // });
 
-async function toggleBookmark(event) {
-  const courseId = event.target.closest('.Course-Bookmark').dataset.courseId;
-  console.log('Course ID:', courseId);
+async function toggleBookmark(courseId) {
+  const userId = '<%= typeof uid !== "undefined" ? uid : "" %>'; // get the user ID from the session
   const response = await fetch('/addBookmark', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ courseId: courseId })
+    body: JSON.stringify({ userId: userId, courseId: courseId })
   });
   if (response.ok) {
     const bookmarkButton = document.querySelector(`.Course-Bookmark[data-course-id="${courseId}"]`);
