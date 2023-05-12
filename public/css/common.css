@@ -119,3 +119,11 @@ button,
 .btn-icon {
 
 }
+.link {
+    color: var(--color-primary-green);
+    text-decoration: none;
+}
+.link:hover{
+    color: var(--color-primary-green);
+    text-decoration: underline;
+}

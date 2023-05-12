@@ -46,6 +46,7 @@ let { database } = include('databaseConnection');
 const userCollection = database.db(mongodb_database).collection('users');
 const datasetCollection = database.db(mongodb_database).collection('courses');
 const reviewCollection = database.db(mongodb_database).collection('reviews');
+const tokenCollection = database.db(mongodb_database).collection('tokens');
 
 app.set('view engine', 'ejs');
 
@@ -186,6 +187,18 @@ app.post('/signup-submit', signupValidation, async (req, res) => {
   let username = req.body.username;
   let email = req.body.email;
 
+  // check if the id already exists
+  const idCheck = await userCollection.find({ userId: userId }).project({ _id: 1}).toArray();
+  // const emailCheck = await userCollection.find({ email: email }).project({ _id: 1 }).toArray();
+  if (idCheck.length > 0) {
+    res.render('signup-submit', { signupFail: true, errorMessage: `This ID already exists. \n Please choose a different user id.` });
+    return;
+  }
+  // if (emailCheck.length > 0) {
+  //   res.render('signup-submit', { signupFail: true, errorMessage: `This email already exists. \n Please choose a different email.` });
+  //   return;
+  // }
+
   // If inputs are valid, add the member
   let hashedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -215,17 +228,14 @@ app.get('/find-password', (req,res) => {
 });
 app.post('/find-password', async (req,res) => {
   const email = req.body.email;
-  const client = new MongoClient(`mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/${mongodb_database}`);
 
   try {
-    await client.connect();
-    const db = client.db();
-    const user = await db.collection('users').findOne({ email: email });
+    const user = await userCollection.findOne({ email: email });
 
     if (user) {
       const token = new ObjectId().toString();
       const expireTime = new Date(Date.now() + 3600000); // Token expires in 1 hour
-      await db.collection('tokens').insertOne({ token: token, userId: user._id, expireAt: expireTime });
+      await tokenCollection.insertOne({ token: token, uid: user._id, expireAt: expireTime });
 
       const transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -239,16 +249,25 @@ app.post('/find-password', async (req,res) => {
         from: email_host,
         to: email,
         subject: 'Password Reset',
-      };
-        text: `Hi ${user.username},\n\nYou requested a password reset for your account.\n\nPlease click on the following link within the next hour to reset your password:\n\https://coursla.cyclic.app/reset-password/${token}\n\nIf you did not request this reset, please ignore this email.\n\nThank you,\nThe Coursla App Team`
+        text: `Hi ${user.userId},\n\nYou requested a password reset for your account.
+        \n\nPlease click on the following link within the next hour to reset your password:
+        \n\nhttps://coursla.cyclic.app/reset-password/${token}
+        \n\nIf you did not request this reset, please ignore this email.
+        \n\nThank you,
+        \\n\\ntest : http://localhost:3000/reset-password/${token}
+        \nThe Coursla App Team`
 
-      transporter.sendMail(mailOptions, (error, info) => {
+      };
+        // \n\ntest : http://localhost:3000/reset-password/${token}
+
+      await transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
           console.log(error);
-          res.render('find-password', { message: 'Failed to send email. Please try again later.' });
+          res.render('find-password', {message: 'Failed to send email. Please try again later.'});
         } else {
           console.log(info);
-          res.render('find-password', { message: 'An email has been sent with further instructions.' });
+          res.redirect("/login");
+          // res.render('find-password', { message: 'An email has been sent with further instructions.' });
         }
       });
     } else {
@@ -257,37 +276,53 @@ app.post('/find-password', async (req,res) => {
   } catch (error) {
     console.log(error);
     res.render('find-password', { message: 'Failed to find user. Please try again later.' });
-  } finally {
-    await client.close();
   }
 });
 
 app.get('/reset-password/:token', async (req, res) => {
+  const token = req.params.token;
   try {
-    // Find the user with the given reset token in the database
-    const user = await userCollection.findOne({ resetToken: req.params.token });
+    const tokenData = await tokenCollection.findOne({ token: token });
 
-    if (!user) {
-      // If the user is not found, redirect to a "forgot password" page or show an error message
-      return res.status(404).send('Invalid or expired reset token.');
+    if (tokenData && tokenData.expireAt > new Date()) {
+      const user = await userCollection.findOne({ _id: tokenData.uid });
+      console.log(user)
+      res.render('reset-password', { token: token, userId: user.userId, avatar: user.avatar });
+    } else {
+      res.render('error', { message: 'Invalid or expired token' });
     }
-
-    // Check if the reset token has expired
-    if (Date.now() > user.resetTokenExpires) {
-      // If the reset token has expired, delete it from the user's record and redirect to a "forgot password" page or show an error message
-      await userCollection.updateOne({ _id: user._id }, { $unset: { resetToken: "", resetTokenExpires: "" } });
-      return res.status(404).send('Invalid or expired reset token.');
-    }
-
-    // If the reset token is valid, render the password reset form
-    res.render('reset-password', { token: req.params.token });
-
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Internal Server Error');
+  } catch (error) {
+    console.error(error);
+    res.render('error', { message: 'An error occurred' });
   }
 });
 
+app.post('/reset-password-submit', async(req,res) => {
+  console.log('change password submit');
+  /* Check the old password */
+  let token = req.body.token;
+  let newPassword = req.body.password1;
+
+  try {
+    const tokenData = await tokenCollection.findOne({ token: token });
+    console.log('tokenData',token,tokenData)
+    const user = await userCollection.findOne({ _id: tokenData.uid });
+    console.log('user',user)
+
+    /* update the new password */
+    // If inputs are valid, add the member
+    let hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+    let uid = user._id;
+    await userCollection.updateOne({_id: new ObjectId(uid)}, {$set: {password: hashedPassword}});
+    console.log('password is changed')
+    res.redirect("/profile");
+
+  } catch (error) {
+    console.error(error);
+    res.render('error', { message: 'An error occurred' });
+  }
+
+});
 
 app.get('/profile', sessionValidation, (req,res) => {
   let { username, email, avatar, userId } = req.session;
@@ -643,7 +678,7 @@ app.use(express.static(__dirname + "/public"));
 
 app.get("*", (req, res) => {
   res.status(404);
-  res.send("Page not found - 404");
+  res.render("404", { isLoggedIn: isLoggedIn(req) });
 })
 
 app.listen(port, () => {
