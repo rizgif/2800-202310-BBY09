@@ -1,17 +1,17 @@
 /* SignUp, SignIn */
 .form-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.form-wrapper .container {
-    max-width: 500px;
+    padding: 0 20px;
 }
 .form-floating {
     margin-bottom: 20px;
 }
-.form-signin h1 {
+.form-wrapper h1,
+.form-wrapper h2{
     margin-bottom: 30px;
+}
+.form-wrapper .form-signin-heading {
+    margin-top: 20px;
+    font-size: 20px;
 }
 .btn-sign {
     margin-top: 40px;

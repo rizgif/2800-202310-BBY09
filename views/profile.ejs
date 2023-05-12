@@ -1,18 +1,25 @@
-<%- include('templates/header') %>
+<% if (isLoggedIn) { %>
+  <%- include("templates/header") %>
+<% } else { %>
+  <%- include("templates/header-beforeLogin") %>
+<% } %>
 <main class="profile-wrapper container">
   <section class="profile-section-info">
     <div class="profile-container-avatar">
-      <%- include("templates/profile-avatar") %>
+      <%- include("templates/profile-avatar", {avatar}) %>
     </div>
   
     <h2 class="title-profile">Personal information</h2>
   
     <div class="container-info">
       <div class="item-row">
-        Name: <%= username %>
+        ID: <%= userId %>
       </div>
       <div class="item-row">
         Email: <%= email %>
+      </div>
+      <div class="item-row">
+        Username: <%= username %>
       </div>
       <div class="d-flex justify-content-end">
         <div class="dropdown">
@@ -20,8 +27,8 @@
             <img src="/image/setting.png" alt="Setting"/>
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#">Edit profile</a>
-            <a class="dropdown-item" href="#">Change password</a>
+            <a class="dropdown-item" href="/edit-profile">Edit profile</a>
+            <a class="dropdown-item" href="/change-password">Change password</a>
             <a class="dropdown-item" href="/logout">Log out</a>
           </div>
         </div>

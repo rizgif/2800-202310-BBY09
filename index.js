@@ -4,6 +4,8 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const bcrypt = require('bcrypt');
 const Joi = require("joi");
+const {ObjectId, MongoClient} = require("mongodb");
+const nodemailer = require('nodemailer');
 
 require("./utils.js");
 
@@ -23,7 +25,7 @@ const port = process.env.PORT || 8000;
 const app = express();
 
 
-const expireTime = 1 * 60 * 60 * 1000; //expires after 1 hour  (hours * minutes * seconds * millis)
+const expireTime = 12 * 60 * 60 * 1000; //expires after 12 hour  (hours * minutes * seconds * millis)
 
 
 /* secret information section */
@@ -34,6 +36,9 @@ const mongodb_database = process.env.MONGODB_DATABASE;
 const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
 
 const node_session_secret = process.env.NODE_SESSION_SECRET;
+
+const email_host = process.env.EMAIL_HOST;
+const email_password = process.env.EMAIL_PASSWORD;
 /* END secret section */
 
 let { database } = include('databaseConnection');
@@ -48,7 +53,7 @@ app.use(express.urlencoded({ extended: false }));
 
 
 var mongoStore = MongoStore.create({
-  mongoUrl: `mongodb+srv://riz:apple@courselaapp.fb2pphc.mongodb.net/sessions`,
+  mongoUrl: `mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/${mongodb_database}`,
   crypto: {
     secret: mongodb_session_secret
   }
@@ -64,7 +69,10 @@ app.use(session({
 
 /* === Pages === */
 
+// TODO:
 require("./routes/index.js");
+
+const routePath = "./views/html";
 
 // app.get('/', (req,res) => {
 //   // let username = req.session.username || 'test';
@@ -72,76 +80,94 @@ require("./routes/index.js");
 //   res.render("index", {isLoggedIn: false});
 // });
 
-app.get('/', (req, res) => {
-  // if (!req.session.authenticated) {
-  //     res.render("index_beforeLogin");
-  // } else {
-  //     res.render("index_afterLogin");
-  // }
+app.get('/', async(req, res) => {
+  if (req.session.authenticated && !req.session.uid) {
+    const result = await userCollection.find({ email: req.session.email }).project({ _id: 1 }).toArray();
+    req.session.uid = result[0]._id;
+
+  }
   res.render("index", { isLoggedIn: isLoggedIn(req) });
 });
 
-app.post('/searchSubmit', async (req, res) => {
+let searchResult;
+
+app.post('/searchSubmit', async (req,res) => {
   var courseSearch = req.body.courseSearch;
 
-  const searchResult = await datasetCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
-    _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1,
-    Course_URL: 1, Organization: 1, Course_Description: 1
-  }).toArray();
+  searchResult = await datasetCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
+  _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, 
+  Course_URL: 1, Organization: 1, Course_Description: 1}).toArray();
+  
+  res.render("searchList2", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
 
-  res.render("searchList", { searchResult: searchResult });
-  // res.redirect('/searchList');
+
+
 });
 
 //Filters 
 
+app.get('/filterudemy', (req,res) => {
+  res.render("filterudemy", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+});
 
+app.get('/filtercoursera', (req,res) => {
+  res.render("filtercoursera",{searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+});
+
+app.get('/filterallcourses', (req,res) => {
+  res.render("filterallcourses", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+});
 
 
 
 
 
 app.get('/login', (req, res) => {
-  res.render("login");
+  res.render("login",{ isLoggedIn: isLoggedIn(req) });
 });
 
 app.get('/sample', (req, res) => {
   res.render("sample");
 });
 
-app.post('/loginSubmit', loginValidation, async (req,res) => {
-  let email = req.body.email;
+app.post('/login-submit', loginValidation, async (req,res) => {
+  let userId = req.body.userId;
 
-  const result = await userCollection.find({ email: email }).project({ email: 1, password: 1, username: 1, _id: 1 }).toArray();
-
+  const result = await userCollection.find({ userId: userId }).project({ email: 1, password: 1, username: 1, avatar: 1, _id: 1 }).toArray();
+  req.session.uid = result[0]._id;
   req.session.authenticated = true;
-  req.session.email = email;
+  req.session.userId = userId;
+  req.session.email = result[0].email;
   req.session.username = result[0].username;
+  req.session.avatar = result[0].avatar;
   req.session.cookie.maxAge = expireTime;
 
   res.redirect('/');
 });
 
 app.get('/signup', (req, res) => {
-  res.render('signup');
+  res.render('signup',{ isLoggedIn: isLoggedIn(req) });
 });
 
-app.post('/signupSubmit', signupValidation, async (req, res) => {
-  let email = req.body.email;
+app.post('/signup-submit', signupValidation, async (req, res) => {
+  let userId = req.body.userId;
   let password = req.body.password;
   let username = req.body.username;
+  let email = req.body.email;
 
   // If inputs are valid, add the member
   let hashedPassword = await bcrypt.hash(password, saltRounds);
 
-  await userCollection.insertOne({ username: username, email: email, password: hashedPassword, user_type: 'user' });
+  await userCollection.insertOne({ userId: userId, username: username, email: email, password: hashedPassword, user_type: 'user' });
   console.log("Inserted user");
 
   // Create a session
   req.session.authenticated = true;
+  req.session.userId = userId;
   req.session.email = email;
   req.session.username = username;
   req.session.user_type = 'user';
+  req.session.avatar = null;
   req.session.cookie.maxAge = expireTime;
 
   // redirect the user to the / page.
@@ -153,49 +179,142 @@ app.get('/logout', (req,res) => {
   res.redirect("/");
 });
 
-app.get('/profile', sessionValidation, (req,res) => {
-  let { username, email } = req.session;
-  res.render('profile', {username, email});
+app.get('/find-password', (req,res) => {
+  res.render('find-password');
+});
+app.post('/find-password', async (req,res) => {
+  const email = req.body.email;
+  const client = new MongoClient(`mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/${mongodb_database}`);
+
+  try {
+    await client.connect();
+    const db = client.db();
+    const user = await db.collection('users').findOne({ email: email });
+
+    if (user) {
+      const token = new ObjectId().toString();
+      const expireTime = new Date(Date.now() + 3600000); // Token expires in 1 hour
+      await db.collection('tokens').insertOne({ token: token, userId: user._id, expireAt: expireTime });
+
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: email_host,
+          pass: email_password
+        }
+      });
+
+      const mailOptions = {
+        from: email_host,
+        to: email,
+        subject: 'Password Reset',
+      };
+        text: `Hi ${user.username},\n\nYou requested a password reset for your account.\n\nPlease click on the following link within the next hour to reset your password:\n\https://coursla.cyclic.app/reset-password/${token}\n\nIf you did not request this reset, please ignore this email.\n\nThank you,\nThe Coursla App Team`
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+          res.render('find-password', { message: 'Failed to send email. Please try again later.' });
+        } else {
+          console.log(info);
+          res.render('find-password', { message: 'An email has been sent with further instructions.' });
+        }
+      });
+    } else {
+      res.render('find-password', { message: 'No user found with that email address.' });
+    }
+  } catch (error) {
+    console.log(error);
+    res.render('find-password', { message: 'Failed to find user. Please try again later.' });
+  } finally {
+    await client.close();
+  }
+});
+
+app.get('/reset-password/:token', async (req, res) => {
+  try {
+    // Find the user with the given reset token in the database
+    const user = await userCollection.findOne({ resetToken: req.params.token });
+
+    if (!user) {
+      // If the user is not found, redirect to a "forgot password" page or show an error message
+      return res.status(404).send('Invalid or expired reset token.');
+    }
+
+    // Check if the reset token has expired
+    if (Date.now() > user.resetTokenExpires) {
+      // If the reset token has expired, delete it from the user's record and redirect to a "forgot password" page or show an error message
+      await userCollection.updateOne({ _id: user._id }, { $unset: { resetToken: "", resetTokenExpires: "" } });
+      return res.status(404).send('Invalid or expired reset token.');
+    }
+
+    // If the reset token is valid, render the password reset form
+    res.render('reset-password', { token: req.params.token });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 
+app.get('/profile', sessionValidation, (req,res) => {
+  let { username, email, avatar, userId } = req.session;
+  res.render('profile', {username, email, avatar, userId, isLoggedIn: isLoggedIn(req) });
+});
 
+app.get('/change-password', sessionValidation, async (req,res) => {
+  const message = req.query.message || '';
+  const avatar = req.session.avatar;
+  res.render('change-password', { message, avatar, isLoggedIn: isLoggedIn(req) });
+});
 
-// app.get('/reviews', async (req, res) => {
+app.post('/change-password-submit', sessionValidation, async(req,res) => {
+  console.log('change password submit');
+  /* Check the old password */
+  let email = req.session.email;
+  let newPassword = req.body.password1;
+  let oldPassword = req.body.oldPassword;
 
-//   const reviews = await reviewCollection.find().toArray();
+  // check if the password is correct
+  const result = await userCollection.find({ email: email }).project({ _id: 1, password: 1 }).toArray();
+  if (!await bcrypt.compare(oldPassword, result[0].password)) {
+    res.redirect("/change-password?message=Old%20password%20is%20incorrect");
+    return;
+  }
 
-//   // Extract the slider values from the reviews
-//   const sliderValues = reviews.map(review => ({
-//     courseContentSliderValue: review.CourseContentRating,
-//     courseStructureSliderValue: review.CourseStructureRating,
-//     teachingStyleSliderValue: review.TeachingStyleRating,
-//     studentSupportSliderValue: review.StudentSupportRating
-//   }));
+  /* update the new password */
+  // If inputs are valid, add the member
+  let hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+  let uid = result[0]._id;
+  await userCollection.updateOne({_id: new ObjectId(uid)}, {$set: {password: hashedPassword}});
+  console.log('password is changed')
+  res.redirect("/profile");
+});
 
-//   const review = reviews.map(review => ({
-//     review: review.Review
-//   }))
+app.get('/edit-profile', sessionValidation, async (req,res) => {
+  let email = req.session.email;
+  let username = req.session.username;
+  let avatar = req.session.avatar;
+  let userId = req.session.userId;
+  res.render("edit-profile", {userId, email, username, avatar, isLoggedIn: isLoggedIn(req)});
+});
 
-//   const currentDate = reviews.map(review => ({
-//     currentDate: review.Time
-//   }))
+app.post('/edit-profile-submit', sessionValidation, async(req,res) => {
+  let username = req.body.username;
+  let avatar = req.body.avatar;
+  let email = req.body.email;
+  let uid = req.session.uid;
 
-//   const username = reviews.map(review => ({
-//     username: review.username
-//   }))
+  if (username) {
+    await userCollection.updateOne({_id: new ObjectId(uid)}, {$set: {email, username, avatar}});
+    req.session.username= username;
+    req.session.avatar = avatar;
+    req.session.email = email;
+  }
 
-//   const renderData = {
-//     req: req,
-//     sliderValues: sliderValues,
-//     review: review,
-//     currentDate: currentDate,
-//     username: username,
-//     reviews: reviews
-//   };
-
-//   res.render("review", renderData);
-// });
+  res.redirect("/profile");
+});
 
 app.get('/reviews', async (req, res) => {
   const reviews = await reviewCollection.find().toArray();
@@ -208,12 +327,13 @@ app.get('/reviews', async (req, res) => {
       studentSupportSliderValue: review.StudentSupportRating
     };
 
+    
     return {
       review: review,
       sliderValue: sliderValue
     };
   });
-
+  // console.log(reviewSliderPairs);
   // console.log(sliderValue);
   res.render("review", {
     req: req,
@@ -221,6 +341,12 @@ app.get('/reviews', async (req, res) => {
   });
 
 });
+
+app.get('/reviews/all', async (req, res) => {
+  res.render("allreview");
+});
+
+
 
 app.get('/reviews/write', async (req, res) => {
 
@@ -295,7 +421,30 @@ app.post('/submitReview', async (req, res) => {
   res.redirect('/reviews');
 });
 
-/* === // Pages end === */
+app.get('/profileReview', async (req, res) => {
+  const reviews = await reviewCollection.find().toArray();
+
+  const reviewSliderPairs= reviews.map(review => {
+    const sliderValue = {
+      courseContentSliderValue: review.CourseContentRating,
+      courseStructureSliderValue: review.CourseStructureRating,
+      teachingStyleSliderValue: review.TeachingStyleRating,
+      studentSupportSliderValue: review.StudentSupportRating
+    };
+
+    
+    return {
+      review: review,
+      sliderValue: sliderValue
+    };
+  });
+
+  res.render("profile-review", {
+    req: req,
+    reviewSliderPairs: reviewSliderPairs
+  });
+
+});
 
 app.use(express.static(__dirname + "/public"));
 

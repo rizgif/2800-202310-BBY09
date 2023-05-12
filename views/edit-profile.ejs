@@ -1,0 +1,58 @@
+<% if (isLoggedIn) { %>
+    <%- include("templates/header") %>
+<% } else { %>
+    <%- include("templates/header-beforeLogin") %>
+<% } %>
+
+<main class="form-wrapper profile-section-info">
+    <div class="profile-container-avatar">
+        <%- include("templates/profile-avatar", {avatar}) %>
+
+<!--        <div class="add-photo">-->
+<!--            <input id="upload-images" type="file" accept="image/jpeg, image/png, image/jpg" hidden>-->
+<!--            <label for="upload-images">-->
+<!--                <a type="button" class="btn btn-add-photo" aria-label="add photos">-->
+<!--              <span class="material-symbols-outlined">-->
+<!--                add_a_photo-->
+<!--              </span>-->
+<!--                    <p>-->
+<!--                        Add Photos <br />-->
+<!--                        (<i class="add-photo-number">0</i>/5)-->
+<!--                    </p>-->
+<!--                </a>-->
+<!--            </label>-->
+<!--            <output id="upload-output">-->
+<!--            </output>-->
+<!--        </div>-->
+    </div>
+    <form action='/edit-profile-submit' method='post' class="needs-validation" novalidate>
+        <h2 class="h3 fw-normal">Edit Profile</h2>
+
+        <div class="form-floating readonly">
+            <input name="userId" type="text" class="form-control" id="userId" value="<%= userId %>" readonly>
+            <label for="userId">ID</label>
+        </div>
+
+        <div class="form-floating">
+            <input name="username" type="text" class="form-control" id="username" placeholder="Username" value="<%= username %>" required>
+            <label for="username">Username</label>
+            <div class="invalid-feedback">
+                Please enter your username.
+            </div>
+        </div>
+
+        <div class="form-floating">
+            <input name="email" type="email" class="form-control" id="username" placeholder="Username" value="<%= email %>" required>
+            <label for="email">Username</label>
+            <div class="invalid-feedback">
+                Please enter your email.
+            </div>
+        </div>
+
+        <div class="sign-btns-container">
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Save</button>
+        </div>
+    </form>
+</main>
+
+<%- include("templates/footer") %>
