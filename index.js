@@ -435,6 +435,15 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
   res.render("write-review", renderData);
 });
 
+//delete the review from database
+app.delete('/reviews/deleteReview/:id', async (req, res) => {
+  const reviewId = req.params.id;
+
+  // Delete the review from the database based on the review ID
+  await reviewCollection.deleteOne({ _id: new ObjectId(reviewId) });
+
+  res.redirect('/reviews'); 
+});
 
 //write to database
 app.post('/submitReview', async (req, res) => {
