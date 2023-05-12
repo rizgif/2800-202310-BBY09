@@ -42,6 +42,7 @@ let { database } = include('databaseConnection');
 const userCollection = database.db(mongodb_database).collection('users');
 const datasetCollection = database.db(mongodb_database).collection('courses');
 const reviewCollection = database.db(mongodb_database).collection('reviews');
+const bookmarkCollection = database.db(mongodb_database).collection('bookmarks');
 
 app.set('view engine', 'ejs');
 
@@ -98,6 +99,19 @@ app.post('/searchSubmit', async (req,res) => {
 
 
 
+});
+
+app.post('/addBookmark', async (req, res) => {
+  const userId = req.session.uid; // user's _id
+  const courseId = req.body.courseId; // course's _id
+
+  console.log('Received courseId:', courseId);
+  await bookmarkCollection.insertOne({
+    userId: userId,
+    courseId: courseId
+  });
+
+  res.sendStatus(200);
 });
 
 //Filters 
