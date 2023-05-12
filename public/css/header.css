@@ -70,6 +70,7 @@ nav #i2 {
 
 .nav-links ul li:hover:after {
   width: 100%;
+  background: var(--color-primary-green);
 }
 
 .nav-links ul li a {
@@ -129,7 +130,6 @@ nav #i2 {
     content: "";
     width: 0%;
     height: 2px;
-    background: white;
     display: block;
     margin: auto;
     transition: 0.2s;

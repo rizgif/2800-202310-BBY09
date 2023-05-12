@@ -28,7 +28,9 @@
 }
 
 .loginarea-main {
-    margin-bottom: 12px;
+}
+.loginarea-main.before-login {
+    margin-top: -60px;
 }
 
 .slogan-main {
@@ -39,7 +41,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 5px;
-    padding: 10px;
+    padding: 10px 20px;
   }
   
   .item {
@@ -48,6 +50,10 @@
     justify-content: center;
     align-items: center;
   }
+    .item img {
+        width: 80%;
+        margin-bottom: 10px;
+    }
 
   .item p {
     margin-top: 5px;
