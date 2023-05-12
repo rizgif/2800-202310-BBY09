@@ -43,24 +43,28 @@ h2 {
 	padding:20px;
 }
 
-
 .Course-Bookmark {
-	box-sizing: border-box;
-    color: rgb(21, 21, 21);
-    font-family: HelveticaNeue, arial;
-    font-size: 14px;
+	/* box-sizing: border-box; */
+    /* color: rgb(21, 21, 21); */
+    /* font-family: HelveticaNeue, arial; */
+    /* font-size: 14px; */
     background: none;
-    border: 0px;
-    cursor: pointer;
-    height: fit-content;
-    outline: none;
-    padding: 0px;
-    width: fit-content;
+    /* border: 0px; */
+    /* cursor: pointer; */
+    /* height: fit-content; */
+    /* outline: none; */
+    /* padding: 0px; */
+    /* width: fit-content; */
     align-self: flex-start;
     display: flex;
-	nav-index: 2;
+	/* nav-index: 2; */
 	position: relative;
+    margin-left: 5px;
 
+}
+
+.Course-Bookmark.bookmarked svg path {
+  fill: #BC4749;
 }
 
 .Coursecard-InfoRatingWrapper {
