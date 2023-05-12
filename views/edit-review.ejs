@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="/css/edit-review.css">
-
+<% console.log(id) %>
 <div class="setting">
     <div class="dropdown">
         <button class="edit-button" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
@@ -8,14 +8,14 @@
         </button>
        
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item edit-review-link" href="#" data-review-id="<%= review._id.toString() %>">Edit this review</a>
+            <a class="dropdown-item edit-review-link" href="#" review-id="<%= review._id.toString() %>">Edit this review</a>
             <a class="dropdown-item" href="#">Delete this review</a>
         </div>
     </div>
 </div>
 
 
-<script>
+<!-- <script>
 $(document).ready(function() {
   $(document).on('click', '.edit-review-link', function(e) {
     e.preventDefault();
@@ -27,6 +27,6 @@ $(document).ready(function() {
   });
 });
 
-</script>
+</script> -->
 
 
