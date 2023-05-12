@@ -46,6 +46,7 @@ let { database } = include('databaseConnection');
 const userCollection = database.db(mongodb_database).collection('users');
 const datasetCollection = database.db(mongodb_database).collection('courses');
 const reviewCollection = database.db(mongodb_database).collection('reviews');
+const tokenCollection = database.db(mongodb_database).collection('tokens');
 
 app.set('view engine', 'ejs');
 
@@ -155,6 +156,18 @@ app.post('/signup-submit', signupValidation, async (req, res) => {
   let username = req.body.username;
   let email = req.body.email;
 
+  // check if the id already exists
+  const idCheck = await userCollection.find({ userId: userId }).project({ _id: 1}).toArray();
+  const emailCheck = await userCollection.find({ email: email }).project({ _id: 1 }).toArray();
+  if (idCheck.length > 0) {
+    res.render('signup-submit', { signupFail: true, errorMessage: `This ID already exists. \n Please choose a different user id.` });
+    return;
+  }
+  if (emailCheck.length > 0) {
+    res.render('signup-submit', { signupFail: true, errorMessage: `This email already exists. \n Please choose a different email.` });
+    return;
+  }
+
   // If inputs are valid, add the member
   let hashedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -184,17 +197,14 @@ app.get('/find-password', (req,res) => {
 });
 app.post('/find-password', async (req,res) => {
   const email = req.body.email;
-  const client = new MongoClient(`mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/${mongodb_database}`);
 
   try {
-    await client.connect();
-    const db = client.db();
-    const user = await db.collection('users').findOne({ email: email });
+    const user = await userCollection.findOne({ email: email });
 
     if (user) {
       const token = new ObjectId().toString();
       const expireTime = new Date(Date.now() + 3600000); // Token expires in 1 hour
-      await db.collection('tokens').insertOne({ token: token, userId: user._id, expireAt: expireTime });
+      await tokenCollection.insertOne({ token: token, uid: user._id, expireAt: expireTime });
 
       const transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -208,8 +218,14 @@ app.post('/find-password', async (req,res) => {
         from: email_host,
         to: email,
         subject: 'Password Reset',
+        text: `Hi ${user.username},\n\nYou requested a password reset for your account.
+        \n\nPlease click on the following link within the next hour to reset your password:
+        \n\nhttps://coursla.cyclic.app/reset-password/${token}
+        \n\ntest : http://localhost:3000/reset-password/${token}
+        \n\nIf you did not request this reset, please ignore this email.
+        \n\nThank you,
+        \nThe Coursla App Team`
       };
-        text: `Hi ${user.username},\n\nYou requested a password reset for your account.\n\nPlease click on the following link within the next hour to reset your password:\n\https://coursla.cyclic.app/reset-password/${token}\n\nIf you did not request this reset, please ignore this email.\n\nThank you,\nThe Coursla App Team`
 
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
