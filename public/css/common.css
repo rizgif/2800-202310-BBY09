@@ -35,7 +35,7 @@
     --color-parchment: #F2E8CF;
     --color-sand: #D7D3C1;
 
-    --color-divider: #eee;
+    --color-divider: #c5c5c5;
 
     --color-bg-gray: #e9ecef;
     --color-border-gray: #ccc;
@@ -49,6 +49,7 @@
     --height-nav: 60px;
 
     --radius-box: 14px;
+
 }
 
 /* Reset */

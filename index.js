@@ -4,7 +4,8 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const bcrypt = require('bcrypt');
 const Joi = require("joi");
-const {ObjectId} = require("mongodb");
+const {ObjectId, MongoClient} = require("mongodb");
+const nodemailer = require('nodemailer');
 
 require("./utils.js");
 
@@ -35,6 +36,9 @@ const mongodb_database = process.env.MONGODB_DATABASE;
 const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
 
 const node_session_secret = process.env.NODE_SESSION_SECRET;
+
+const email_host = process.env.EMAIL_HOST;
+const email_password = process.env.EMAIL_PASSWORD;
 /* END secret section */
 
 let { database } = include('databaseConnection');
@@ -175,6 +179,85 @@ app.get('/logout', (req,res) => {
   res.redirect("/");
 });
 
+app.get('/find-password', (req,res) => {
+  res.render('find-password');
+});
+app.post('/find-password', async (req,res) => {
+  const email = req.body.email;
+  const client = new MongoClient(`mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/${mongodb_database}`);
+
+  try {
+    await client.connect();
+    const db = client.db();
+    const user = await db.collection('users').findOne({ email: email });
+
+    if (user) {
+      const token = new ObjectId().toString();
+      const expireTime = new Date(Date.now() + 3600000); // Token expires in 1 hour
+      await db.collection('tokens').insertOne({ token: token, userId: user._id, expireAt: expireTime });
+
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: email_host,
+          pass: email_password
+        }
+      });
+
+      const mailOptions = {
+        from: email_host,
+        to: email,
+        subject: 'Password Reset',
+      };
+        text: `Hi ${user.username},\n\nYou requested a password reset for your account.\n\nPlease click on the following link within the next hour to reset your password:\n\https://coursla.cyclic.app/reset-password/${token}\n\nIf you did not request this reset, please ignore this email.\n\nThank you,\nThe Coursla App Team`
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+          res.render('find-password', { message: 'Failed to send email. Please try again later.' });
+        } else {
+          console.log(info);
+          res.render('find-password', { message: 'An email has been sent with further instructions.' });
+        }
+      });
+    } else {
+      res.render('find-password', { message: 'No user found with that email address.' });
+    }
+  } catch (error) {
+    console.log(error);
+    res.render('find-password', { message: 'Failed to find user. Please try again later.' });
+  } finally {
+    await client.close();
+  }
+});
+
+app.get('/reset-password/:token', async (req, res) => {
+  try {
+    // Find the user with the given reset token in the database
+    const user = await userCollection.findOne({ resetToken: req.params.token });
+
+    if (!user) {
+      // If the user is not found, redirect to a "forgot password" page or show an error message
+      return res.status(404).send('Invalid or expired reset token.');
+    }
+
+    // Check if the reset token has expired
+    if (Date.now() > user.resetTokenExpires) {
+      // If the reset token has expired, delete it from the user's record and redirect to a "forgot password" page or show an error message
+      await userCollection.updateOne({ _id: user._id }, { $unset: { resetToken: "", resetTokenExpires: "" } });
+      return res.status(404).send('Invalid or expired reset token.');
+    }
+
+    // If the reset token is valid, render the password reset form
+    res.render('reset-password', { token: req.params.token });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
 app.get('/profile', sessionValidation, (req,res) => {
   let { username, email, avatar, userId } = req.session;
   res.render('profile', {username, email, avatar, userId, isLoggedIn: isLoggedIn(req) });
@@ -216,6 +299,7 @@ app.get('/edit-profile', sessionValidation, async (req,res) => {
   let userId = req.session.userId;
   res.render("edit-profile", {userId, email, username, avatar, isLoggedIn: isLoggedIn(req)});
 });
+
 app.post('/edit-profile-submit', sessionValidation, async(req,res) => {
   let username = req.body.username;
   let avatar = req.body.avatar;
