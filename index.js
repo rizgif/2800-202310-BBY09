@@ -138,7 +138,7 @@ app.post('/login-submit', loginValidation, async (req,res) => {
   req.session.avatar = result[0].avatar;
   req.session.cookie.maxAge = expireTime;
 
-  res.render('index-afterLogin',{ isLoggedIn: isLoggedIn(req) });
+  res.redirect('/');
 });
 
 app.get('/signup', (req, res) => {
@@ -150,13 +150,6 @@ app.post('/signup-submit', signupValidation, async (req, res) => {
   let password = req.body.password;
   let username = req.body.username;
   let email = req.body.email;
-
-  // check if the id already exists
-  const idCheck = await userCollection.find({ id: id }).project({ _id: 1, password: 1 }).toArray();
-  if (idCheck.length > 0) {
-    res.render('signup-submit', { signupFail: true, errorMessage: `This ID already exists. \n Please choose a different user id.` });
-    return;
-  }
 
   // If inputs are valid, add the member
   let hashedPassword = await bcrypt.hash(password, saltRounds);
