@@ -23,6 +23,7 @@
   <ul class="dropdown-menu" aria-labelledby="providerDropdown">
     <li><a class="dropdown-item" href="/filter-udemy" >Udemy</a></li>
     <li><a class="dropdown-item" href="/filter-coursera" >Coursera</a></li>
+    <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="/filter-allcourses" >All</a></li>
   </ul>
   </div>
@@ -32,10 +33,11 @@
       Level
     </button>
     <ul class="dropdown-menu" >
-      <li><a class="dropdown-item" href="/filter-alllevels">All Levels</a></li>
       <li><a class="dropdown-item" href="/filter-beginner">Beginner</a></li>
       <li><a class="dropdown-item" href="/filter-intermediate">Intermediate</a></li>
       <li><a class="dropdown-item" href="/filter-advanced">Advanced</a></li>
+      <li><hr class="dropdown-divider"></li>
+      <li><a class="dropdown-item" href="/filter-alllevels">All Levels</a></li>
    
     </ul>
   </div>
@@ -45,8 +47,8 @@
           Rating
         </button>
         <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#">Low to High</a></li>
-          <li><a class="dropdown-item" href="#">High to Low</a></li>
+          <li><a class="dropdown-item" href="/sort-lowtohigh">Low to High</a></li>
+          <li><a class="dropdown-item" href="/sort-hightolow">High to Low</a></li>
       
        
         </ul>
@@ -55,12 +57,13 @@
 
 
 
-<h2>Your Filtered Results</h2>
+<h2>Your Sorted Results</h2>
 
+<%searchResult.sort((a, b) => b.Course_Rating - a.Course_Rating)%>
 <% for(let i=0; i < searchResult.length; i++) { %>
-  <% if (searchResult[i].Provider === 'Udemy') { %>
+
     <%- include('templates/list', {result: searchResult[i]})  %>
-  <% } %>
+
 <% } %>
 
 

@@ -104,7 +104,7 @@ app.post('/searchSubmit', async (req, res) => {
 
 });
 
-/* Filter Section */
+/* Filter and Sort Course Search Results Section */
 
 // Filter Online Course Providers
 
@@ -138,9 +138,18 @@ app.get('/filter-alllevels', (req,res) => {
   res.render("filter-alllevels", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
 });
 
+//Sort Course Ratings 
+
+app.get('/sort-hightolow', (req,res) => {
+  res.render("sort-hightolow", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+});
 
 
+app.get('/sort-lowtohigh', (req,res) => {
+  res.render("sort-lowtohigh", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+});
 
+/* End of Filter and Sort Course Search Results Section */
 
 
 
