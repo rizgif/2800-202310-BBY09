@@ -450,7 +450,7 @@ app.use(express.static(__dirname + "/public"));
 
 app.get("*", (req, res) => {
   res.status(404);
-  res.send("Page not found - 404");
+  res.render("404", { isLoggedIn: isLoggedIn(req) });
 })
 
 app.listen(port, () => {
