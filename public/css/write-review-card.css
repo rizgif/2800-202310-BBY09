@@ -108,7 +108,9 @@
 
 
 .edit-title{
-    margin: 10%;
-    margin-top: 15%;
+    margin: 5%;
+    margin-top: 25%;
     font-size: 25px;
+    padding: 2%;
+    top: 50px;
 }
