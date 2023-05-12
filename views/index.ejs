@@ -1,17 +1,17 @@
 <% if (isLoggedIn) { %>
-    <%- include("templates/header") %>
+    <%- include("templates/header-main-afterLogin") %>
 <% } else { %>
-    <%- include("templates/header-beforeLogin") %>
+    <%- include("templates/header-main-beforeLogin") %>
 <% } %>
 
 <div class="text-center">
-    <div class="col-lg-6 mx-auto">
+    <div class="">
         <% if (isLoggedIn) { %>
         
         <% } else { %>
             <div class="p-3 loginarea-main">
-                <a class="btn btn-main-login btn-lg px-4" href="/login">Login</a>
-                <a class="btn btn-primary btn-lg px-4" href="/signup">Sign up</a>
+                <a class="btn btn-primary-white btn-lg px-4" href="/login">Login</a>
+                <a id="signbutton_index" class="btn btn-primary btn-lg px-4" href="/signup">Sign up</a>
             </div>
         <% } %>
         

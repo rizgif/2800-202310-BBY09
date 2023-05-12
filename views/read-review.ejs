@@ -1,4 +1,7 @@
-<link rel="stylesheet" href="/css/reviewcard.css">
+
+
+<link rel="stylesheet" href="/css/read-review-card.css">
+
 
 <% const sum=parseInt(sliderValue.courseContentSliderValue) + parseInt(sliderValue.studentSupportSliderValue) +
     parseInt(sliderValue.courseStructureSliderValue) + parseInt(sliderValue.teachingStyleSliderValue); %>
@@ -17,13 +20,18 @@
 
             <div class="user_info">
                 <%= review.username %>
+
             </div>
             <div class="time_stamp">
                 <%= review.Time %>
             </div>
             <div class="user_review">
                 <%= review.Review %>
+                <% if (review.username === username) { %>
+                    <%- include("edit-review", {username: username, id: review._id.toString()}) %>
+                        <% } %>
             </div>
+         
         </div>
 
         <div class="level">
@@ -55,3 +63,6 @@
                 }) %>
         </div>
     </div>
+
+   
+  
