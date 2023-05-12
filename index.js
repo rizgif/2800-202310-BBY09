@@ -226,34 +226,26 @@ app.post('/find-password', async (req,res) => {
   } catch (error) {
     console.log(error);
     res.render('find-password', { message: 'Failed to find user. Please try again later.' });
-  } finally {
-    await client.close();
   }
 });
 
 app.get('/reset-password/:token', async (req, res) => {
+  const token = req.params.token;
   try {
-    // Find the user with the given reset token in the database
-    const user = await userCollection.findOne({ resetToken: req.params.token });
+    const tokenData = await tokenCollection.findOne({ token: token });
+    console.log('tokenData',tokenData, tokenData.uid)
 
-    if (!user) {
-      // If the user is not found, redirect to a "forgot password" page or show an error message
-      return res.status(404).send('Invalid or expired reset token.');
+
+    if (tokenData && tokenData.expireAt > new Date()) {
+      const user = await userCollection.findOne({ _id: tokenData.uid });
+      console.log(user)
+      res.render('reset-password', { token: token, userId: user.userId, avatar: user.avatar });
+    } else {
+      res.render('error', { message: 'Invalid or expired token' });
     }
-
-    // Check if the reset token has expired
-    if (Date.now() > user.resetTokenExpires) {
-      // If the reset token has expired, delete it from the user's record and redirect to a "forgot password" page or show an error message
-      await userCollection.updateOne({ _id: user._id }, { $unset: { resetToken: "", resetTokenExpires: "" } });
-      return res.status(404).send('Invalid or expired reset token.');
-    }
-
-    // If the reset token is valid, render the password reset form
-    res.render('reset-password', { token: req.params.token });
-
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Internal Server Error');
+  } catch (error) {
+    console.error(error);
+    res.render('error', { message: 'An error occurred' });
   }
 });
 
