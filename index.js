@@ -4,7 +4,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const bcrypt = require('bcrypt');
 const Joi = require("joi");
-const {ObjectId} = require("mongodb");
+const { ObjectId } = require("mongodb");
 
 require("./utils.js");
 
@@ -76,7 +76,7 @@ const routePath = "./views/html";
 //   res.render("index", {isLoggedIn: false});
 // });
 
-app.get('/', async(req, res) => {
+app.get('/', async (req, res) => {
   if (req.session.authenticated && !req.session.uid) {
     const result = await userCollection.find({ email: req.session.email }).project({ _id: 1 }).toArray();
     req.session.uid = result[0]._id;
@@ -87,14 +87,15 @@ app.get('/', async(req, res) => {
 
 let searchResult;
 
-app.post('/searchSubmit', async (req,res) => {
+app.post('/searchSubmit', async (req, res) => {
   var courseSearch = req.body.courseSearch;
 
   searchResult = await datasetCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
-  _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, 
-  Course_URL: 1, Organization: 1, Course_Description: 1}).toArray();
-  
-  res.render("searchList2", {searchResult: searchResult});
+    _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1,
+    Course_URL: 1, Organization: 1, Course_Description: 1
+  }).toArray();
+
+  res.render("searchList2", { searchResult: searchResult });
   // res.redirect('/searchList');
 
 
@@ -102,16 +103,16 @@ app.post('/searchSubmit', async (req,res) => {
 
 //Filters 
 
-app.get('/filterudemy', (req,res) => {
-  res.render("filterudemy", {searchResult: searchResult});
+app.get('/filterudemy', (req, res) => {
+  res.render("filterudemy", { searchResult: searchResult });
 });
 
-app.get('/filtercoursera', (req,res) => {
-  res.render("filtercoursera", {searchResult: searchResult});
+app.get('/filtercoursera', (req, res) => {
+  res.render("filtercoursera", { searchResult: searchResult });
 });
 
-app.get('/filterallcourses', (req,res) => {
-  res.render("filterallcourses", {searchResult: searchResult});
+app.get('/filterallcourses', (req, res) => {
+  res.render("filterallcourses", { searchResult: searchResult });
 });
 
 
@@ -126,7 +127,7 @@ app.get('/sample', (req, res) => {
   res.render("sample");
 });
 
-app.post('/login-submit', loginValidation, async (req,res) => {
+app.post('/login-submit', loginValidation, async (req, res) => {
   let id = req.body.id;
 
   const result = await userCollection.find({ id: id }).project({ email: 1, password: 1, username: 1, avatar: 1, _id: 1 }).toArray();
@@ -170,23 +171,23 @@ app.post('/signup-submit', signupValidation, async (req, res) => {
   res.redirect('/');
 });
 
-app.get('/logout', (req,res) => {
+app.get('/logout', (req, res) => {
   req.session.destroy();
   res.redirect("/");
 });
 
-app.get('/profile', sessionValidation, (req,res) => {
+app.get('/profile', sessionValidation, (req, res) => {
   let { username, email, avatar } = req.session;
-  res.render('profile', {username, email, avatar});
+  res.render('profile', { username, email, avatar });
 });
 
-app.get('/change-password', sessionValidation, async (req,res) => {
+app.get('/change-password', sessionValidation, async (req, res) => {
   const message = req.query.message || '';
   const avatar = req.session.avatar;
   res.render('change-password', { message, avatar });
 });
 
-app.post('/change-password-submit', sessionValidation, async(req,res) => {
+app.post('/change-password-submit', sessionValidation, async (req, res) => {
   console.log('change password submit');
   /* Check the old password */
   let email = req.session.email;
@@ -204,25 +205,25 @@ app.post('/change-password-submit', sessionValidation, async(req,res) => {
   // If inputs are valid, add the member
   let hashedPassword = await bcrypt.hash(newPassword, saltRounds);
   let uid = result[0]._id;
-  await userCollection.updateOne({_id: new ObjectId(uid)}, {$set: {password: hashedPassword}});
+  await userCollection.updateOne({ _id: new ObjectId(uid) }, { $set: { password: hashedPassword } });
   console.log('password is changed')
   res.redirect("/profile");
 });
 
-app.get('/edit-profile', sessionValidation, async (req,res) => {
+app.get('/edit-profile', sessionValidation, async (req, res) => {
   let email = req.session.email;
   let username = req.session.username;
   let avatar = req.session.avatar;
-  res.render("edit-profile", {email, username, avatar});
+  res.render("edit-profile", { email, username, avatar });
 });
-app.post('/edit-profile-submit', sessionValidation, async(req,res) => {
+app.post('/edit-profile-submit', sessionValidation, async (req, res) => {
   let username = req.body.username;
   let avatar = req.body.avatar;
   let uid = req.session.uid;
 
   if (username) {
-    await userCollection.updateOne({_id: new ObjectId(uid)}, {$set: {username, avatar}});
-    req.session.username= username;
+    await userCollection.updateOne({ _id: new ObjectId(uid) }, { $set: { username, avatar } });
+    req.session.username = username;
     req.session.avatar = avatar;
   }
 
@@ -236,7 +237,7 @@ app.get('/reviews', async (req, res) => {
 
   const username = req.session.username;
 
-  const reviewSliderPairs= reviews.map(review => {
+  const reviewSliderPairs = reviews.map(review => {
     const sliderValue = {
       courseContentSliderValue: review.CourseContentRating,
       courseStructureSliderValue: review.CourseStructureRating,
@@ -347,7 +348,7 @@ app.get('/reviews', async (req, res) => {
 app.get('/reviews/write/:editReview', async (req, res) => {
   const username = req.session.username;
   const reviewId = req.body._id;
-  
+
   const reviews = await reviewCollection.find().toArray();
 
   const reviewSliderPairs = reviews.map(review => ({
@@ -400,33 +401,35 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
     }
   }));
 
-  const sliderValues = {
-    courseContentSliderValue: 0, // Set initial values for the sliders
-    courseStructureSliderValue: 0,
-    teachingStyleSliderValue: 0,
-    studentSupportSliderValue: 0
-  };
+  // const sliderValues = {
+  //   courseContentSliderValue: 0, // Set initial values for the sliders
+  //   courseStructureSliderValue: 0,
+  //   teachingStyleSliderValue: 0,
+  //   studentSupportSliderValue: 0
+  // };
 
   // Find the specific review for the current user based on the review ID
   const specificReview = reviews.find(review => review._id.toString() === reviewId);
-console.log(specificReview);
+
+  console.log("id", reviewId);
 
 
-  if (specificReview) {
-    // Set the slider values if the specific review is found
-    sliderValues.courseContentSliderValue = specificReview.CourseContentRating;
-    sliderValues.courseStructureSliderValue = specificReview.CourseStructureRating;
-    sliderValues.teachingStyleSliderValue = specificReview.TeachingStyleRating;
-    sliderValues.studentSupportSliderValue = specificReview.StudentSupportRating;
-  }
+  // if (specificReview) {
+  //   // Set the slider values if the specific review is found
+  //   sliderValues.courseContentSliderValue = specificReview.CourseContentRating;
+  //   sliderValues.courseStructureSliderValue = specificReview.CourseStructureRating;
+  //   sliderValues.teachingStyleSliderValue = specificReview.TeachingStyleRating;
+  //   sliderValues.studentSupportSliderValue = specificReview.StudentSupportRating;
+  // }
 
   const renderData = {
     req: req,
-    sliderValues: sliderValues,
+    // sliderValues: sliderValues,
     reviewSliderPairs: reviewSliderPairs,
     username: username,
     editReview: true,
-    specificReview: specificReview
+    specificReview: specificReview,
+    reviewId: reviewId
   };
 
   res.render("write-review", renderData);
@@ -435,7 +438,7 @@ console.log(specificReview);
 
 //write to database
 app.post('/submitReview', async (req, res) => {
-
+  const reviewId = req.body.reviewId;
   const { review,
     courseContentSliderValue,
     courseStructureSliderValue,
@@ -445,31 +448,40 @@ app.post('/submitReview', async (req, res) => {
 
   const username = req.session.username; // Replace 'username' with the actual field name
   const email = req.session.email;
+  console.log(reviewId);
+  
+  if (reviewId) {
+    console.log('Update user review and active index');
+    // Update an existing review
+    await reviewCollection.updateOne(
+      { _id: new ObjectId(reviewId) }, // Specify the query criteria
+      {
+        $set: {
+          Review: review,
+          CourseContentRating: courseContentSliderValue,
+          CourseStructureRating: courseStructureSliderValue,
+          TeachingStyleRating: teachingStyleSliderValue,
+          StudentSupportRating: studentSupportSliderValue,
+          Time: currentDate
+        }
+      }
+    );
+    console.log('Review updated successfully');
+  }
+  
+  else {
 
-  // Validate the review input
-  // const schema = Joi.object({
-  //   review: Joi.string().max(256).required().messages({
-  //     'string.empty': 'Please enter your review.'
-  //   })
-  // });
-
-  // const { error } = schema.validate({ review });
-  // if (error) {
-  //   return res.status(400).send(error.details[0].message);
-  // }
-
-  // try {
-  await reviewCollection.insertOne({
-    Review: review,
-    CourseContentRating: courseContentSliderValue,
-    CourseStructureRating: courseStructureSliderValue,
-    TeachingStyleRating: teachingStyleSliderValue,
-    StudentSupportRating: studentSupportSliderValue,
-    Time: currentDate,
-    username: username,
-    email: email
-  });
-
+    await reviewCollection.insertOne({
+      Review: review,
+      CourseContentRating: courseContentSliderValue,
+      CourseStructureRating: courseStructureSliderValue,
+      TeachingStyleRating: teachingStyleSliderValue,
+      StudentSupportRating: studentSupportSliderValue,
+      Time: currentDate,
+      username: username,
+      email: email
+    });
+  }
   // console.log('Inserted user review and active index');
   // res.status(200).send('Review and active index saved successfully');
   res.redirect('/reviews');
@@ -478,7 +490,7 @@ app.post('/submitReview', async (req, res) => {
 app.get('/profileReview', async (req, res) => {
   const reviews = await reviewCollection.find().toArray();
 
-  const reviewSliderPairs= reviews.map(review => {
+  const reviewSliderPairs = reviews.map(review => {
     const sliderValue = {
       courseContentSliderValue: review.CourseContentRating,
       courseStructureSliderValue: review.CourseStructureRating,
@@ -486,7 +498,7 @@ app.get('/profileReview', async (req, res) => {
       studentSupportSliderValue: review.StudentSupportRating
     };
 
-    
+
     return {
       review: review,
       sliderValue: sliderValue

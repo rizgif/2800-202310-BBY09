@@ -2,117 +2,124 @@
 
 <% if (editReview) { %>
     <h1>Edit Review</h1>
-            <% } %>
+    <h1>
+        <%= reviewId %>
+    </h1>
+    <% } %>
 
 
-                <!-- writing a review -->
-                <form action="/submitReview" method="POST">
-                    <div class="write-review-grid">
-                        <div class="user-profile">
-                            <%= username %>
+        <!-- writing a review -->
+        <form action="/submitReview" method="POST">
+            <div class="write-review-grid">
+                <div class="user-profile">
+                    <%= username %>
+                </div>
+                <div class="time-stamp"></div>
+                <textarea name="review" class="write-review" placeholder="Enter your review..."></textarea>
+
+
+                <div class="ratings">
+                    <div class="review-section-1">
+                        <div class="review-category">Course Content</div>
+                        <div class="review-slider">
+                            <% if (editReview) { %>
+                                <%- include("templates/write-slider", { type: "courseContent" , value:
+                                    specificReview.CourseContentRating, editReview:editReview, id:reviewId }) %>
+                                    <% } else { %>
+                                        <%- include("templates/write-slider", { type: "courseContent" }) %>
+                                            <% } %>
                         </div>
-                        <div class="time-stamp"></div>
-                        <textarea name="review" class="write-review" placeholder="Enter your review..."></textarea>
-
-
-                        <div class="ratings">
-                            <div class="review-section-1">
-                                <div class="review-category">Course Content</div>
-                                <div class="review-slider">
-                                    <% if (editReview) { %>
-                                        <%- include("templates/write-slider", { type: "courseContent" , value:
-                                            specificReview.CourseContentRating, editReview:editReview }) %>
-                                            <% } else { %>
-                                                <%- include("templates/write-slider", { type: "courseContent" }) %>
-                                                    <% } %>
-                                </div>
-                            </div>
-
-                            <div class="review-section-2">
-                                <div class="review-category">Course Structure</div>
-                                <div class="review-slider">
-                                    <% if (editReview) { %>
-                                        <%- include("templates/write-slider", { type: "courseStructure" , value:
-                                            specificReview.CourseContentRating, editReview:editReview }) %>
-                                            <% } else { %>
-                                                <%- include("templates/write-slider", { type: "courseStructure" }) %>
-                                                    <% } %>
-                                </div>
-                            </div>
-
-                            <div class="review-section-3">
-                                <div class="review-category">Teaching Style</div>
-                                <div class="review-slider">
-                                    <% if (editReview) { %>
-                                        <%- include("templates/write-slider", { type: "teachingStyle" , value:
-                                            specificReview.CourseContentRating, editReview:editReview }) %>
-                                            <% } else { %>
-                                                <%- include("templates/write-slider", { type: "teachingStyle" }) %>
-                                                    <% } %>
-                                </div>
-                            </div>
-
-                            <div class="review-section-4">
-                                <div class="review-category">Student Support</div>
-                                <div class="review-slider">
-                                    <% if (editReview) { %>
-                                        <%- include("templates/write-slider", { type: "studentSupport" , value:
-                                            specificReview.CourseContentRating, editReview:editReview }) %>
-                                            <% } else { %>
-                                                <%- include("templates/write-slider", { type: "studentSupport" }) %>
-                                                    <% } %>
-                                </div>
-                            </div>
-
-
-                        </div>
-
-                        <button id="submit-review-btn" class="btn-submit-review" type="submit">SUBMIT</button>
-                        <input type="hidden" id="timestamp-input" name="currentDate" value="">
-
                     </div>
-                </form>
 
-              
+                    <div class="review-section-2">
+                        <div class="review-category">Course Structure</div>
+                        <div class="review-slider">
+                            <% if (editReview) { %>
+                                <%- include("templates/write-slider", { type: "courseStructure" , value:
+                                    specificReview.CourseStructureRating, editReview:editReview, id:reviewId }) %>
+                                    <% } else { %>
+                                        <%- include("templates/write-slider", { type: "courseStructure" }) %>
+                                            <% } %>
+                        </div>
+                    </div>
+
+                    <div class="review-section-3">
+                        <div class="review-category">Teaching Style</div>
+                        <div class="review-slider">
+                            <% if (editReview) { %>
+                                <%- include("templates/write-slider", { type: "teachingStyle" , value:
+                                    specificReview.TeachingStyleRating, editReview:editReview, id:reviewId }) %>
+                                    <% } else { %>
+                                        <%- include("templates/write-slider", { type: "teachingStyle" }) %>
+                                            <% } %>
+                        </div>
+                    </div>
+
+                    <div class="review-section-4">
+                        <div class="review-category">Student Support</div>
+                        <div class="review-slider">
+                            <% if (editReview) { %>
+                                <%- include("templates/write-slider", { type: "studentSupport" , value:
+                                    specificReview.StudentSupportRating, editReview:editReview, id:reviewId }) %>
+                                    <% } else { %>
+                                        <%- include("templates/write-slider", { type: "studentSupport" }) %>
+                                            <% } %>
+                        </div>
+                    </div>
 
 
-                <script>
-                    // JavaScript code for each slider instance
-                    console.log("click event");
-                    const sliders = document.querySelectorAll('.slider');
+                </div>
 
-                    sliders.forEach(function (slider) {
-                        const sliderBoxes = slider.querySelectorAll('.slider-box');
+                <button id="submit-review-btn" class="btn-submit-review" type="submit">SUBMIT</button>
+                <input type="hidden" id="timestamp-input" name="currentDate" value="">
 
-                        sliderBoxes.forEach(function (box, index) {
-                            box.addEventListener('click', function () {
-                                updateSlider(slider, index);
-                            });
-                        });
+                <% if (editReview) { %>
+                    <!-- Hidden field to pass the review ID -->
+                    <input type="hidden" name="reviewId" value="<%= reviewId %>">
+                    <% } %>
+            </div>
+        </form>
 
-                        function updateSlider(slider, activeIndex) {
-                            const sliderBoxes = slider.querySelectorAll('.slider-box');
-                            const hiddenInput = slider.querySelector('input[type="hidden"]');
 
-                            sliderBoxes.forEach(function (box, index) {
-                                if (index <= activeIndex) {
-                                    box.classList.add('active');
-                                } else {
-                                    box.classList.remove('active');
-                                }
-                            });
 
-                            hiddenInput.value = activeIndex + 1; // Update the hidden input value with the selected index + 1
+
+        <script>
+            // JavaScript code for each slider instance
+            console.log("click event");
+            const sliders = document.querySelectorAll('.slider');
+
+            sliders.forEach(function (slider) {
+                const sliderBoxes = slider.querySelectorAll('.slider-box');
+
+                sliderBoxes.forEach(function (box, index) {
+                    box.addEventListener('click', function () {
+                        updateSlider(slider, index);
+                    });
+                });
+
+                function updateSlider(slider, activeIndex) {
+                    const sliderBoxes = slider.querySelectorAll('.slider-box');
+                    const hiddenInput = slider.querySelector('input[type="hidden"]');
+
+                    sliderBoxes.forEach(function (box, index) {
+                        if (index <= activeIndex) {
+                            box.classList.add('active');
+                        } else {
+                            box.classList.remove('active');
                         }
-
                     });
 
-                    document.getElementById('submit-review-btn').addEventListener('click', function () {
-                        // Get the current timestamp
-                        var currentDate = new Date().toISOString().split('T')[0];
+                    hiddenInput.value = activeIndex + 1; // Update the hidden input value with the selected index + 1
+                }
 
-                        // Assign the timestamp value to the hidden input field in the form
-                        document.getElementById('timestamp-input').value = currentDate;
-                    });
+            });
 
-                </script>
+            document.getElementById('submit-review-btn').addEventListener('click', function () {
+                // Get the current timestamp
+                var currentDate = new Date().toISOString().split('T')[0];
+
+                // Assign the timestamp value to the hidden input field in the form
+                document.getElementById('timestamp-input').value = currentDate;
+            });
+
+        </script>
