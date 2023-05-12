@@ -1,7 +1,18 @@
 .title-wrapper{
-    margin: 8%;
+   margin: 3%;
+    margin-top: 8%;
     margin-bottom: 4%;
+    
     border-top: 1px solid black;
+}
+
+.title {
+    margin-top:  5%;
+    font-weight: bold;
+}
+
+.subtitle {
+    font-size: 16px;
 }
 
 .overall-rating-wrapper {
@@ -15,7 +26,7 @@
     margin-bottom: 10%;
     padding: 5%;
     height: auto;
-    width: 80vw;
+    width: 90vw;
     border-radius: 15px;
     background-color: #D7D3C1;
     overflow: hidden;
@@ -91,20 +102,19 @@
 }
 
 .all-rating > .label {
-    font-size: 25px;
+    font-size: 16px;
+    padding: 2%;
 }
 
 .mean {
-    font-size: 75px; 
+    font-size: 50px; 
     font-weight: bold;
+    padding: 2%;
+    color: #6a994e;
 }
 
 .divider {
     
     font-size: 2rem; /* Adjust the font size as desired */
     align-self: flex-end;
-}
-
-p {
-    font-size: 20px;
 }

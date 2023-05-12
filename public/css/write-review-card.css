@@ -9,7 +9,7 @@
     margin-bottom: 10%;
     padding: 2%;
     height: auto;
-    width: 80vw;
+    width: 90vw;
     border-radius: 15px;
     background-color: #D7D3C1;
     overflow: hidden;
@@ -54,7 +54,7 @@
 .btn-submit-review {
     grid-row: 4;
     grid-column: 3;
-    font-size: 25px;
+    font-size: 20px;
     font-weight: bold;
     margin: 5%;
     border-radius: 10px;
@@ -86,7 +86,7 @@
 
  
 .ratings .review-category {
-    font-size: 23px;
+    font-size: 18px;
     text-align: right;
     font-weight: bold;
     display: flex;
@@ -104,4 +104,11 @@
 
     justify-content: right;
     align-items: center;
+}
+
+
+.edit-title{
+    margin: 10%;
+    margin-top: 15%;
+    font-size: 25px;
 }

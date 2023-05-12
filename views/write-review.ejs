@@ -1,10 +1,9 @@
+<%- include('templates/header') %>
+
 <link rel="stylesheet" href="/css/write-review-card.css">
 
 <% if (editReview) { %>
-    <h1>Edit Review</h1>
-    <h1>
-        <%= reviewId %>
-    </h1>
+    <h class="edit-title">Edit Review</h>
     <% } %>
 
 
@@ -123,3 +122,5 @@
             });
 
         </script>
+
+<%- include("templates/footer") %>
