@@ -127,12 +127,12 @@ app.get('/sample', (req, res) => {
 });
 
 app.post('/login-submit', loginValidation, async (req,res) => {
-  let id = req.body.id;
+  let userId = req.body.userId;
 
-  const result = await userCollection.find({ id: id }).project({ email: 1, password: 1, username: 1, avatar: 1, _id: 1 }).toArray();
+  const result = await userCollection.find({ userId: userId }).project({ email: 1, password: 1, username: 1, avatar: 1, _id: 1 }).toArray();
   req.session.uid = result[0]._id;
   req.session.authenticated = true;
-  req.session.id = id;
+  req.session.userId = userId;
   req.session.email = result[0].email;
   req.session.username = result[0].username;
   req.session.avatar = result[0].avatar;
@@ -146,7 +146,7 @@ app.get('/signup', (req, res) => {
 });
 
 app.post('/signup-submit', signupValidation, async (req, res) => {
-  let id = req.body.id;
+  let userId = req.body.userId;
   let password = req.body.password;
   let username = req.body.username;
   let email = req.body.email;
@@ -154,12 +154,12 @@ app.post('/signup-submit', signupValidation, async (req, res) => {
   // If inputs are valid, add the member
   let hashedPassword = await bcrypt.hash(password, saltRounds);
 
-  await userCollection.insertOne({ id: id, username: username, email: email, password: hashedPassword, user_type: 'user' });
+  await userCollection.insertOne({ userId: userId, username: username, email: email, password: hashedPassword, user_type: 'user' });
   console.log("Inserted user");
 
   // Create a session
   req.session.authenticated = true;
-  req.session.id = id;
+  req.session.userId = userId;
   req.session.email = email;
   req.session.username = username;
   req.session.user_type = 'user';
@@ -176,9 +176,8 @@ app.get('/logout', (req,res) => {
 });
 
 app.get('/profile', sessionValidation, (req,res) => {
-  let { username, email, avatar, id } = req.session;
-  console.log(req.session, req.session.id)
-  res.render('profile', {username, email, avatar, id, isLoggedIn: isLoggedIn(req) });
+  let { username, email, avatar, userId } = req.session;
+  res.render('profile', {username, email, avatar, userId, isLoggedIn: isLoggedIn(req) });
 });
 
 app.get('/change-password', sessionValidation, async (req,res) => {
