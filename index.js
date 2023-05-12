@@ -5,7 +5,7 @@ const MongoStore = require('connect-mongo');
 const bcrypt = require('bcrypt');
 const Joi = require("joi");
 const {ObjectId, MongoClient} = require("mongodb");
-const nodemailer = require('nodemailer');
+// const nodemailer = require('nodemailer');
 
 require("./utils.js");
 
@@ -106,16 +106,16 @@ app.post('/searchSubmit', async (req,res) => {
 
 //Filters 
 
-app.get('/filterudemy', (req,res) => {
-  res.render("filterudemy", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+app.get('/filter-udemy', (req,res) => {
+  res.render("filter-udemy", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
 });
 
-app.get('/filtercoursera', (req,res) => {
-  res.render("filtercoursera",{searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+app.get('/filter-coursera', (req,res) => {
+  res.render("filter-coursera",{searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
 });
 
-app.get('/filterallcourses', (req,res) => {
-  res.render("filterallcourses", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+app.get('/filter-allcourses', (req,res) => {
+  res.render("filter-allcourses", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
 });
 
 
