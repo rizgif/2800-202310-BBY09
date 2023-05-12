@@ -213,17 +213,20 @@ app.get('/edit-profile', sessionValidation, async (req,res) => {
   let email = req.session.email;
   let username = req.session.username;
   let avatar = req.session.avatar;
-  res.render("edit-profile", {email, username, avatar, isLoggedIn: isLoggedIn(req)});
+  let userId = req.session.userId;
+  res.render("edit-profile", {userId, email, username, avatar, isLoggedIn: isLoggedIn(req)});
 });
 app.post('/edit-profile-submit', sessionValidation, async(req,res) => {
   let username = req.body.username;
   let avatar = req.body.avatar;
+  let email = req.body.email;
   let uid = req.session.uid;
 
   if (username) {
-    await userCollection.updateOne({_id: new ObjectId(uid)}, {$set: {username, avatar}});
+    await userCollection.updateOne({_id: new ObjectId(uid)}, {$set: {email, username, avatar}});
     req.session.username= username;
     req.session.avatar = avatar;
+    req.session.email = email;
   }
 
   res.redirect("/profile");

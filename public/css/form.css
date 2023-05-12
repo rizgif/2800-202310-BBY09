@@ -5,7 +5,8 @@
 .form-floating {
     margin-bottom: 20px;
 }
-.form-wrapper h1 {
+.form-wrapper h1,
+.form-wrapper h2{
     margin-bottom: 30px;
 }
 .form-wrapper .form-signin-heading {

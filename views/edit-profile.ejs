@@ -28,6 +28,11 @@
     <form action='/edit-profile-submit' method='post' class="needs-validation" novalidate>
         <h2 class="h3 fw-normal">Edit Profile</h2>
 
+        <div class="form-floating readonly">
+            <input name="userId" type="text" class="form-control" id="userId" value="<%= userId %>" readonly>
+            <label for="userId">ID</label>
+        </div>
+
         <div class="form-floating">
             <input name="username" type="text" class="form-control" id="username" placeholder="Username" value="<%= username %>" required>
             <label for="username">Username</label>
@@ -36,9 +41,12 @@
             </div>
         </div>
 
-        <div class="form-floating readonly">
-            <input name="email" type="email" class="form-control" id="floatingInput" value="<%= email %>" readonly>
-            <label for="floatingInput">Email address</label>
+        <div class="form-floating">
+            <input name="email" type="email" class="form-control" id="username" placeholder="Username" value="<%= email %>" required>
+            <label for="email">Username</label>
+            <div class="invalid-feedback">
+                Please enter your email.
+            </div>
         </div>
 
         <div class="sign-btns-container">

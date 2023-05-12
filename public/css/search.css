@@ -38,10 +38,11 @@
 	padding-left:5px;
 }
 
-h2 {
-	text-align: center;
-	padding:20px;
-}
+/* TODO: plz avoid using general tag except common.css. if not it will affect other pages */
+/*h2 {*/
+/*	text-align: center;*/
+/*	padding:20px;*/
+/*}*/
 
 .Course-Bookmark {
 	/* box-sizing: border-box; */
