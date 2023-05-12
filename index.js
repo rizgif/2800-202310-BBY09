@@ -158,15 +158,15 @@ app.post('/signup-submit', signupValidation, async (req, res) => {
 
   // check if the id already exists
   const idCheck = await userCollection.find({ userId: userId }).project({ _id: 1}).toArray();
-  const emailCheck = await userCollection.find({ email: email }).project({ _id: 1 }).toArray();
+  // const emailCheck = await userCollection.find({ email: email }).project({ _id: 1 }).toArray();
   if (idCheck.length > 0) {
     res.render('signup-submit', { signupFail: true, errorMessage: `This ID already exists. \n Please choose a different user id.` });
     return;
   }
-  if (emailCheck.length > 0) {
-    res.render('signup-submit', { signupFail: true, errorMessage: `This email already exists. \n Please choose a different email.` });
-    return;
-  }
+  // if (emailCheck.length > 0) {
+  //   res.render('signup-submit', { signupFail: true, errorMessage: `This email already exists. \n Please choose a different email.` });
+  //   return;
+  // }
 
   // If inputs are valid, add the member
   let hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -218,22 +218,25 @@ app.post('/find-password', async (req,res) => {
         from: email_host,
         to: email,
         subject: 'Password Reset',
-        text: `Hi ${user.username},\n\nYou requested a password reset for your account.
+        text: `Hi ${user.userId},\n\nYou requested a password reset for your account.
         \n\nPlease click on the following link within the next hour to reset your password:
         \n\nhttps://coursla.cyclic.app/reset-password/${token}
-        \n\ntest : http://localhost:3000/reset-password/${token}
         \n\nIf you did not request this reset, please ignore this email.
         \n\nThank you,
+        \\n\\ntest : http://localhost:3000/reset-password/${token}
         \nThe Coursla App Team`
-      };
 
-      transporter.sendMail(mailOptions, (error, info) => {
+      };
+        // \n\ntest : http://localhost:3000/reset-password/${token}
+
+      await transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
           console.log(error);
-          res.render('find-password', { message: 'Failed to send email. Please try again later.' });
+          res.render('find-password', {message: 'Failed to send email. Please try again later.'});
         } else {
           console.log(info);
-          res.render('find-password', { message: 'An email has been sent with further instructions.' });
+          res.redirect("/login");
+          // res.render('find-password', { message: 'An email has been sent with further instructions.' });
         }
       });
     } else {
@@ -249,8 +252,6 @@ app.get('/reset-password/:token', async (req, res) => {
   const token = req.params.token;
   try {
     const tokenData = await tokenCollection.findOne({ token: token });
-    console.log('tokenData',tokenData, tokenData.uid)
-
 
     if (tokenData && tokenData.expireAt > new Date()) {
       const user = await userCollection.findOne({ _id: tokenData.uid });
@@ -265,6 +266,32 @@ app.get('/reset-password/:token', async (req, res) => {
   }
 });
 
+app.post('/reset-password-submit', async(req,res) => {
+  console.log('change password submit');
+  /* Check the old password */
+  let token = req.body.token;
+  let newPassword = req.body.password1;
+
+  try {
+    const tokenData = await tokenCollection.findOne({ token: token });
+    console.log('tokenData',token,tokenData)
+    const user = await userCollection.findOne({ _id: tokenData.uid });
+    console.log('user',user)
+
+    /* update the new password */
+    // If inputs are valid, add the member
+    let hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+    let uid = user._id;
+    await userCollection.updateOne({_id: new ObjectId(uid)}, {$set: {password: hashedPassword}});
+    console.log('password is changed')
+    res.redirect("/profile");
+
+  } catch (error) {
+    console.error(error);
+    res.render('error', { message: 'An error occurred' });
+  }
+
+});
 
 app.get('/profile', sessionValidation, (req,res) => {
   let { username, email, avatar, userId } = req.session;
