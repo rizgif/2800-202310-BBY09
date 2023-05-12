@@ -5,7 +5,7 @@ const MongoStore = require('connect-mongo');
 const bcrypt = require('bcrypt');
 const Joi = require("joi");
 const {ObjectId, MongoClient} = require("mongodb");
-// const nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer');
 
 require("./utils.js");
 
