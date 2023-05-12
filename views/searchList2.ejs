@@ -1,4 +1,8 @@
-<%- include("templates/header") %> 
+<% if (isLoggedIn) { %>
+    <%- include("templates/header") %>
+<% } else { %>
+    <%- include("templates/header-beforeLogin") %>
+<% } %>
 <div class="row justify-content-center">
     <div class="col-sm-8">
       <form action="/searchSubmit" method="post" class="form-inline my-2 my-lg-0 d-flex justify-content-center">

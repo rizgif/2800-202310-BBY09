@@ -1,11 +1,16 @@
 /* SignUp, SignIn */
 .form-wrapper {
+    padding: 0 20px;
 }
 .form-floating {
     margin-bottom: 20px;
 }
 .form-wrapper h1 {
     margin-bottom: 30px;
+}
+.form-wrapper .form-signin-heading {
+    margin-top: 20px;
+    font-size: 20px;
 }
 .btn-sign {
     margin-top: 40px;
