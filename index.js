@@ -5,7 +5,7 @@ const MongoStore = require('connect-mongo');
 const bcrypt = require('bcrypt');
 const Joi = require("joi");
 const {ObjectId, MongoClient} = require("mongodb");
-const nodemailer = require('nodemailer');
+// const nodemailer = require('nodemailer');
 
 require("./utils.js");
 
@@ -104,19 +104,41 @@ app.post('/searchSubmit', async (req, res) => {
 
 });
 
-//Filters 
+/* Filter Section */
 
-app.get('/filterudemy', (req,res) => {
-  res.render("filterudemy", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+// Filter Online Course Providers
+
+app.get('/filter-udemy', (req,res) => {
+  res.render("filter-udemy", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
 });
 
-app.get('/filtercoursera', (req,res) => {
-  res.render("filtercoursera",{searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+app.get('/filter-coursera', (req,res) => {
+  res.render("filter-coursera",{searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
 });
 
-app.get('/filterallcourses', (req,res) => {
-  res.render("filterallcourses", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+app.get('/filter-allcourses', (req,res) => {
+  res.render("filter-allcourses", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
 });
+
+// Filter Levels
+
+app.get('/filter-beginner', (req,res) => {
+  res.render("filter-beginner", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+});
+
+app.get('/filter-intermediate', (req,res) => {
+  res.render("filter-intermediate",{searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+});
+
+app.get('/filter-advanced', (req,res) => {
+  res.render("filter-advanced", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+});
+
+app.get('/filter-alllevels', (req,res) => {
+  res.render("filter-alllevels", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+});
+
+
 
 
 

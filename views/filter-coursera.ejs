@@ -21,9 +21,9 @@
     Provider
   </button>
   <ul class="dropdown-menu" aria-labelledby="providerDropdown">
-    <li><a class="dropdown-item" href="/filterudemy" >Udemy</a></li>
-    <li><a class="dropdown-item" href="/filtercoursera" >Coursera</a></li>
-    <li><a class="dropdown-item" href="/filterallcourses" >All</a></li>
+    <li><a class="dropdown-item" href="/filter-udemy" >Udemy</a></li>
+    <li><a class="dropdown-item" href="/filter-coursera" >Coursera</a></li>
+    <li><a class="dropdown-item" href="/filter-allcourses" >All Courses</a></li>
   </ul>
   </div>
 
@@ -32,10 +32,10 @@
       Level
     </button>
     <ul class="dropdown-menu" >
-      <li><a class="dropdown-item" href="#">All Levels</a></li>
-      <li><a class="dropdown-item" href="#">Beginner</a></li>
-      <li><a class="dropdown-item" href="#">Intermediate</a></li>
-      <li><a class="dropdown-item" href="#">Advanced</a></li>
+      <li><a class="dropdown-item" href="/filter-alllevels">All Levels</a></li>
+      <li><a class="dropdown-item" href="/filter-beginner">Beginner</a></li>
+      <li><a class="dropdown-item" href="/filter-intermediate">Intermediate</a></li>
+      <li><a class="dropdown-item" href="/filter-advanced">Advanced</a></li>
    
     </ul>
   </div>
@@ -58,13 +58,10 @@
 <h2>Your Filtered Results</h2>
 
 <% for(let i=0; i < searchResult.length; i++) { %>
-  <% if (searchResult[i].Provider === 'Udemy') { %>
+  <% if (searchResult[i].Provider === 'Coursera') { %>
     <%- include('templates/list', {result: searchResult[i]})  %>
   <% } %>
 <% } %>
-
-
-     
 
 
 <%- include("templates/footer") %>
