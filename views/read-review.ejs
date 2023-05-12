@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="/css/read-review-card.css">
+<%- include('templates/header') %>
 
 <% const sum=parseInt(sliderValue.courseContentSliderValue) + parseInt(sliderValue.studentSupportSliderValue) +
     parseInt(sliderValue.courseStructureSliderValue) + parseInt(sliderValue.teachingStyleSliderValue); %>
@@ -24,8 +25,8 @@
             </div>
             <div class="user_review">
                 <%= review.Review %>
-                <% if (review.username===username) { %>
-                    <%- include("edit-review") %>
+                <% if (review.username === username) { %>
+                    <%- include("edit-review", {username: username, id: review._id.toString()}) %>
                         <% } %>
             </div>
          
@@ -60,3 +61,5 @@
                 }) %>
         </div>
     </div>
+
+    <%- include("templates/footer") %>

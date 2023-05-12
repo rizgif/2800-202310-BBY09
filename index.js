@@ -258,18 +258,57 @@ app.get('/reviews', async (req, res) => {
 
 });
 
+// app.get('/reviews/write/:editReview?', async (req, res) => {
+//   const username = req.session.username;
 
+//   console.log(username);
+//   const reviews = await reviewCollection.find().toArray();
+//   const reviewSliderPairs= reviews.map(review => {
+//     const sliderValue = {
+//       courseContentSliderValue: review.CourseContentRating,
+//       courseStructureSliderValue: review.CourseStructureRating,
+//       teachingStyleSliderValue: review.TeachingStyleRating,
+//       studentSupportSliderValue: review.StudentSupportRating
+//     }
+//   });
 
+//   // Extract the slider values from the reviews
+//   const sliderValues = reviews.map(review => ({
+//     courseContentSliderValue: review.CourseContentRating,
+//     courseStructureSliderValue: review.CourseStructureRating,
+//     teachingStyleSliderValue: review.TeachingStyleRating,
+//     studentSupportSliderValue: review.StudentSupportRating
+//   }));
 
-app.get('/reviews/write', async (req, res) => {
+//   const editReview = req.params.editReview === 'updateReview';
 
+//   const renderData = {
+//     req: req,
+//     sliderValues: sliderValues,
+//     reviewSliderPairs: reviewSliderPairs,
+//     username: username,
+//     editReview: editReview
+//   };
+
+//   res.render("write-review", renderData);
+// });
+
+app.get('/reviews/write/:editReview', async (req, res) => {
   const username = req.session.username;
-
-
-  console.log(username);
+  const reviewId = req.body._id;
+  
   const reviews = await reviewCollection.find().toArray();
 
-  // Extract the slider values from the reviews
+  const reviewSliderPairs = reviews.map(review => ({
+    username: review.username,
+    sliderValue: {
+      courseContentSliderValue: review.CourseContentRating,
+      courseStructureSliderValue: review.CourseStructureRating,
+      teachingStyleSliderValue: review.TeachingStyleRating,
+      studentSupportSliderValue: review.StudentSupportRating
+    }
+  }));
+
   const sliderValues = reviews.map(review => ({
     courseContentSliderValue: review.CourseContentRating,
     courseStructureSliderValue: review.CourseStructureRating,
@@ -277,20 +316,24 @@ app.get('/reviews/write', async (req, res) => {
     studentSupportSliderValue: review.StudentSupportRating
   }));
 
-  // const currentDate = req.session.time;
-  // console.log(currentDate);
+  const editReview = req.params.editReview === '/updateReview';
 
-  // console.log(sliderValues);
+  // Find the specific review for the current user
+  const specificReview = reviews.find(review => review.username === username);
 
   const renderData = {
     req: req,
     sliderValues: sliderValues,
+    reviewSliderPairs: reviewSliderPairs,
     username: username,
-    // currentDate: currentDate
+    editReview: editReview,
+    specificReview: specificReview
   };
 
   res.render("write-review", renderData);
 });
+
+
 
 //write to database
 app.post('/submitReview', async (req, res) => {

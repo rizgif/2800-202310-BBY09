@@ -1,9 +1,4 @@
-<%- include('templates/header') %>
-
 <link rel="stylesheet" href="/css/edit-review.css">
-
-
-
 
 <div class="setting">
     <div class="dropdown">
@@ -11,11 +6,27 @@
             aria-expanded="false">
             <img src="/image/setting.png" alt="Setting" />
         </button>
+       
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#">Edit this review</a>
+            <a class="dropdown-item edit-review-link" href="#" data-review-id="<%= review._id.toString() %>">Edit this review</a>
             <a class="dropdown-item" href="#">Delete this review</a>
         </div>
     </div>
 </div>
 
-<%- include("templates/footer") %>
+
+<script>
+$(document).ready(function() {
+  $(document).on('click', '.edit-review-link', function(e) {
+    e.preventDefault();
+    
+    const reviewId = $(this).data('review-id');
+    
+    // Redirect to the edit review page with the review ID
+    window.location.href = '/reviews/write/updateReview/' + reviewId;
+  });
+});
+
+</script>
+
+
