@@ -183,7 +183,7 @@ app.get('/profile', sessionValidation, (req,res) => {
 app.get('/change-password', sessionValidation, async (req,res) => {
   const message = req.query.message || '';
   const avatar = req.session.avatar;
-  res.render('change-password', { message, avatar });
+  res.render('change-password', { message, avatar, isLoggedIn: isLoggedIn(req) });
 });
 
 app.post('/change-password-submit', sessionValidation, async(req,res) => {
@@ -213,7 +213,7 @@ app.get('/edit-profile', sessionValidation, async (req,res) => {
   let email = req.session.email;
   let username = req.session.username;
   let avatar = req.session.avatar;
-  res.render("edit-profile", {email, username, avatar});
+  res.render("edit-profile", {email, username, avatar, isLoggedIn: isLoggedIn(req)});
 });
 app.post('/edit-profile-submit', sessionValidation, async(req,res) => {
   let username = req.body.username;
