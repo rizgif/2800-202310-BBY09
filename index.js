@@ -344,25 +344,11 @@ app.get('/reviews', async (req, res) => {
 //   res.render("write-review", renderData);
 // });
 
-
-app.get('/reviews/write/:editReview/:reviewId', async (req, res) => {
+app.get('/reviews/write/:editReview', async (req, res) => {
   const username = req.session.username;
-  const editReview = req.params.editReview; // Get the editReview parameter from the URL
-  const reviewId = req.params.reviewId; // Get the reviewId parameter from the URL
-
-  // Retrieve the review from the database based on the review ID
-  const specificReview = await reviewCollection.findOne({ _id: ObjectId(reviewId) });
-
-  // Fetch all reviews from the database
+  const reviewId = req.body._id;
+  
   const reviews = await reviewCollection.find().toArray();
-
-  // Map the review data to slider values and pairs
-  const sliderValues = {
-    courseContentSliderValue: specificReview.CourseContentRating,
-    courseStructureSliderValue: specificReview.CourseStructureRating,
-    teachingStyleSliderValue: specificReview.TeachingStyleRating,
-    studentSupportSliderValue: specificReview.StudentSupportRating
-  };
 
   const reviewSliderPairs = reviews.map(review => ({
     username: review.username,
@@ -374,12 +360,72 @@ app.get('/reviews/write/:editReview/:reviewId', async (req, res) => {
     }
   }));
 
+  const sliderValues = reviews.map(review => ({
+    courseContentSliderValue: review.CourseContentRating,
+    courseStructureSliderValue: review.CourseStructureRating,
+    teachingStyleSliderValue: review.TeachingStyleRating,
+    studentSupportSliderValue: review.StudentSupportRating
+  }));
+
+  const editReview = req.params.editReview === '/updateReview';
+
+  // Find the specific review for the current user
+  const specificReview = reviews.find(review => review.username === username);
+
   const renderData = {
     req: req,
     sliderValues: sliderValues,
     reviewSliderPairs: reviewSliderPairs,
     username: username,
     editReview: editReview,
+    specificReview: specificReview
+  };
+
+  res.render("write-review", renderData);
+});
+
+app.get('/reviews/write/updateReview/:id', async (req, res) => {
+  const username = req.session.username;
+  const reviewId = req.params.id; // Get the review ID from the URL parameter
+
+  const reviews = await reviewCollection.find().toArray();
+
+  const reviewSliderPairs = reviews.map(review => ({
+    username: review.username,
+    sliderValue: {
+      courseContentSliderValue: review.CourseContentRating,
+      courseStructureSliderValue: review.CourseStructureRating,
+      teachingStyleSliderValue: review.TeachingStyleRating,
+      studentSupportSliderValue: review.StudentSupportRating
+    }
+  }));
+
+  const sliderValues = {
+    courseContentSliderValue: 0, // Set initial values for the sliders
+    courseStructureSliderValue: 0,
+    teachingStyleSliderValue: 0,
+    studentSupportSliderValue: 0
+  };
+
+  // Find the specific review for the current user based on the review ID
+  const specificReview = reviews.find(review => review._id.toString() === reviewId);
+console.log(specificReview);
+
+
+  if (specificReview) {
+    // Set the slider values if the specific review is found
+    sliderValues.courseContentSliderValue = specificReview.CourseContentRating;
+    sliderValues.courseStructureSliderValue = specificReview.CourseStructureRating;
+    sliderValues.teachingStyleSliderValue = specificReview.TeachingStyleRating;
+    sliderValues.studentSupportSliderValue = specificReview.StudentSupportRating;
+  }
+
+  const renderData = {
+    req: req,
+    sliderValues: sliderValues,
+    reviewSliderPairs: reviewSliderPairs,
+    username: username,
+    editReview: true,
     specificReview: specificReview
   };
 
