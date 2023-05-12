@@ -176,8 +176,9 @@ app.get('/logout', (req,res) => {
 });
 
 app.get('/profile', sessionValidation, (req,res) => {
-  let { username, email, avatar } = req.session;
-  res.render('profile', {username, email, avatar, isLoggedIn: isLoggedIn(req) });
+  let { username, email, avatar, id } = req.session;
+  console.log(req.session, req.session.id)
+  res.render('profile', {username, email, avatar, id, isLoggedIn: isLoggedIn(req) });
 });
 
 app.get('/change-password', sessionValidation, async (req,res) => {
