@@ -1,3 +1,7 @@
+:root {
+  --bs-border-bg: #e1e1e1;
+}
+
 .btn-primary,
 .btn-primary:focus,
 .btn-primary:hover {

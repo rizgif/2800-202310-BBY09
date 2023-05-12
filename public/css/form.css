@@ -5,7 +5,8 @@
 .form-floating {
     margin-bottom: 20px;
 }
-.form-wrapper h1 {
+.form-wrapper h1,
+.form-wrapper h2{
     margin-bottom: 30px;
 }
 .form-wrapper .form-signin-heading {
@@ -28,4 +29,21 @@
 }
 .link-signup a:hover {
     text-decoration: underline;
+}
+.profile-summary {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding:20px;
+    background-color: var(--color-bg-gray);
+    border-radius: var(--radius-box);
+}
+.profile-summary .avatar-img {
+    width: 50px;
+    height: 50px;
+}
+.profile-summary .user-id {
+    margin-left: 20px;
+    font-size: 18px;
+    font-weight: bold;
 }

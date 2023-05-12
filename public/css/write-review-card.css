@@ -1,0 +1,115 @@
+.write-review-grid {
+    display: grid;
+    grid-template-columns: 1fr 0.8fr 0.8fr;
+    grid-template-rows: 0.3fr 1.5fr 1.6fr 0.4fr;
+    grid-gap: 10px;
+    margin-top: 10%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10%;
+    padding: 2%;
+    height: auto;
+    width: 90vw;
+    border-radius: 15px;
+    background-color: #D7D3C1;
+    overflow: hidden;
+}
+
+.user-profile {
+    grid-column: 1;
+    grid-row: 1;
+    margin-left: 5%;
+    margin-top: 5%;
+    padding: 3%;
+    font-size: 20px;
+}
+
+.time-stamp {
+    grid-column: 3;
+    grid-row: 1;
+    margin: 2%;
+    padding: 2%;
+}
+
+.write-review {
+    grid-column: span 3;
+    grid-row: 2;
+    background-color: white;
+    margin: 2%;
+    padding: 2%;
+    border-radius: 10px;
+    font-size: 20px;
+}
+
+.ratings {
+    grid-row: 3;
+    grid-column: span 3;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.btn-submit-review {
+    grid-row: 4;
+    grid-column: 3;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 5%;
+    border-radius: 10px;
+    padding: 2%;
+    background-color: #98B66E;
+    color: #f2e8cf;
+}
+
+.ratings {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, 1fr);
+    grid-gap: 10px;
+    width: 80vw;
+    /* align-items: center;
+    justify-items: center; */
+} 
+
+.review-section-1,
+.review-section-2,
+.review-section-3,
+.review-section-4 {
+    display: grid;
+    grid-template-columns: 0.7fr 1fr;  
+    grid-gap: 10px;
+    /* justify-items: center;
+    align-items: center; */
+}
+
+ 
+.ratings .review-category {
+    font-size: 18px;
+    text-align: right;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: right;
+    margin-top: 5%;
+    margin-left: 5%;
+}
+
+
+ 
+.ratings > .review-slider {
+    height: 80px;
+    display: grid;
+
+    justify-content: right;
+    align-items: center;
+}
+
+.edit-title{
+    margin: 5%;
+    margin-top: 25%;
+    font-size: 25px;
+    padding: 2%;
+    top: 50px;
+}
