@@ -71,9 +71,6 @@ app.use(session({
 
 /* === Pages === */
 
-// TODO:
-require("./routes/index.js");
-
 const routePath = "./views/html";
 
 // app.get('/', (req,res) => {
@@ -166,7 +163,6 @@ app.get('/sort-lowtohigh', (req,res) => {
 });
 
 /* End of Filter and Sort Course Search Results Section */
-
 
 
 app.get('/login', (req, res) => {
@@ -272,7 +268,7 @@ app.post('/find-password', async (req,res) => {
           res.render('find-password', {message: 'Failed to send email. Please try again later.'});
         } else {
           console.log(info);
-          res.redirect("/login");
+          res.redirect("/login?successMessage=Please check your email");
           // res.render('find-password', { message: 'An email has been sent with further instructions.' });
         }
       });

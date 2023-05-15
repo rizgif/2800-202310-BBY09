@@ -1,5 +1,16 @@
+import { showSuccessModal } from "/js/modal.js";
+
 const init = () => {
   loadInputValidation();
+
+  const params = new URLSearchParams(window.location.search);
+
+  if (params.has("successMessage")) {
+    showSuccessModal({
+      message: params.get('successMessage')
+    });
+
+  }
 };
 window.addEventListener("load", init);
 
@@ -20,6 +31,8 @@ const loadInputValidation = () => {
       }, false)
     })
 }
+
+
 
 // document.addEventListener('DOMContentLoaded', () => {
 //   const bookmarkButtons = document.querySelectorAll('.Course-Bookmark');
