@@ -579,8 +579,8 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
   // Find the specific review for the current user based on the review ID
   const specificReview = reviews.find(review => review._id.toString() === reviewId);
 
-  console.log("id", reviewId);
-  console.log("specific review", specificReview);
+  // console.log("id", reviewId);
+  // console.log("specific review", specificReview);
 
 
   // if (specificReview) {
@@ -626,7 +626,8 @@ app.post('/submitReview', async (req, res) => {
 
   const username = req.session.username; // Replace 'username' with the actual field name
   const email = req.session.email;
-  console.log(req.body);
+  
+  console.log("new review",req.body);
   
   if (reviewId) {
     console.log('Update user review and active index');
