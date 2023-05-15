@@ -262,11 +262,9 @@ app.post('/find-password', async (req,res) => {
         \n\nhttps://coursla.cyclic.app/reset-password/${token}
         \n\nIf you did not request this reset, please ignore this email.
         \n\nThank you,
-        \\n\\ntest : http://localhost:3000/reset-password/${token}
         \nThe Coursla App Team`
 
       };
-        // \n\ntest : http://localhost:3000/reset-password/${token}
 
       await transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
