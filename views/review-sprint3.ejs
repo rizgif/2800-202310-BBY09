@@ -1,0 +1,29 @@
+<%- include('templates/header') %>
+
+
+  <% let courseContentSum=0; %>
+    <% let courseStructureSum=0; %>
+      <% let teachingStyleSum=0; %>
+        <% let studentSupportSum=0; %>
+          <% let num=0; %>
+
+            <!-- need to connect the course collection -->
+
+            <div class="number-ratings" style="margin-top: 20%;font-size: 25px; font-weight: bold;">
+              <%= reviewSliderPairs.length %> Student Ratings
+            </div>
+              <% reviewSliderPairs.forEach(pair=> { %>
+                <%- include("read-review", { review: pair.review, sliderValue: pair.sliderValue, username: username })
+                  %>
+                  <% courseContentSum +=parseInt(pair.sliderValue.courseContentSliderValue); %>
+                    <% courseStructureSum +=parseInt(pair.sliderValue.courseStructureSliderValue); %>
+                      <% teachingStyleSum +=parseInt(pair.sliderValue.teachingStyleSliderValue); %>
+                        <% studentSupportSum +=parseInt(pair.sliderValue.studentSupportSliderValue); %>
+                          <% num ++; %>
+                            <% }) %>
+                              <%- include("all-reviews", { courseContentSum: courseContentSum, courseStructureSum:
+                                courseStructureSum, teachingStyleSum: teachingStyleSum, studentSupportSum:
+                                studentSupportSum, num: num }) %>
+                           
+
+                                  <%- include("templates/footer") %>

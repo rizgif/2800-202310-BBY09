@@ -4,7 +4,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const bcrypt = require('bcrypt');
 const Joi = require("joi");
-const {ObjectId, MongoClient} = require("mongodb");
+const { ObjectId, MongoClient } = require("mongodb");
 const nodemailer = require('nodemailer');
 
 require("./utils.js");
@@ -97,14 +97,46 @@ app.post('/searchSubmit', async (req, res) => {
   var courseSearch = req.body.courseSearch;
 
   searchResult = await datasetCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
-  _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, 
-  Course_URL: 1, Organization: 1, Course_Description: 1}).toArray();
-  
-  res.render("searchList2", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+    _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1,
+    Course_URL: 1, Organization: 1, Course_Description: 1
+  }).toArray();
+
+  res.render("searchList2", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
 
 
 
 });
+
+app.get('/courseDetails', async (req, res) => {
+  const courseId = req.query.courseid;
+  const reviews = await reviewCollection.find().toArray();
+  const username = req.session.username;
+
+  const reviewSliderPairs = reviews.map(review => {
+    const sliderValue = {
+      courseContentSliderValue: review.CourseContentRating,
+      courseStructureSliderValue: review.CourseStructureRating,
+      teachingStyleSliderValue: review.TeachingStyleRating,
+      studentSupportSliderValue: review.StudentSupportRating
+    };
+
+    return {
+      review: review,
+      sliderValue: sliderValue
+    };
+  });
+
+  // console.log(reviewSliderPairs);
+  // console.log(sliderValue);
+  res.render("course-detail", {
+    req: req,
+    courseId: courseId,
+    reviewSliderPairs: reviewSliderPairs,
+    // whichCourse: true,
+    username: username
+  });
+});
+
 
 app.post('/addBookmark', async (req, res) => {
   const userId = req.session.uid; // user's _id
@@ -124,45 +156,45 @@ app.post('/addBookmark', async (req, res) => {
 
 // Filter Online Course Providers
 
-app.get('/filter-udemy', (req,res) => {
-  res.render("filter-udemy", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+app.get('/filter-udemy', (req, res) => {
+  res.render("filter-udemy", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
 });
 
-app.get('/filter-coursera', (req,res) => {
-  res.render("filter-coursera",{searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+app.get('/filter-coursera', (req, res) => {
+  res.render("filter-coursera", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
 });
 
-app.get('/filter-allcourses', (req,res) => {
-  res.render("filter-allcourses", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+app.get('/filter-allcourses', (req, res) => {
+  res.render("filter-allcourses", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
 });
 
 // Filter Levels
 
-app.get('/filter-beginner', (req,res) => {
-  res.render("filter-beginner", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+app.get('/filter-beginner', (req, res) => {
+  res.render("filter-beginner", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
 });
 
-app.get('/filter-intermediate', (req,res) => {
-  res.render("filter-intermediate",{searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+app.get('/filter-intermediate', (req, res) => {
+  res.render("filter-intermediate", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
 });
 
-app.get('/filter-advanced', (req,res) => {
-  res.render("filter-advanced", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+app.get('/filter-advanced', (req, res) => {
+  res.render("filter-advanced", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
 });
 
-app.get('/filter-alllevels', (req,res) => {
-  res.render("filter-alllevels", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+app.get('/filter-alllevels', (req, res) => {
+  res.render("filter-alllevels", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
 });
 
 //Sort Course Ratings 
 
-app.get('/sort-hightolow', (req,res) => {
-  res.render("sort-hightolow", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+app.get('/sort-hightolow', (req, res) => {
+  res.render("sort-hightolow", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
 });
 
 
-app.get('/sort-lowtohigh', (req,res) => {
-  res.render("sort-lowtohigh", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+app.get('/sort-lowtohigh', (req, res) => {
+  res.render("sort-lowtohigh", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
 });
 
 /* End of Filter and Sort Course Search Results Section */
@@ -170,14 +202,14 @@ app.get('/sort-lowtohigh', (req,res) => {
 
 
 app.get('/login', (req, res) => {
-  res.render("login",{ isLoggedIn: isLoggedIn(req) });
+  res.render("login", { isLoggedIn: isLoggedIn(req) });
 });
 
 app.get('/sample', (req, res) => {
   res.render("sample");
 });
 
-app.post('/login-submit', loginValidation, async (req,res) => {
+app.post('/login-submit', loginValidation, async (req, res) => {
   let userId = req.body.userId;
 
   const result = await userCollection.find({ userId: userId }).project({ email: 1, password: 1, username: 1, avatar: 1, _id: 1 }).toArray();
@@ -193,7 +225,7 @@ app.post('/login-submit', loginValidation, async (req,res) => {
 });
 
 app.get('/signup', (req, res) => {
-  res.render('signup',{ isLoggedIn: isLoggedIn(req) });
+  res.render('signup', { isLoggedIn: isLoggedIn(req) });
 });
 
 app.post('/signup-submit', signupValidation, async (req, res) => {
@@ -203,7 +235,7 @@ app.post('/signup-submit', signupValidation, async (req, res) => {
   let email = req.body.email;
 
   // check if the id already exists
-  const idCheck = await userCollection.find({ userId: userId }).project({ _id: 1}).toArray();
+  const idCheck = await userCollection.find({ userId: userId }).project({ _id: 1 }).toArray();
   // const emailCheck = await userCollection.find({ email: email }).project({ _id: 1 }).toArray();
   if (idCheck.length > 0) {
     res.render('signup-submit', { signupFail: true, errorMessage: `This ID already exists. \n Please choose a different user id.` });
@@ -238,10 +270,10 @@ app.get('/logout', (req, res) => {
   res.redirect("/");
 });
 
-app.get('/find-password', (req,res) => {
+app.get('/find-password', (req, res) => {
   res.render('find-password');
 });
-app.post('/find-password', async (req,res) => {
+app.post('/find-password', async (req, res) => {
   const email = req.body.email;
 
   try {
@@ -273,12 +305,12 @@ app.post('/find-password', async (req,res) => {
         \nThe Coursla App Team`
 
       };
-        // \n\ntest : http://localhost:3000/reset-password/${token}
+      // \n\ntest : http://localhost:3000/reset-password/${token}
 
       await transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
           console.log(error);
-          res.render('find-password', {message: 'Failed to send email. Please try again later.'});
+          res.render('find-password', { message: 'Failed to send email. Please try again later.' });
         } else {
           console.log(info);
           res.redirect("/login");
@@ -312,7 +344,7 @@ app.get('/reset-password/:token', async (req, res) => {
   }
 });
 
-app.post('/reset-password-submit', async(req,res) => {
+app.post('/reset-password-submit', async (req, res) => {
   console.log('change password submit');
   /* Check the old password */
   let token = req.body.token;
@@ -320,15 +352,15 @@ app.post('/reset-password-submit', async(req,res) => {
 
   try {
     const tokenData = await tokenCollection.findOne({ token: token });
-    console.log('tokenData',token,tokenData)
+    console.log('tokenData', token, tokenData)
     const user = await userCollection.findOne({ _id: tokenData.uid });
-    console.log('user',user)
+    console.log('user', user)
 
     /* update the new password */
     // If inputs are valid, add the member
     let hashedPassword = await bcrypt.hash(newPassword, saltRounds);
     let uid = user._id;
-    await userCollection.updateOne({_id: new ObjectId(uid)}, {$set: {password: hashedPassword}});
+    await userCollection.updateOne({ _id: new ObjectId(uid) }, { $set: { password: hashedPassword } });
     console.log('password is changed')
     res.redirect("/profile");
 
@@ -339,9 +371,9 @@ app.post('/reset-password-submit', async(req,res) => {
 
 });
 
-app.get('/profile', sessionValidation, (req,res) => {
+app.get('/profile', sessionValidation, (req, res) => {
   let { username, email, avatar, userId } = req.session;
-  res.render('profile', {username, email, avatar, userId, isLoggedIn: isLoggedIn(req) });
+  res.render('profile', { username, email, avatar, userId, isLoggedIn: isLoggedIn(req) });
 });
 
 app.get('/change-password', sessionValidation, async (req, res) => {
@@ -378,18 +410,18 @@ app.get('/edit-profile', sessionValidation, async (req, res) => {
   let username = req.session.username;
   let avatar = req.session.avatar;
   let userId = req.session.userId;
-  res.render("edit-profile", {userId, email, username, avatar, isLoggedIn: isLoggedIn(req)});
+  res.render("edit-profile", { userId, email, username, avatar, isLoggedIn: isLoggedIn(req) });
 });
 
-app.post('/edit-profile-submit', sessionValidation, async(req,res) => {
+app.post('/edit-profile-submit', sessionValidation, async (req, res) => {
   let username = req.body.username;
   let avatar = req.body.avatar;
   let email = req.body.email;
   let uid = req.session.uid;
 
   if (username) {
-    await userCollection.updateOne({_id: new ObjectId(uid)}, {$set: {email, username, avatar}});
-    req.session.username= username;
+    await userCollection.updateOne({ _id: new ObjectId(uid) }, { $set: { email, username, avatar } });
+    req.session.username = username;
     req.session.avatar = avatar;
     req.session.email = email;
   }
@@ -429,88 +461,6 @@ app.get('/reviews', async (req, res) => {
 
 });
 
-
-// app.get('/reviews/write', async (req, res) => {
-//   const username = req.session.username;
-//   const editReview = req.params.editReview; // Get the editReview parameter from the URL
-//   const reviewId = req.params.reviewId; // Get the reviewId parameter from the URL
-
-//   // Retrieve the review from the database based on the review ID
-//   const specificReview = await reviewCollection.findOne({ _id: ObjectId(reviewId) });
-
-//   // Fetch all reviews from the database
-//   const reviews = await reviewCollection.find().toArray();
-
-//   // Map the review data to slider values and pairs
-//   const sliderValues = {
-//     courseContentSliderValue: specificReview.CourseContentRating,
-//     courseStructureSliderValue: specificReview.CourseStructureRating,
-//     teachingStyleSliderValue: specificReview.TeachingStyleRating,
-//     studentSupportSliderValue: specificReview.StudentSupportRating
-//   };
-
-//   const reviewSliderPairs = reviews.map(review => ({
-//     username: review.username,
-//     sliderValue: {
-//       courseContentSliderValue: review.CourseContentRating,
-//       courseStructureSliderValue: review.CourseStructureRating,
-//       teachingStyleSliderValue: review.TeachingStyleRating,
-//       studentSupportSliderValue: review.StudentSupportRating
-//     }
-//   }));
-
-//   const renderData = {
-//     req: req,
-//     sliderValues: sliderValues,
-//     reviewSliderPairs: reviewSliderPairs,
-//     username: username,
-//     editReview: false,
-//     specificReview: specificReview
-//   };
-
-//   res.render("write-review", renderData);
-// });
-
-
-
-// //edit or delete reviews
-// app.get('/reviews/write/updateReview/:id', async (req, res) => {
-
-//   const username = req.session.username;
-//   const id = req.params.id;
-
-//   const reviews = await reviewCollection.find().toArray();
-
-//   const reviewSliderPairs = reviews.map(review => ({
-//     username: review.username,
-//     // sliderValue: {
-//     //   courseContentSliderValue: review.CourseContentRating,
-//     //   courseStructureSliderValue: review.CourseStructureRating,
-//     //   teachingStyleSliderValue: review.TeachingStyleRating,
-//     //   studentSupportSliderValue: review.StudentSupportRating
-//     // }
-//   }));
-
-//   // const sliderValues = reviews.map(review => ({
-//   //   courseContentSliderValue: review.CourseContentRating,
-//   //   courseStructureSliderValue: review.CourseStructureRating,
-//   //   teachingStyleSliderValue: review.TeachingStyleRating,
-//   //   studentSupportSliderValue: review.StudentSupportRating
-//   // }));
-
-//   // Find the specific review for the current user
-//   const specificReview = reviews.find(review => review.username === username);
-
-//   const renderData = {
-//     req: req,
-//     // sliderValues: sliderValues,
-//     // reviewSliderPairs: reviewSliderPairs,
-//     username: username,
-//     specificReview: specificReview,
-//     editReview: true
-//   };
-//   res.render("write-review", renderData);
-// });
 
 app.get('/reviews/write/:editReview', async (req, res) => {
   const username = req.session.username;
@@ -611,7 +561,7 @@ app.delete('/reviews/deleteReview/:id', async (req, res) => {
   // Delete the review from the database based on the review ID
   await reviewCollection.deleteOne({ _id: new ObjectId(reviewId) });
 
-  res.redirect('/reviews'); 
+  res.redirect('/reviews');
 });
 
 //write to database
@@ -626,9 +576,9 @@ app.post('/submitReview', async (req, res) => {
 
   const username = req.session.username; // Replace 'username' with the actual field name
   const email = req.session.email;
-  
-  console.log("new review",req.body);
-  
+
+  console.log("new review", req.body);
+
   if (reviewId) {
     console.log('Update user review and active index');
     // Update an existing review
@@ -647,7 +597,7 @@ app.post('/submitReview', async (req, res) => {
     );
     console.log('Review updated successfully');
   }
-  
+
   else {
 
     await reviewCollection.insertOne({
@@ -661,7 +611,7 @@ app.post('/submitReview', async (req, res) => {
       email: email
     });
   }
- 
+
   res.redirect('/reviews');
 });
 

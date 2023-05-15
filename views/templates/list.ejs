@@ -1,5 +1,17 @@
+   <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+<script>
+  function handleClick(courseid) {
+    console.log('Clicked on:', courseid);
 
-    <!-- <li>Title: <%= result.Title %></li> -->
+    // Send a POST request to the server route
+    $.get('/courseDetails', function(response) {
+      console.log('Redirecting to new page');
+      window.location.href = '/courseDetails?courseid=' + courseid;
+    });
+  }
+</script>
+   
+   <!-- <li>Title: <%= result.Title %></li> -->
     <!-- <li>Provider: <%= result.Provider %>
     <li>Difficulty: <%= result.Course_Difficulty %>
     <li>Rating: <%= result.Course_Rating %></li>
@@ -8,7 +20,7 @@
     <li>Description: <%= result.Course_Description %></li> -->
 
 
-<div class="CourseCard-StyledCourseCard">
+<div class="CourseCard-StyledCourseCard" onclick="handleClick('<%= result._id.toString() %>')">
     <div class="Coursecard-InfoRatingWrapper">
 
         <div class="CourseCard-NumRatingWrapper-syjs0d-2 joEEbw">
@@ -44,3 +56,4 @@
         <img src="/image/bookmark.png" alt="Bookmark" data-tooltip="true" data-tip="Save Course" data-for="GLOBAL_TOOLTIP" currentitem="false">
     </button> -->
 </div>
+
