@@ -8,6 +8,9 @@
 
             <!-- need to connect the course collection -->
             <% if (whichCourse) { %>
+            <div class="number-ratings" style="margin: 2%;font-size: 25px; font-weight: bold;">
+              <%= reviewSliderPairs.length %> Student Ratings
+            </div>
               <% reviewSliderPairs.forEach(pair=> { %>
                 <%- include("read-review", { review: pair.review, sliderValue: pair.sliderValue, username: username })
                   %>
