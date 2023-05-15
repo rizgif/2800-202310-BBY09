@@ -423,7 +423,7 @@ app.get('/reviews', async (req, res) => {
   res.render("review", {
     req: req,
     reviewSliderPairs: reviewSliderPairs,
-    whichCourse: true,
+    // whichCourse: true,
     username: username
   });
 
