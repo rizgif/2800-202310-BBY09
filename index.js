@@ -560,6 +560,7 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
 
   const reviewSliderPairs = reviews.map(review => ({
     username: review.username,
+    // review: review.Review,
     sliderValue: {
       courseContentSliderValue: review.CourseContentRating,
       courseStructureSliderValue: review.CourseStructureRating,
@@ -579,7 +580,7 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
   const specificReview = reviews.find(review => review._id.toString() === reviewId);
 
   console.log("id", reviewId);
-  console.log(specificReview);
+  console.log("specific review", specificReview);
 
 
   // if (specificReview) {
@@ -659,8 +660,7 @@ app.post('/submitReview', async (req, res) => {
       email: email
     });
   }
-  // console.log('Inserted user review and active index');
-  // res.status(200).send('Review and active index saved successfully');
+ 
   res.redirect('/reviews');
 });
 
