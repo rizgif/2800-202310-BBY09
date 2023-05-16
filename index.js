@@ -132,17 +132,61 @@ app.get('/course-details', async (req, res) => {
 
       return {
         review: review,
-        sliderValue: sliderValue
+        sliderValue: sliderValue,
+
       };
     });
 
-  // console.log(reviewSliderPairs)
+
+
+  const totalvote = reviewSliderPairs.length;
+  const numCategory = 4;
+
+  const overallCategorySums = {
+    courseContent: 0,
+    courseStructure: 0,
+    teachingStyle: 0,
+    studentSupport: 0
+  };
+
+  reviewSliderPairs.forEach(pair => {
+    overallCategorySums.courseContent += parseInt(pair.sliderValue.courseContentSliderValue);
+    overallCategorySums.courseStructure += parseInt(pair.sliderValue.courseStructureSliderValue);
+    overallCategorySums.teachingStyle += parseInt(pair.sliderValue.teachingStyleSliderValue);
+    overallCategorySums.studentSupport += parseInt(pair.sliderValue.studentSupportSliderValue);
+  });
+
+  // console.log("Category Sums:", overallCategorySums);
+
+  const CourslaRating = (Object.values(overallCategorySums).reduce((sum, value) => sum + value, 0) / (numCategory * totalvote)).toFixed(1);
+
+  // console.log("overall rating", CourslaRating)
+
+  async function updateCourse(courseId, overallCategorySums, totalvote) {
+    // Update the course document with the specified courseId
+    await datasetCollection.updateOne(
+      { _id: new ObjectId(courseId) },
+      {
+        $set: {
+          OverallCategorySums: overallCategorySums,
+          Totalvote: totalvote,
+          CourslaRating: CourslaRating
+        }
+      }
+    );
+  }
+
+  updateCourse(courseId, overallCategorySums, reviewSliderPairs.length);
+
   res.render("course-detail", {
     req: req,
     courseId: courseId,
     reviewSliderPairs: reviewSliderPairs,
     // whichCourse: true,
-    username: username
+    username: username,
+    overallCategorySums: overallCategorySums,
+    Totalvote: totalvote,
+    CourslaRating: CourslaRating
   });
 });
 

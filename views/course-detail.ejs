@@ -1,35 +1,28 @@
 <%- include('templates/header') %>
 
+  <% console.log("categorysum", overallCategorySums) %>
+    <% console.log("vote", Totalvote) %>
 
-  <% let courseContentSum=0; %>
-    <% let courseStructureSum=0; %>
-      <% let teachingStyleSum=0; %>
-        <% let studentSupportSum=0; %>
-          <% let num=0; %>
+    <%- include("all-reviews", { overallCategorySums: overallCategorySums,  num: Totalvote,  CourslaRating: CourslaRating}) %>
 
-            <!-- need to connect the course collection -->
 
-            <div class="number-ratings" style="margin-top: 20%;font-size: 25px; font-weight: bold;">
-              <%= reviewSliderPairs.length %> Student Ratings
-            </div>
+        <!-- read reviews from each user -->
+        <!-- need to connect the course collection -->
+        <div class="number-ratings" style="margin-top: 20%;font-size: 25px; font-weight: bold;">
+          <%= reviewSliderPairs.length %> Student Ratings
+        </div>
 
-            <!-- add css later -->
-            <a class="write-review-link" href="/reviews/write/:<%= courseId %>">
-              <button>Write a Review</button>
-            </a>
+        <!-- add css later -->
+        <a class="write-review-link" href="/reviews/write/:<%= courseId %>">
+          <button>Write a Review</button>
+        </a>
 
-              <% reviewSliderPairs.forEach(pair=> { %>
-                <%- include("read-review", { review: pair.review, sliderValue: pair.sliderValue, username: username, courseId: courseId })
-                  %>
-                  <% courseContentSum +=parseInt(pair.sliderValue.courseContentSliderValue); %>
-                    <% courseStructureSum +=parseInt(pair.sliderValue.courseStructureSliderValue); %>
-                      <% teachingStyleSum +=parseInt(pair.sliderValue.teachingStyleSliderValue); %>
-                        <% studentSupportSum +=parseInt(pair.sliderValue.studentSupportSliderValue); %>
-                          <% num ++; %>
-                            <% }) %>
-                              <%- include("all-reviews", { courseContentSum: courseContentSum, courseStructureSum:
-                                courseStructureSum, teachingStyleSum: teachingStyleSum, studentSupportSum:
-                                studentSupportSum, num: num }) %>
-                           
+        <% reviewSliderPairs.forEach(pair=> { %>
+          <%- include("read-review", { review: pair.review, sliderValue: pair.sliderValue, username: username, courseId:
+            courseId }) %>
+            <% }) %>
 
-                                  <%- include("templates/footer") %>
+
+
+
+              <%- include("templates/footer") %>
