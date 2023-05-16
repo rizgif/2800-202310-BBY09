@@ -47,7 +47,7 @@ let { database } = include('databaseConnection');
 
 const userCollection = database.db(mongodb_database).collection('users');
 const bookmarkCollection = database.db(mongodb_database).collection('bookmarks');
-const datasetCollection = database.db(mongodb_database).collection('courses');
+const courseCollection = database.db(mongodb_database).collection('courses');
 const reviewCollection = database.db(mongodb_database).collection('reviews');
 const tokenCollection = database.db(mongodb_database).collection('tokens');
 
@@ -97,7 +97,7 @@ app.post('/searchSubmit', async (req, res) => {
   const userId = req.session.uid;
 
   try {
-    searchResult = await datasetCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
+    searchResult = await courseCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
       _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, 
       Course_URL: 1, Organization: 1, Course_Description: 1}).toArray();
 
@@ -117,9 +117,11 @@ app.post('/searchSubmit', async (req, res) => {
 
 app.get('/courseDetails', async (req, res) => {
   const courseId = req.query.courseid;
-  console.log("courseid here (1)", courseId)
   const reviews = await reviewCollection.find().toArray();
   const username = req.session.username;
+
+  const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
+  console.log('courseInfo',courseInfo)
 
   const reviewSliderPairs = reviews.map(review => {
     const sliderValue = {
@@ -142,7 +144,9 @@ app.get('/courseDetails', async (req, res) => {
     courseId: courseId,
     reviewSliderPairs: reviewSliderPairs,
     // whichCourse: true,
-    username: username
+    username: username,
+    courseInfo: courseInfo,
+    isLoggedIn: isLoggedIn(req)
   });
 });
 

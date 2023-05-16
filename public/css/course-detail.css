@@ -1,0 +1,25 @@
+.course-detail-wrapper {
+    margin-top: 20px;
+    padding: 0 20px;
+    height: 50px;
+    border:1px solid red;
+}
+.course-detail-buttons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.share-link {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    color: var(--color-primary-green) !important;
+}
+.share-link .material-symbols-outlined {
+    margin-left: 2px;
+    font-size: 40px;
+}
+
+.course-detail-ratings {
+    display: flex;
+}

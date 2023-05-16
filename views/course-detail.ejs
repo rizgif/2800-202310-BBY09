@@ -1,5 +1,52 @@
-<%- include('templates/header') %>
+<% if (isLoggedIn) { %>
+  <%- include("templates/header") %>
+<% } else { %>
+  <%- include("templates/header-beforeLogin") %>
+<% } %>
 
+<!--Course Detail-->
+
+<div class="course-detail-wrapper">
+  <div class="course-detail-buttons">
+    <a href="<%= courseInfo.Course_URL %>" class="btn share-link">
+      Link to the course
+      <span class="material-symbols-outlined">
+        exit_to_app
+      </span>
+    </a>
+  </div>
+  <h2>
+    <%= courseInfo.Name %>
+  </h2>
+  <div class="course-detail-ratings">
+    <div class="rating-box">
+      <p>
+        <span class="rating-number"><%= courseInfo.Course_Rating %></span> /5
+      </p>
+      <strong>Provider Rating</strong>
+    </div>
+    <div class="rating-box">
+      <p>
+        <span class="rating-number">0.0</span> /5
+      </p>
+      <strong>Coursla Rating</strong>
+    </div>
+  </div>
+  <ul class="course-detail-overview">
+    <li>
+        <span class="material-symbols-outlined">
+            school
+        </span>
+        <span class="title">Provider</span>
+        <span class="content"><%= courseInfo.Provider %></span>
+    </li>
+  </ul>
+</div>
+
+
+
+
+<!--Reviews-->
 
   <% let courseContentSum=0; %>
     <% let courseStructureSum=0; %>
