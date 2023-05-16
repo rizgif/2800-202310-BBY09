@@ -7,13 +7,13 @@ const mongodb_database = process.env.MONGODB_DATABASE;
 
 
 const loginScheme = Joi.object({
-  userId: Joi.string().required(),
+  email: Joi.string().email().required(),
   password: Joi.string().max(20).required()
 });
 
 const errorMessages = {
   emptyUserName: 'Please provide a user name',
-  emptyUserId: 'Please provide an id',
+  emptyUserEmail: 'Please provide an email',
   emptyPassword: 'Please provide a password',
 }
 
@@ -25,15 +25,15 @@ function isLoggedIn (req) {
 }
 
 const loginValidation = async (req, res, next) => {
-  let userId = req.body.userId;
+  let email = req.body.email;
   let password = req.body.password;
 
   let errorMessage = {};
-  const validationResult = loginScheme.validate({ userId, password});
+  const validationResult = loginScheme.validate({ email, password});
 
   if (validationResult.error != null) {
-    if (userId.length < 1) {
-      errorMessage = errorMessages.emptyUserId;
+    if (email.length < 1) {
+      errorMessage = errorMessages.emptyUserEmail;
     } else if (password.length < 1) {
       errorMessage = errorMessages.emptyPassword;
     } else {
@@ -46,7 +46,7 @@ const loginValidation = async (req, res, next) => {
   // check if the user exists in the database
   let {database} = include('databaseConnection');
   const userCollection = database.db(mongodb_database).collection('users');
-  const result = await userCollection.find({userId: userId}).project({userId: 1, password: 1, _id: 1}).toArray();
+  const result = await userCollection.find({email: email}).project({ password: 1, _id: 1}).toArray();
 
   // if the user does not exist
   if (result.length != 1) {

@@ -1,4 +1,6 @@
 import { onAuthChanged } from "/js/app/firebase.js";
+import { showSuccessModal } from "/js/modal.js";
+
 var storageRef = storage.ref();
 
 // Uploads image on Firebase and returns response.

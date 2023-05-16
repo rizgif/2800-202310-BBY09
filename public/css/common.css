@@ -128,3 +128,29 @@ button,
     color: var(--color-primary-green);
     text-decoration: underline;
 }
+
+
+/* modals */
+#success-modal {
+    padding: 30px;
+  }
+  #success-modal .modal-dialog{
+    display: flex;
+    justify-content: center;
+  }
+  #success-modal .modal-content {
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    width: 300px;
+    padding: 50px 30px;
+    font-size: 24px;
+    border-radius: 30px;
+  }
+  #success-modal .img {
+    width: 80px;
+    margin-bottom: 16px;
+  }
+  #success-modal .msg {
+    font-size: 20px;
+  }

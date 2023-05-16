@@ -52,3 +52,7 @@ input.form-control:read-only + label:after{
     background-color: var(--color-readonly) !important;
     border: 1px solid var(--color-readonly) !important;
 }
+
+.form-floating>label {
+  color: var(--color-placeholder);
+}
