@@ -5,28 +5,29 @@
 <% } %>
 
 <main class="form-wrapper profile-section-info">
-    <div class="profile-container-avatar">
-        <%- include("templates/profile-avatar", {avatar}) %>
-
-<!--        <div class="add-photo">-->
-<!--            <input id="upload-images" type="file" accept="image/jpeg, image/png, image/jpg" hidden>-->
-<!--            <label for="upload-images">-->
-<!--                <a type="button" class="btn btn-add-photo" aria-label="add photos">-->
-<!--              <span class="material-symbols-outlined">-->
-<!--                add_a_photo-->
-<!--              </span>-->
-<!--                    <p>-->
-<!--                        Add Photos <br />-->
-<!--                        (<i class="add-photo-number">0</i>/5)-->
-<!--                    </p>-->
-<!--                </a>-->
-<!--            </label>-->
-<!--            <output id="upload-output">-->
-<!--            </output>-->
-<!--        </div>-->
-    </div>
     <form action='/edit-profile-submit' method='post' class="needs-validation" novalidate>
         <h2 class="h3 fw-normal">Edit Profile</h2>
+        <div class="avatar-container">
+            <div class="avatar-container-inner">
+                <%- include("templates/profile-avatar", {avatar}) %>
+        
+                <div class="add-photo">
+                    <input id="upload-images" type="file" accept="image/jpeg, image/png, image/jpg" hidden>
+                    <label for="upload-images">
+                        <a type="button" class="btn btn-add-photo" aria-label="add photos">
+                                <span class="material-symbols-outlined">
+                                add_a_photo
+                                </span>
+                        </a>
+                        </label>
+                    <output id="upload-output">
+                    </output>
+                </div>
+            </div>
+            <button type="button" id="remove-profile" class="btn remove-profile">
+                Remove Profile
+            </button>
+        </div>
 
         <div class="form-floating readonly">
             <input name="email" type="email" class="form-control" id="email" value="<%= email %>" readonly>
@@ -48,3 +49,38 @@
 </main>
 
 <%- include("templates/footer") %>
+
+<script>
+const input = document.getElementById("upload-images");
+const output = document.getElementsByClassName("img-avatar")?.[0];
+const btnRemove = document.getElementById("remove-profile")
+
+// imagesArray: the virtual array list to save selected images
+//              to share to select, delete, and post.
+let originalUrl =  output.src;
+
+// displays selected images to preview.
+function displayImages(imgUrl) {
+  // Insert dynamic elements to preview selected images.
+  let images = "";
+  output.setAttribute("src", imgUrl)
+}
+
+input.addEventListener("change", () => {
+    // Update images from selected images data
+    let imgFile = input.files?.[0];
+    let imgUrl = URL.createObjectURL(imgFile);
+    input.src = imgUrl;
+
+    // Show previews
+    displayImages(imgUrl);
+
+});
+
+// Bind click events to remove selected preview item.
+btnRemove.addEventListener("click", () => {
+    displayImages(originalUrl);
+});
+
+initAddPhoto();
+</script>

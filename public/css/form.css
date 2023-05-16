@@ -51,3 +51,41 @@
     color: var(--color-primary-green);
     font-size: 0.8em;
 }
+
+.avatar-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.avatar-container-inner {
+    position: relative;
+}
+.add-photo {
+    position: absolute;
+    right: 0;bottom: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border: 2px solid var(--color-primary-green);
+}
+.add-photo span{
+    display: flex;
+}
+.add-photo:hover {
+    background-color: #eee;
+}
+.remove-profile {
+    margin-top: 5px;
+    font-size: 14px;
+    color: var(--color-primary-green) !important;
+}
+.remove-profile:hover{
+    text-decoration: underline;
+}
