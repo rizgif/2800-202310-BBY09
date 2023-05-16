@@ -101,13 +101,17 @@ app.post('/searchSubmit', async (req, res) => {
       _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, 
       Course_URL: 1, Organization: 1, Course_Description: 1}).toArray();
 
-    const user = await userCollection.findOne({ _id: new ObjectId(userId) });
-    const userBookmarks = user && user.bookmarks && user.bookmarks.length > 0 ? user.bookmarks.map(b => b.courseId.toString()) : [];
-    
+    const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray(); 
+    const searchResultCount = searchResult.length; 
 
-
-
-    res.render("searchList", {searchResult: searchResult, isLoggedIn: isLoggedIn(req), userBookmarks });
+    res.render("searchList2", {
+      searchResult: searchResult, 
+      isLoggedIn: isLoggedIn(req), 
+      userBookmarks, 
+      searchResultCount: searchResultCount,
+      courseSearch
+    });
+    // console.log("userBookamrks: ", userBookmarks)
 
   } catch (error) {
     console.error(error);
@@ -164,15 +168,57 @@ app.post('/removeBookmark', async (req, res) => {
   const userId = req.session.uid; // user's _id
   const courseId = req.body.courseId; // course's _id
 
-  const result = await bookmarkCollection.deleteOne({ userId: userId, courseId: courseId });
-  if (result.deletedCount === 1) {
-    res.sendStatus(200);
+  const bookmark = await bookmarkCollection.findOne({ userId: userId, courseId: courseId });
+  if (bookmark) {
+    const result = await bookmarkCollection.deleteOne({ _id: bookmark._id });
+    if (result.deletedCount === 1) {
+      res.sendStatus(200);
+    } else {
+      res.sendStatus(500); // failed to delete bookmark
+    }
   } else {
-    res.sendStatus(400); // bookmark not found
+    res.sendStatus(404); // bookmark not found
   }
   console.log('Deleted bookmark from DB');
 
 });
+
+app.get('/bookmarks', async (req, res) => {
+  try {
+    const bookmarkedCourses = await database.db(mongodb_database).collection('bookmarks').aggregate([
+      {
+        $lookup: {
+          from: 'courses',
+          let: { courseId: { $toObjectId: '$courseId' } },
+          pipeline: [
+            { $match: { $expr: { $eq: ['$_id', '$$courseId'] } } },
+            {
+              $project: {
+                _id: 0,
+                Title: 1,
+                Provider: 1,
+                Course_Rating: 1,
+                Course_Difficulty: 1
+              }
+            }
+          ],
+          as: 'courseDetails'
+        }
+      },
+      {
+        $unwind: '$courseDetails'
+      }
+    ]).toArray();
+    console.log('bookmarked courses: ', bookmarkedCourses); // log the array to the console
+
+    res.render('bookmarks', { bookmarkedCourses, isLoggedIn: isLoggedIn(req) });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
 
 //Filters 
 /* Filter and Sort Course Search Results Section */
