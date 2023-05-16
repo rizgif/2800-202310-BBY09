@@ -77,14 +77,14 @@ input.addEventListener("change", () => {
 
 // Bind click events to remove selected preview item.
 btnRemove.addEventListener("click", () => {
-    displayImages(null);
+    input.value = '';
+    displayImages("/image/avatar.png");
 });
 
 // Initialize Firebase
 firebase.initializeApp(<%- JSON.stringify(firebaseConfig) %>);
 
 function uploadImage(file) {
-    console.log(file)
     btnSubmit.setAttribute("disabled", true)
     try {
         const ref = firebase.storage().ref();
@@ -121,9 +121,8 @@ const post = async (data) => {
     body: JSON.stringify(data)
   })
   .then(response => {
-    console.log('response',response)
     if (response.ok) {
-    //   window.location.href = '/profile';
+      window.location.href = '/profile';
     } else {
       console.error('Error:', response.status);
     }
@@ -149,6 +148,5 @@ $(form).submit(async function(e) {
         username: usernameInput.value
     })
   }
-
 });
 </script>

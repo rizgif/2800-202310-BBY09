@@ -417,7 +417,6 @@ app.post('/edit-profile-submit', sessionValidation, async(req,res) => {
   let username = req.body.username;
   let avatar = req.body.avatar;
   let uid = req.session.uid;
-  console.log('avatar',avatar)
 
   await userCollection.updateOne({_id: new ObjectId(uid)}, {$set: { username, avatar}});
   req.session.username= username;
