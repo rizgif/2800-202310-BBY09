@@ -104,7 +104,7 @@ app.post('/searchSubmit', async (req, res) => {
     const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray(); 
     const searchResultCount = searchResult.length; 
 
-    res.render("searchList2", {
+    res.render("searchList", {
       searchResult: searchResult, 
       isLoggedIn: isLoggedIn(req), 
       userBookmarks, 

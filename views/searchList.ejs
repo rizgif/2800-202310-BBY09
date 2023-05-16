@@ -62,6 +62,10 @@
   <%- include('templates/list', { result: searchResult[i], userBookmarks: userBookmarks })  %>
 <% } %>
 
+<button id="scrollUpButton" onclick="scrollToTop()" title="Scroll Up">
+  <i class="fa fa-chevron-up"></i>
+</button>
+
 <%- include("templates/footer") %>
 
 
