@@ -18,8 +18,24 @@
     max-width: 120px;
 }
 .sign-btns-container {
+    position: relative;
     display: flex;
     justify-content: flex-end;
+}
+.sign-btns-container button:disabled {
+    color: transparent;
+}
+.sign-btns-container button:disabled + .loader{
+    display: block;
+}
+.sign-btns-container button + .loader {
+    position: absolute;
+    display: none;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
 }
 .link-signup {
     text-align: center;
