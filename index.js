@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const Joi = require("joi");
 const { ObjectId, MongoClient } = require("mongodb");
 const nodemailer = require('nodemailer');
+const bodyParser = require('body-parser');
 
 require("./utils.js");
 
@@ -24,6 +25,7 @@ const port = process.env.PORT || 8000;
 
 const app = express();
 
+app.use(bodyParser.json());
 
 const expireTime = 12 * 60 * 60 * 1000; //expires after 12 hour  (hours * minutes * seconds * millis)
 
@@ -71,9 +73,6 @@ app.use(session({
 
 /* === Pages === */
 
-// TODO:
-require("./routes/index.js");
-
 const routePath = "./views/html";
 
 // app.get('/', (req,res) => {
@@ -95,16 +94,25 @@ let searchResult;
 
 app.post('/searchSubmit', async (req, res) => {
   var courseSearch = req.body.courseSearch;
+  const userId = req.session.uid;
 
-  searchResult = await datasetCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
-    _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1,
-    Course_URL: 1, Organization: 1, Course_Description: 1
-  }).toArray();
+  try {
+    searchResult = await datasetCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
+      _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, 
+      Course_URL: 1, Organization: 1, Course_Description: 1}).toArray();
 
-  res.render("searchList2", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
+    const user = await userCollection.findOne({ _id: new ObjectId(userId) });
+    const userBookmarks = user && user.bookmarks && user.bookmarks.length > 0 ? user.bookmarks.map(b => b.courseId.toString()) : [];
+    
 
 
 
+    res.render("searchList", {searchResult: searchResult, isLoggedIn: isLoggedIn(req), userBookmarks });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('An error occurred while searching');
+  }
 });
 
 app.get('/courseDetails', async (req, res) => {
@@ -150,6 +158,20 @@ app.post('/addBookmark', async (req, res) => {
   });
 
   res.sendStatus(200);
+});
+
+app.post('/removeBookmark', async (req, res) => {
+  const userId = req.session.uid; // user's _id
+  const courseId = req.body.courseId; // course's _id
+
+  const result = await bookmarkCollection.deleteOne({ userId: userId, courseId: courseId });
+  if (result.deletedCount === 1) {
+    res.sendStatus(200);
+  } else {
+    res.sendStatus(400); // bookmark not found
+  }
+  console.log('Deleted bookmark from DB');
+
 });
 
 //Filters 
@@ -210,14 +232,13 @@ app.get('/sample', (req, res) => {
   res.render("sample");
 });
 
-app.post('/login-submit', loginValidation, async (req, res) => {
-  let userId = req.body.userId;
+app.post('/login-submit', loginValidation, async (req,res) => {
+  let email = req.body.email;
 
-  const result = await userCollection.find({ userId: userId }).project({ email: 1, password: 1, username: 1, avatar: 1, _id: 1 }).toArray();
+  const result = await userCollection.find({ email: email }).project({ password: 1, username: 1, avatar: 1, _id: 1 }).toArray();
   req.session.uid = result[0]._id;
   req.session.authenticated = true;
-  req.session.userId = userId;
-  req.session.email = result[0].email;
+  req.session.email = email;
   req.session.username = result[0].username;
   req.session.avatar = result[0].avatar;
   req.session.cookie.maxAge = expireTime;
@@ -230,32 +251,26 @@ app.get('/signup', (req, res) => {
 });
 
 app.post('/signup-submit', signupValidation, async (req, res) => {
-  let userId = req.body.userId;
   let password = req.body.password;
   let username = req.body.username;
   let email = req.body.email;
 
   // check if the id already exists
-  const idCheck = await userCollection.find({ userId: userId }).project({ _id: 1 }).toArray();
-  // const emailCheck = await userCollection.find({ email: email }).project({ _id: 1 }).toArray();
-  if (idCheck.length > 0) {
-    res.render('signup-submit', { signupFail: true, errorMessage: `This ID already exists. \n Please choose a different user id.` });
+  const emailCheck = await userCollection.find({ email: email }).project({ _id: 1 }).toArray();
+
+  if (emailCheck.length > 0) {
+    res.render('signup-submit', { signupFail: true, errorMessage: `This email already exists. \n Please choose a different email.` });
     return;
   }
-  // if (emailCheck.length > 0) {
-  //   res.render('signup-submit', { signupFail: true, errorMessage: `This email already exists. \n Please choose a different email.` });
-  //   return;
-  // }
 
   // If inputs are valid, add the member
   let hashedPassword = await bcrypt.hash(password, saltRounds);
 
-  await userCollection.insertOne({ userId: userId, username: username, email: email, password: hashedPassword, user_type: 'user' });
+  await userCollection.insertOne({ username: username, email: email, password: hashedPassword, user_type: 'user' });
   console.log("Inserted user");
 
   // Create a session
   req.session.authenticated = true;
-  req.session.userId = userId;
   req.session.email = email;
   req.session.username = username;
   req.session.user_type = 'user';
@@ -297,16 +312,14 @@ app.post('/find-password', async (req, res) => {
         from: email_host,
         to: email,
         subject: 'Password Reset',
-        text: `Hi ${user.userId},\n\nYou requested a password reset for your account.
+        text: `Hi ${user.username},\n\nYou requested a password reset for your account.
         \n\nPlease click on the following link within the next hour to reset your password:
         \n\nhttps://coursla.cyclic.app/reset-password/${token}
         \n\nIf you did not request this reset, please ignore this email.
         \n\nThank you,
-        \\n\\ntest : http://localhost:3000/reset-password/${token}
         \nThe Coursla App Team`
 
       };
-      // \n\ntest : http://localhost:3000/reset-password/${token}
 
       await transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
@@ -314,7 +327,7 @@ app.post('/find-password', async (req, res) => {
           res.render('find-password', { message: 'Failed to send email. Please try again later.' });
         } else {
           console.log(info);
-          res.redirect("/login");
+          res.redirect("/login?successMessage=Please check your email");
           // res.render('find-password', { message: 'An email has been sent with further instructions.' });
         }
       });
@@ -335,7 +348,7 @@ app.get('/reset-password/:token', async (req, res) => {
     if (tokenData && tokenData.expireAt > new Date()) {
       const user = await userCollection.findOne({ _id: tokenData.uid });
       console.log(user)
-      res.render('reset-password', { token: token, userId: user.userId, avatar: user.avatar });
+      res.render('reset-password', { token: token, username: user.username, avatar: user.avatar });
     } else {
       res.render('error', { message: 'Invalid or expired token' });
     }
@@ -372,9 +385,9 @@ app.post('/reset-password-submit', async (req, res) => {
 
 });
 
-app.get('/profile', sessionValidation, (req, res) => {
-  let { username, email, avatar, userId } = req.session;
-  res.render('profile', { username, email, avatar, userId, isLoggedIn: isLoggedIn(req) });
+app.get('/profile', sessionValidation, (req,res) => {
+  let { username, email, avatar } = req.session;
+  res.render('profile', {username, email, avatar, isLoggedIn: isLoggedIn(req) });
 });
 
 app.get('/change-password', sessionValidation, async (req, res) => {
@@ -410,8 +423,7 @@ app.get('/edit-profile', sessionValidation, async (req, res) => {
   let email = req.session.email;
   let username = req.session.username;
   let avatar = req.session.avatar;
-  let userId = req.session.userId;
-  res.render("edit-profile", { userId, email, username, avatar, isLoggedIn: isLoggedIn(req) });
+  res.render("edit-profile", {email, username, avatar, isLoggedIn: isLoggedIn(req)});
 });
 
 app.post('/edit-profile-submit', sessionValidation, async (req, res) => {

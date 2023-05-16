@@ -1,0 +1,106 @@
+
+.CourseCard-StyledCourseCard {
+    
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    max-width: 600px;
+    border-radius: 20px;
+    box-shadow: 0 0px 5px rgba(0, 0, 0, 0.3);
+   
+}
+
+
+
+.filter-btn {
+	padding-right: 5px;
+	padding-left:5px;
+}
+
+/* TODO: plz avoid using general tag except common.css. if not it will affect other pages */
+.course-results {
+	text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+} 
+
+.Course-Bookmark {
+
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px;
+    background-color: #ccc;
+
+}
+
+.Course-Bookmark.bookmarked svg path {
+  fill: #BC4749;
+  
+
+}
+
+/* .Coursecard-InfoRatingWrapper {
+	text-align: center;
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+    font: inherit;
+    vertical-align: baseline;
+    color: rgb(21, 21, 21);
+    font-family: HelveticaNeue, arial;
+    font-size: 14px;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+
+} */
+
+/* .CardNumRating-CardNumRatingNumber {
+	position: relative;
+	nav-index: 1;
+	width: 200px;;
+	display: block;
+	margin: 0 auto;
+} */
+
+
+/* Thumbnail */
+.card-thumbnail {
+    flex: 0 0 calc(33.33% - 10px);
+    margin-right: 10px;
+  }
+  
+  /* Thumbnail image */
+  .card-thumbnail img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px; 
+  }
+  
+  /* Bookmark button */
+  .bookmark-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px;
+    background-color: #ccc;
+  }
+
+ /* Information side */
+ .card-info {
+    flex: 1 1 auto;
+    text-align:left;
+
+  }
+
+
+/* Title */
+.Card-CourseName {
+font-weight: bold;
+margin-bottom: 5px;
+}
