@@ -156,20 +156,25 @@ app.get('/bookmarks', async (req, res) => {
     const bookmarkedCourses = await database.db(mongodb_database).collection('bookmarks').aggregate([
       {
         $lookup: {
-          from: "courses",
-          localField: "courseId",
-          foreignField: "_id",
-          as: "courseDetails"
+          from: 'courses',
+          let: { courseId: { $toObjectId: '$courseId' } },
+          pipeline: [
+            { $match: { $expr: { $eq: ['$_id', '$$courseId'] } } },
+            {
+              $project: {
+                _id: 0,
+                Title: 1,
+                Provider: 1,
+                Course_Rating: 1,
+                Course_Difficulty: 1
+              }
+            }
+          ],
+          as: 'courseDetails'
         }
       },
       {
-        $project: {
-          _id: 0,
-          "courseDetails.Title": 1,
-          "courseDetails.Provider": 1,
-          "courseDetails.Course_Rating": 1,
-          "courseDetails.Course_Difficulty": 1
-        }
+        $unwind: '$courseDetails'
       }
     ]).toArray();
     console.log('bookmarked courses: ', bookmarkedCourses); // log the array to the console
