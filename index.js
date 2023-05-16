@@ -100,29 +100,16 @@ app.post('/searchSubmit', async (req, res) => {
     searchResult = await datasetCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
       _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, 
       Course_URL: 1, Organization: 1, Course_Description: 1}).toArray();
-
-    const user = await userCollection.findOne({ _id: new ObjectId(userId) });
-    const userBookmarks = user && user.bookmarks && user.bookmarks.length > 0 ? user.bookmarks.map(b => b.courseId.toString()) : [];   
+      
+    const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();  
 
     res.render("searchList2", {searchResult: searchResult, isLoggedIn: isLoggedIn(req), userBookmarks });
+    // console.log("userBookamrks: ", userBookmarks)
 
   } catch (error) {
     console.error(error);
     res.status(500).send('An error occurred while searching');
   }
-});
-
-app.post('/getUserBookmarks', async (req, res) => {
-  const userId = req.session.uid; // user's _id
-  console.error(userId);
-  try {
-    const userBookmarks = await getUserBookmarks(userId); //call getUserBookmarks() in bookmark.js
-    res.json(userBookmarks);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('An error occurred while getting user bookmarks');
-  }
-
 });
 
 app.post('/addBookmark', async (req, res) => {

@@ -32,7 +32,8 @@
         </div>
     </div>
     <% if (isLoggedIn) { %>
-        <button class="Course-Bookmark <%= userBookmarks && userBookmarks.includes(result._id.toString()) ? 'bookmarked' : '' %>" type="button" data-course-id="<%= result._id %>" onclick="toggleBookmark('<%= result._id %>')">    
+        <% const bookmarkedCourseIds = userBookmarks.map(b => b.courseId); %>
+        <button class="Course-Bookmark <%= bookmarkedCourseIds.includes(result._id.toString()) ? 'bookmarked' : '' %>" type="button" data-course-id="<%= result._id %>" onclick="toggleBookmark('<%= result._id %>')">
     <% } else { %>
         <button class="Course-Bookmark" type="button" data-course-id="<%= result._id %>" onclick="toggleBookmark('<%= result._id %>')">
     <% } %>
