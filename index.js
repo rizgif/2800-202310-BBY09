@@ -90,21 +90,23 @@ app.get('/', async (req, res) => {
   res.render("index", { isLoggedIn: isLoggedIn(req) });
 });
 
-let searchResult;
+let storedsearchResult;
 
 app.post('/searchSubmit', async (req, res) => {
   var courseSearch = req.body.courseSearch;
   const userId = req.session.uid;
 
   try {
-    searchResult = await datasetCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
+    let searchResult = await datasetCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
       _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, 
       Course_URL: 1, Organization: 1, Course_Description: 1}).toArray();
 
     const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray(); 
     const searchResultCount = searchResult.length; 
+    storedsearchResult = searchResult;
 
     res.render("searchList", {
+     
       searchResult: searchResult, 
       isLoggedIn: isLoggedIn(req), 
       userBookmarks, 
@@ -230,7 +232,7 @@ app.get('/filter-udemy', (req, res) => {
 });
 
 app.get('/filter-coursera', (req, res) => {
-  res.render("filter-coursera", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
+  res.render("filter-coursera", { searchResult: storedsearchResult, isLoggedIn: isLoggedIn(req) });
 });
 
 app.get('/filter-allcourses', (req, res) => {
