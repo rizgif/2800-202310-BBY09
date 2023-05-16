@@ -100,10 +100,17 @@ app.post('/searchSubmit', async (req, res) => {
     searchResult = await datasetCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
       _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, 
       Course_URL: 1, Organization: 1, Course_Description: 1}).toArray();
-      
-    const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();  
 
-    res.render("searchList2", {searchResult: searchResult, isLoggedIn: isLoggedIn(req), userBookmarks });
+    const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray(); 
+    const searchResultCount = searchResult.length; 
+
+    res.render("searchList2", {
+      searchResult: searchResult, 
+      isLoggedIn: isLoggedIn(req), 
+      userBookmarks, 
+      searchResultCount: searchResultCount,
+      courseSearch
+    });
     // console.log("userBookamrks: ", userBookmarks)
 
   } catch (error) {
@@ -129,11 +136,16 @@ app.post('/removeBookmark', async (req, res) => {
   const userId = req.session.uid; // user's _id
   const courseId = req.body.courseId; // course's _id
 
-  const result = await bookmarkCollection.deleteOne({ userId: userId, courseId: courseId });
-  if (result.deletedCount === 1) {
-    res.sendStatus(200);
+  const bookmark = await bookmarkCollection.findOne({ userId: userId, courseId: courseId });
+  if (bookmark) {
+    const result = await bookmarkCollection.deleteOne({ _id: bookmark._id });
+    if (result.deletedCount === 1) {
+      res.sendStatus(200);
+    } else {
+      res.sendStatus(500); // failed to delete bookmark
+    }
   } else {
-    res.sendStatus(400); // bookmark not found
+    res.sendStatus(404); // bookmark not found
   }
   console.log('Deleted bookmark from DB');
 

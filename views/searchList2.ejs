@@ -56,7 +56,7 @@
 </div>
 
 
-<h2>Your Course Results</h2>
+<p>'<%= searchResultCount %>'Results for "<%= courseSearch %>"</p>
 
 <% for(let i=0; i < searchResult.length; i++) { %>
   <%- include('templates/list', { result: searchResult[i], userBookmarks: userBookmarks })  %>
