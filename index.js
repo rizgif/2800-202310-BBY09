@@ -129,6 +129,7 @@ app.post('/searchSubmit', async (req, res) => {
 
 
     res.render("searchList", {searchResult: searchResult, isLoggedIn: isLoggedIn(req), userBookmarks });
+  
 
   } catch (error) {
     console.error(error);
@@ -167,8 +168,32 @@ app.post('/removeBookmark', async (req, res) => {
 /* Filter and Sort Course Search Results Section */
 
 
-app.get('/filteredlist', (req,res) => {
-  res.render("filteredlist", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+// Apply filters to your course results based on the query parameters
+
+// Assuming searchResult is your original list of courses
+
+var global = []
+app.get('/filter', (req, res) => {
+
+  var courseSearch = req.body.courseSearch;
+
+  
+ 
+  const provider = req.query.provider; // Extract the value of the "provider" query parameter
+  const level = req.query.level; // Extract the value of the "level" query parameter
+
+
+    if (provider) {
+      courseSearch = courseSearch.filter(course => course.Provider === provider);
+    }
+    
+    if (level) {
+      courseSearch = courseSearch.filter(course => course.Course_Difficulty === level);
+    }
+   
+  // Render the filtered results view or send a JSON response with the filtered results
+  res.render('filteredResults', { filteredResults: courseSearch, isLoggedIn: isLoggedIn(req)});
+
 });
 
 
