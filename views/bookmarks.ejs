@@ -1,0 +1,17 @@
+<% if (isLoggedIn) { %>
+    <%- include("templates/header") %>
+<% } else { %>
+    <%- include("templates/header-beforeLogin") %>
+<% } %>
+
+<h2>My Bookmarks</h2>
+
+<% if (bookmarkedCourses.length > 0) { %>
+    <% for(let i=0; i < bookmarkedCourses.length; i++) { %>
+        <%- include('templates/bookmarks-list', {result: bookmarkedCourses[i]})  %>
+    <% } %>
+<% } else { %>
+        <p>You have no bookmarks yet.</p>
+<% } %>
+     
+<%- include("templates/footer") %>

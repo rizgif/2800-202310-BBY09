@@ -112,6 +112,18 @@ app.post('/searchSubmit', async (req, res) => {
   }
 });
 
+app.post('/getUserBookmarks', async (req, res) => {
+  const userId = req.session.uid; // user's _id
+  try {
+    const userBookmarks = await getUserBookmarks(userId); //call getUserBookmarks() in bookmark.js
+    res.json(userBookmarks);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('An error occurred while getting user bookmarks');
+  }
+
+});
+
 app.post('/addBookmark', async (req, res) => {
   const userId = req.session.uid; // user's _id
   const courseId = req.body.courseId; // course's _id
@@ -138,6 +150,38 @@ app.post('/removeBookmark', async (req, res) => {
   console.log('Deleted bookmark from DB');
 
 });
+
+app.get('/bookmarks', async (req, res) => {
+  try {
+    const bookmarkedCourses = await database.db(mongodb_database).collection('bookmarks').aggregate([
+      {
+        $lookup: {
+          from: "courses",
+          localField: "courseId",
+          foreignField: "_id",
+          as: "courseDetails"
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          "courseDetails.Title": 1,
+          "courseDetails.Provider": 1,
+          "courseDetails.Course_Rating": 1,
+          "courseDetails.Course_Difficulty": 1
+        }
+      }
+    ]).toArray();
+    console.log('bookmarked courses: ', bookmarkedCourses); // log the array to the console
+
+    res.render('bookmarks', { bookmarkedCourses, isLoggedIn: isLoggedIn(req) });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
 
 //Filters 
 /* Filter and Sort Course Search Results Section */

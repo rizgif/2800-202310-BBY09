@@ -1,3 +1,62 @@
+// window.onload = async function() {
+//   await updateBookmarks();
+// }
+
+async function updateBookmarks() {
+  // Get all bookmark buttons
+  const bookmarkButtons = document.querySelectorAll('.Course-Bookmark');
+
+  // Get user bookmarks from the server
+  const response = await fetch('/getUserBookmarks');
+  const userBookmarks = await response.json();
+
+  // Update each bookmark button
+  bookmarkButtons.forEach((bookmarkButton) => {
+    const courseId = bookmarkButton.getAttribute('data-course-id');
+    if (userBookmarks && userBookmarks.includes(courseId)) {
+      bookmarkButton.classList.add('bookmarked');
+    } else {
+      bookmarkButton.classList.remove('bookmarked');
+    }
+  });
+
+  // Check if each course in the search result is bookmarked
+  const searchResult = document.querySelectorAll('.search-result');
+  searchResult.forEach((course) => {
+    const courseId = course.getAttribute('data-course-id');
+    const bookmarkButton = course.querySelector('.Course-Bookmark');
+    if (userBookmarks && userBookmarks.includes(courseId)) {
+      bookmarkButton.classList.add('bookmarked');
+    } else {
+      bookmarkButton.classList.remove('bookmarked');
+    }
+  });
+}
+
+
+// async function updateBookmarks() {
+//     // Get all bookmark buttons
+//     const bookmarkButtons = document.querySelectorAll('.Course-Bookmark');
+    
+//     // Get user bookmarks from the server
+//     const response = await fetch('/getUserBookmarks');
+//     const userBookmarks = await response.json();
+    
+//     // Update each bookmark button
+//     bookmarkButtons.forEach((bookmarkButton) => {
+//       const courseId = bookmarkButton.getAttribute('data-course-id');
+//       if (userBookmarks && userBookmarks.includes(courseId)) {
+//         bookmarkButton.classList.add('bookmarked');
+//       } else {
+//         bookmarkButton.classList.remove('bookmarked');
+//       }
+//     });
+//   }
+
+  async function getUserBookmarks(userId) {
+    const user = await userCollection.findOne({ _id: new ObjectId(userId) });
+    return user && user.bookmarks && user.bookmarks.length > 0 ? user.bookmarks.map(b => b.courseId.toString()) : [];
+  }
 
 // document.addEventListener('DOMContentLoaded', () => {
 //   const bookmarkButtons = document.querySelectorAll('.Course-Bookmark');
@@ -63,3 +122,5 @@ async function toggleBookmark(courseId) {
       }
     }
   }
+
+  
