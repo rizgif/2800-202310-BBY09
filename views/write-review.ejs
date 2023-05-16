@@ -1,4 +1,8 @@
-<%- include('templates/header') %>
+<% if (isLoggedIn) { %>
+    <%- include("templates/header-afterLogin") %>
+  <% } else { %>
+    <%- include("templates/header-beforeLogin") %>
+  <% } %>
 
 <link rel="stylesheet" href="/css/write-review-card.css">
 

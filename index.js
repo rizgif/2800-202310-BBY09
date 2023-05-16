@@ -163,40 +163,14 @@ app.post('/removeBookmark', async (req, res) => {
 
 });
 
-//Filters 
+
 /* Filter and Sort Course Search Results Section */
 
-// Filter Online Course Providers
 
-app.get('/filter-udemy', (req,res) => {
-  res.render("filter-udemy", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+app.get('/filteredlist', (req,res) => {
+  res.render("filteredlist", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
 });
 
-app.get('/filter-coursera', (req,res) => {
-  res.render("filter-coursera",{searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
-});
-
-app.get('/filter-allcourses', (req,res) => {
-  res.render("filter-allcourses", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
-});
-
-// Filter Levels
-
-app.get('/filter-beginner', (req,res) => {
-  res.render("filter-beginner", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
-});
-
-app.get('/filter-intermediate', (req,res) => {
-  res.render("filter-intermediate",{searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
-});
-
-app.get('/filter-advanced', (req,res) => {
-  res.render("filter-advanced", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
-});
-
-app.get('/filter-alllevels', (req,res) => {
-  res.render("filter-alllevels", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
-});
 
 //Sort Course Ratings 
 

@@ -1,8 +1,8 @@
 <% if (isLoggedIn) { %>
-    <%- include("templates/header") %>
-<% } else { %>
+    <%- include("templates/header-afterLogin") %>
+  <% } else { %>
     <%- include("templates/header-beforeLogin") %>
-<% } %>
+  <% } %>
 
 <main class="form-wrapper profile-section-info">
     <form id="form-profile" class="needs-validation" novalidate onsubmit="return false;">

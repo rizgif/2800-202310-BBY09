@@ -1,5 +1,5 @@
 <% if (isLoggedIn) { %>
-  <%- include("templates/header") %>
+  <%- include("templates/header-afterLogin") %>
 <% } else { %>
   <%- include("templates/header-beforeLogin") %>
 <% } %>
@@ -21,10 +21,10 @@
     Provider
   </button>
   <ul class="dropdown-menu" aria-labelledby="providerDropdown">
-    <li><a class="dropdown-item" href="/filter-udemy" >Udemy</a></li>
-    <li><a class="dropdown-item" href="/filter-coursera" >Coursera</a></li>
+    <li><a class="dropdown-item" href="/filteredlist?provider=Udemy" >Udemy</a></li>
+    <li><a class="dropdown-item" href="/filteredlist?provider=Coursera" >Coursera</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" href="/filter-allcourses" >All</a></li>
+    <li><a class="dropdown-item" href="/filteredlist?provider=All Courses" >All Courses</a></li>
   </ul>
   </div>
 
@@ -33,11 +33,11 @@
       Level
     </button>
     <ul class="dropdown-menu" >
-      <li><a class="dropdown-item" href="/filter-beginner">Beginner</a></li>
-      <li><a class="dropdown-item" href="/filter-intermediate">Intermediate</a></li>
-      <li><a class="dropdown-item" href="/filter-advanced">Advanced</a></li>
+      <li><a class="dropdown-item" href="/filteredlist">Beginner</a></li>
+      <li><a class="dropdown-item" href="/filteredlist">Intermediate</a></li>
+      <li><a class="dropdown-item" href="/filteredlist">Advanced</a></li>
       <li><hr class="dropdown-divider"></li>
-      <li><a class="dropdown-item" href="/filter-alllevels">All Levels</a></li>
+      <li><a class="dropdown-item" href="/filteredlist">All Levels</a></li>
    
     </ul>
   </div>
@@ -60,10 +60,45 @@
 <h2>Your Filtered Results</h2>
 
 <% for(let i=0; i < searchResult.length; i++) { %>
-  <% if (searchResult[i].Provider === 'Udemy') { %>
-    <%- include('templates/list', {result: searchResult[i]})  %>
+
+  <% const result = searchResult[i]; %>
+
+  <% if (searchResult[i].Provider === 'Udemy' || searchResult[i].Provider === 'Coursera') { %>
+
+    <%- include('templates/list', {result}) %>
+
   <% } %>
+
+  <% if (searchResult[i].Course_Difficulty === 'All Levels') { %>
+
+    <%- include('templates/list', {result}) %>
+
+  <% } %>
+
+  <% if (searchResult[i].Course_Difficulty === 'Beginner') { %>
+
+    <%- include('templates/list', {result}) %>
+
+  <% } %>
+
+  <% if (searchResult[i].Course_Difficulty === 'Intermediate') { %>
+
+    <%- include('templates/list', {result}) %>
+
+  <% } %>
+
+  <% if (searchResult[i].Course_Difficulty === 'Advanced') { %>
+
+    <%- include('templates/list', {result}) %>
+
+  <% } %>
+
 <% } %>
+
+
+
+
+
 
 
      

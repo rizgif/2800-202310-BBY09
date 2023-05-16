@@ -1,8 +1,8 @@
 <% if (isLoggedIn) { %>
-    <%- include("templates/header") %>
-<% } else { %>
+    <%- include("templates/header-afterLogin") %>
+  <% } else { %>
     <%- include("templates/header-beforeLogin") %>
-<% } %>
+  <% } %>
 <div class="d-flex align-items-center justify-content-center vh-100 wrapper">
     <div class="text-center">
         <h1 class="display-1 fw-bold">404</h1>

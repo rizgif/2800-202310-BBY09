@@ -1,8 +1,8 @@
 <% if (isLoggedIn) { %>
-    <%- include("templates/header") %>
-<% } else { %>
+    <%- include("templates/header-afterLogin") %>
+  <% } else { %>
     <%- include("templates/header-beforeLogin") %>
-<% } %>
+  <% } %>
 <main class="form-wrapper signin">
     <div class="form-signup w-100 m-auto">
         <form action='/signup-submit' method='post' class="needs-validation" novalidate>

@@ -1,9 +1,8 @@
 <% if (isLoggedIn) { %>
-    <%- include("templates/header") %>
-<% } else { %>
-    <%- include("templates/header-main-beforeLogin") %>
-<% } %>
-
+    <%- include("templates/header-afterLogin") %>
+  <% } else { %>
+    <%- include("templates/header-index-beforeLogin") %>
+  <% } %>
 <div class="text-center">
     <div class="">
         <% if (isLoggedIn) { %>
