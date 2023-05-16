@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const Joi = require("joi");
 const {ObjectId, MongoClient} = require("mongodb");
 const nodemailer = require('nodemailer');
+const bodyParser = require('body-parser');
 
 require("./utils.js");
 
@@ -24,6 +25,7 @@ const port = process.env.PORT || 8000;
 
 const app = express();
 
+app.use(bodyParser.json());
 
 const expireTime = 12 * 60 * 60 * 1000; //expires after 12 hour  (hours * minutes * seconds * millis)
 
@@ -92,15 +94,22 @@ let searchResult;
 
 app.post('/searchSubmit', async (req, res) => {
   var courseSearch = req.body.courseSearch;
+  const userId = req.session.uid;
 
-  searchResult = await datasetCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
-  _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, 
-  Course_URL: 1, Organization: 1, Course_Description: 1}).toArray();
-  
-  res.render("searchList2", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+  try {
+    searchResult = await datasetCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
+      _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, 
+      Course_URL: 1, Organization: 1, Course_Description: 1}).toArray();
 
+    const user = await userCollection.findOne({ _id: new ObjectId(userId) });
+    const userBookmarks = user && user.bookmarks && user.bookmarks.length > 0 ? user.bookmarks.map(b => b.courseId.toString()) : [];   
 
+    res.render("searchList2", {searchResult: searchResult, isLoggedIn: isLoggedIn(req), userBookmarks });
 
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('An error occurred while searching');
+  }
 });
 
 app.post('/addBookmark', async (req, res) => {
@@ -114,6 +123,20 @@ app.post('/addBookmark', async (req, res) => {
   });
 
   res.sendStatus(200);
+});
+
+app.post('/removeBookmark', async (req, res) => {
+  const userId = req.session.uid; // user's _id
+  const courseId = req.body.courseId; // course's _id
+
+  const result = await bookmarkCollection.deleteOne({ userId: userId, courseId: courseId });
+  if (result.deletedCount === 1) {
+    res.sendStatus(200);
+  } else {
+    res.sendStatus(400); // bookmark not found
+  }
+  console.log('Deleted bookmark from DB');
+
 });
 
 //Filters 
