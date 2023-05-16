@@ -1,6 +1,6 @@
-// window.onload = async function() {
-//   await updateBookmarks();
-// }
+window.onload = async function() {
+  await updateBookmarks();
+}
 
 async function updateBookmarks() {
   // Get all bookmark buttons
@@ -33,6 +33,10 @@ async function updateBookmarks() {
   });
 }
 
+async function getUserBookmarks(userId) {
+  const user = await userCollection.findOne({ _id: new ObjectId(userId) });
+  return user && user.bookmarks && user.bookmarks.length > 0 ? user.bookmarks.map(b => b.courseId.toString()) : [];
+}
 
 // async function updateBookmarks() {
 //     // Get all bookmark buttons
@@ -53,10 +57,7 @@ async function updateBookmarks() {
 //     });
 //   }
 
-  async function getUserBookmarks(userId) {
-    const user = await userCollection.findOne({ _id: new ObjectId(userId) });
-    return user && user.bookmarks && user.bookmarks.length > 0 ? user.bookmarks.map(b => b.courseId.toString()) : [];
-  }
+
 
 // document.addEventListener('DOMContentLoaded', () => {
 //   const bookmarkButtons = document.querySelectorAll('.Course-Bookmark');

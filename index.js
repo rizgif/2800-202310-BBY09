@@ -114,6 +114,7 @@ app.post('/searchSubmit', async (req, res) => {
 
 app.post('/getUserBookmarks', async (req, res) => {
   const userId = req.session.uid; // user's _id
+  console.error(userId);
   try {
     const userBookmarks = await getUserBookmarks(userId); //call getUserBookmarks() in bookmark.js
     res.json(userBookmarks);
