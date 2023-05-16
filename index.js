@@ -111,14 +111,14 @@ app.get('/', async (req, res) => {
   res.render("index", { isLoggedIn: isLoggedIn(req) });
 });
 
-let searchResult;
+
 
 app.post('/searchSubmit', async (req, res) => {
   var courseSearch = req.body.courseSearch;
   const userId = req.session.uid;
 
   try {
-    searchResult = await datasetCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
+    let searchResult = await datasetCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
       _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, 
       Course_URL: 1, Organization: 1, Course_Description: 1}).toArray();
 
@@ -172,27 +172,19 @@ app.post('/removeBookmark', async (req, res) => {
 
 // Assuming searchResult is your original list of courses
 
-var global = []
-app.get('/filter', (req, res) => {
 
-  var courseSearch = req.body.courseSearch;
+app.get('/filter', async (req, res) => {
 
-  
- 
+
   const provider = req.query.provider; // Extract the value of the "provider" query parameter
   const level = req.query.level; // Extract the value of the "level" query parameter
 
+ 
+     
+    // Render the filtered results view or send a JSON response with the filtered results
+    res.render('filteredResults', { filteredResults: courseSearch, isLoggedIn: isLoggedIn(req)});
 
-    if (provider) {
-      courseSearch = courseSearch.filter(course => course.Provider === provider);
-    }
-    
-    if (level) {
-      courseSearch = courseSearch.filter(course => course.Course_Difficulty === level);
-    }
-   
-  // Render the filtered results view or send a JSON response with the filtered results
-  res.render('filteredResults', { filteredResults: courseSearch, isLoggedIn: isLoggedIn(req)});
+
 
 });
 
