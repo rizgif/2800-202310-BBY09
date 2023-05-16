@@ -115,9 +115,9 @@ app.post('/searchSubmit', async (req, res) => {
   }
 });
 
-app.get('/courseDetails', async (req, res) => {
+app.get('/course-details', async (req, res) => {
   const courseId = req.query.courseid;
-  console.log("courseid here (1)", courseId)
+  // console.log("courseid here (1)", courseId)
   const reviews = await reviewCollection.find().toArray();
   const username = req.session.username;
 
@@ -441,39 +441,6 @@ app.post('/edit-profile-submit', sessionValidation, async (req, res) => {
 
   res.redirect("/profile");
 });
-
-
-//show the list of review cards
-// app.get('/reviews', async (req, res) => {
-//   const reviews = await reviewCollection.find().toArray();
-
-//   const username = req.session.username;
-
-//   const reviewSliderPairs = reviews.map(review => {
-//     const sliderValue = {
-//       courseContentSliderValue: review.CourseContentRating,
-//       courseStructureSliderValue: review.CourseStructureRating,
-//       teachingStyleSliderValue: review.TeachingStyleRating,
-//       studentSupportSliderValue: review.StudentSupportRating
-//     };
-
-//     return {
-//       review: review,
-//       sliderValue: sliderValue
-//     };
-//   });
-
-//   // console.log(reviewSliderPairs);
-//   // console.log(sliderValue);
-//   res.render("review", {
-//     req: req,
-//     reviewSliderPairs: reviewSliderPairs,
-//     // whichCourse: true,
-//     username: username
-//   });
-
-// });
-
 
 // write a review on a specific course
 app.get('/reviews/write/:courseid', async (req, res) => {

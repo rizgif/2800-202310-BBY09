@@ -4,9 +4,9 @@
     console.log('Clicked on', courseid);
 
     // Send a POST request to the server route
-    $.get('/courseDetails', function(response) {
+    $.get('/course-details', function(response) {
       console.log('Redirecting to new page');
-      window.location.href = '/courseDetails?courseid=' + courseid;
+      window.location.href = '/course-details?courseid=' + courseid;
     });
   }
 </script>
