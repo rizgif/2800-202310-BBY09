@@ -102,9 +102,12 @@ app.post('/searchSubmit', async (req, res) => {
       Course_URL: 1, Organization: 1, Course_Description: 1}).toArray();
 
     const user = await userCollection.findOne({ _id: new ObjectId(userId) });
-    const userBookmarks = user && user.bookmarks && user.bookmarks.length > 0 ? user.bookmarks.map(b => b.courseId.toString()) : [];   
+    const userBookmarks = user && user.bookmarks && user.bookmarks.length > 0 ? user.bookmarks.map(b => b.courseId.toString()) : [];
+    
 
-    res.render("searchList2", {searchResult: searchResult, isLoggedIn: isLoggedIn(req), userBookmarks });
+
+
+    res.render("searchList", {searchResult: searchResult, isLoggedIn: isLoggedIn(req), userBookmarks });
 
   } catch (error) {
     console.error(error);
@@ -186,6 +189,7 @@ app.get('/sort-lowtohigh', (req,res) => {
 });
 
 /* End of Filter and Sort Course Search Results Section */
+
 
 
 app.get('/login', (req, res) => {
