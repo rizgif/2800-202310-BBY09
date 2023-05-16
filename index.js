@@ -109,6 +109,7 @@ app.post('/searchSubmit', async (req, res) => {
 
 app.get('/courseDetails', async (req, res) => {
   const courseId = req.query.courseid;
+  console.log("courseid here (1)", courseId)
   const reviews = await reviewCollection.find().toArray();
   const username = req.session.username;
 
@@ -431,40 +432,43 @@ app.post('/edit-profile-submit', sessionValidation, async (req, res) => {
 
 
 //show the list of review cards
-app.get('/reviews', async (req, res) => {
-  const reviews = await reviewCollection.find().toArray();
+// app.get('/reviews', async (req, res) => {
+//   const reviews = await reviewCollection.find().toArray();
 
+//   const username = req.session.username;
+
+//   const reviewSliderPairs = reviews.map(review => {
+//     const sliderValue = {
+//       courseContentSliderValue: review.CourseContentRating,
+//       courseStructureSliderValue: review.CourseStructureRating,
+//       teachingStyleSliderValue: review.TeachingStyleRating,
+//       studentSupportSliderValue: review.StudentSupportRating
+//     };
+
+//     return {
+//       review: review,
+//       sliderValue: sliderValue
+//     };
+//   });
+
+//   // console.log(reviewSliderPairs);
+//   // console.log(sliderValue);
+//   res.render("review", {
+//     req: req,
+//     reviewSliderPairs: reviewSliderPairs,
+//     // whichCourse: true,
+//     username: username
+//   });
+
+// });
+
+
+// write a review on a specific course
+app.get('/reviews/write/:courseid', async (req, res) => {
   const username = req.session.username;
-
-  const reviewSliderPairs = reviews.map(review => {
-    const sliderValue = {
-      courseContentSliderValue: review.CourseContentRating,
-      courseStructureSliderValue: review.CourseStructureRating,
-      teachingStyleSliderValue: review.TeachingStyleRating,
-      studentSupportSliderValue: review.StudentSupportRating
-    };
-
-    return {
-      review: review,
-      sliderValue: sliderValue
-    };
-  });
-
-  // console.log(reviewSliderPairs);
-  // console.log(sliderValue);
-  res.render("review", {
-    req: req,
-    reviewSliderPairs: reviewSliderPairs,
-    // whichCourse: true,
-    username: username
-  });
-
-});
-
-
-app.get('/reviews/write/:editReview', async (req, res) => {
-  const username = req.session.username;
-  const reviewId = req.body._id;
+  // const reviewId = req.body._id;
+  const courseId = req.params.courseid.replace(':', '');;
+  console.log("courseid here (2)", courseId)
 
   const reviews = await reviewCollection.find().toArray();
 
@@ -485,7 +489,7 @@ app.get('/reviews/write/:editReview', async (req, res) => {
     studentSupportSliderValue: review.StudentSupportRating
   }));
 
-  const editReview = req.params.editReview === '/updateReview';
+  // const editReview = req.params.editReview === '/updateReview';
 
   // Find the specific review for the current user
   const specificReview = reviews.find(review => review.username === username);
@@ -495,17 +499,60 @@ app.get('/reviews/write/:editReview', async (req, res) => {
     sliderValues: sliderValues,
     reviewSliderPairs: reviewSliderPairs,
     username: username,
-    editReview: editReview,
+    courseId: courseId,
+    editReview: false,
     specificReview: specificReview
   };
 
   res.render("write-review", renderData);
 });
 
+
+// app.get('/reviews/write/:editReview', async (req, res) => {
+//   const username = req.session.username;
+//   const reviewId = req.body._id;
+
+//   const reviews = await reviewCollection.find().toArray();
+
+//   const reviewSliderPairs = reviews.map(review => ({
+//     username: review.username,
+//     sliderValue: {
+//       courseContentSliderValue: review.CourseContentRating,
+//       courseStructureSliderValue: review.CourseStructureRating,
+//       teachingStyleSliderValue: review.TeachingStyleRating,
+//       studentSupportSliderValue: review.StudentSupportRating
+//     }
+//   }));
+
+//   const sliderValues = reviews.map(review => ({
+//     courseContentSliderValue: review.CourseContentRating,
+//     courseStructureSliderValue: review.CourseStructureRating,
+//     teachingStyleSliderValue: review.TeachingStyleRating,
+//     studentSupportSliderValue: review.StudentSupportRating
+//   }));
+
+//   const editReview = req.params.editReview === '/updateReview';
+
+//   // Find the specific review for the current user
+//   const specificReview = reviews.find(review => review.username === username);
+
+//   const renderData = {
+//     req: req,
+//     sliderValues: sliderValues,
+//     reviewSliderPairs: reviewSliderPairs,
+//     username: username,
+//     editReview: editReview,
+//     specificReview: specificReview
+//   };
+
+//   res.render("write-review", renderData);
+// });
+
+
+//change the review written for a specific course
 app.get('/reviews/write/updateReview/:id', async (req, res) => {
   const username = req.session.username;
   const reviewId = req.params.id; // Get the review ID from the URL parameter
-
   const reviews = await reviewCollection.find().toArray();
 
   const reviewSliderPairs = reviews.map(review => ({
@@ -516,31 +563,16 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
       courseStructureSliderValue: review.CourseStructureRating,
       teachingStyleSliderValue: review.TeachingStyleRating,
       studentSupportSliderValue: review.StudentSupportRating
-    }
-  }));
+    },
+    courseId: review.CourseID
 
-  // const sliderValues = {
-  //   courseContentSliderValue: 0, // Set initial values for the sliders
-  //   courseStructureSliderValue: 0,
-  //   teachingStyleSliderValue: 0,
-  //   studentSupportSliderValue: 0
-  // };
+  }));
 
   // Find the specific review for the current user based on the review ID
   const specificReview = reviews.find(review => review._id.toString() === reviewId);
-
-  // console.log("id", reviewId);
-  // console.log("specific review", specificReview);
-
-
-  // if (specificReview) {
-  //   // Set the slider values if the specific review is found
-  //   sliderValues.courseContentSliderValue = specificReview.CourseContentRating;
-  //   sliderValues.courseStructureSliderValue = specificReview.CourseStructureRating;
-  //   sliderValues.teachingStyleSliderValue = specificReview.TeachingStyleRating;
-  //   sliderValues.studentSupportSliderValue = specificReview.StudentSupportRating;
-  // }
-
+  console.log("specific", specificReview)
+  const courseID = specificReview.CourseID;
+ 
   const renderData = {
     req: req,
     // sliderValues: sliderValues,
@@ -548,11 +580,15 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
     username: username,
     editReview: true,
     specificReview: specificReview,
-    reviewId: reviewId
+    reviewId: reviewId,
+    courseId: courseID
+
   };
 
   res.render("write-review", renderData);
 });
+
+
 
 //delete the review from database
 app.delete('/reviews/deleteReview/:id', async (req, res) => {
@@ -564,8 +600,12 @@ app.delete('/reviews/deleteReview/:id', async (req, res) => {
   res.redirect('/reviews');
 });
 
+
 //write to database
-app.post('/submitReview', async (req, res) => {
+app.post('/submitReview/:id', async (req, res) => {
+  // const courseId = req.params.id;
+  const courseId = req.params.id;
+  console.log("okay", courseId);
   const reviewId = req.body.reviewId;
   const { review,
     courseContentSliderValue,
@@ -591,7 +631,8 @@ app.post('/submitReview', async (req, res) => {
           CourseStructureRating: courseStructureSliderValue,
           TeachingStyleRating: teachingStyleSliderValue,
           StudentSupportRating: studentSupportSliderValue,
-          Time: currentDate
+          Time: currentDate,
+          CourseID: courseId
         }
       }
     );
@@ -608,11 +649,12 @@ app.post('/submitReview', async (req, res) => {
       StudentSupportRating: studentSupportSliderValue,
       Time: currentDate,
       username: username,
-      email: email
+      email: email,
+      CourseID: courseId
     });
   }
 
-  res.redirect('/reviews');
+  res.redirect('/courseDetails?courseid=' + courseId);
 });
 
 app.get('/profileReview', async (req, res) => {

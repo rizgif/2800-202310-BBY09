@@ -12,8 +12,14 @@
             <div class="number-ratings" style="margin-top: 20%;font-size: 25px; font-weight: bold;">
               <%= reviewSliderPairs.length %> Student Ratings
             </div>
+
+            <!-- add css later -->
+            <a class="write-review-link" href="/reviews/write/:<%= courseId %>">
+              <button>Write a Review</button>
+            </a>
+
               <% reviewSliderPairs.forEach(pair=> { %>
-                <%- include("read-review", { review: pair.review, sliderValue: pair.sliderValue, username: username })
+                <%- include("read-review", { review: pair.review, sliderValue: pair.sliderValue, username: username, courseId: courseId })
                   %>
                   <% courseContentSum +=parseInt(pair.sliderValue.courseContentSliderValue); %>
                     <% courseStructureSum +=parseInt(pair.sliderValue.courseStructureSliderValue); %>
