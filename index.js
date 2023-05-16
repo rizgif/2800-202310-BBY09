@@ -4,8 +4,9 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const bcrypt = require('bcrypt');
 const Joi = require("joi");
-const {ObjectId, MongoClient} = require("mongodb");
+const { ObjectId, MongoClient } = require("mongodb");
 const nodemailer = require('nodemailer');
+const bodyParser = require('body-parser');
 
 require("./utils.js");
 
@@ -24,6 +25,7 @@ const port = process.env.PORT || 8000;
 
 const app = express();
 
+app.use(bodyParser.json());
 
 const expireTime = 12 * 60 * 60 * 1000; //expires after 12 hour  (hours * minutes * seconds * millis)
 
@@ -71,9 +73,6 @@ app.use(session({
 
 /* === Pages === */
 
-// TODO:
-require("./routes/index.js");
-
 const routePath = "./views/html";
 
 // app.get('/', (req,res) => {
@@ -95,16 +94,58 @@ let searchResult;
 
 app.post('/searchSubmit', async (req, res) => {
   var courseSearch = req.body.courseSearch;
+  const userId = req.session.uid;
 
-  searchResult = await datasetCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
-  _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, 
-  Course_URL: 1, Organization: 1, Course_Description: 1}).toArray();
-  
-  res.render("searchList2", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+  try {
+    searchResult = await datasetCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
+      _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, 
+      Course_URL: 1, Organization: 1, Course_Description: 1}).toArray();
+
+    const user = await userCollection.findOne({ _id: new ObjectId(userId) });
+    const userBookmarks = user && user.bookmarks && user.bookmarks.length > 0 ? user.bookmarks.map(b => b.courseId.toString()) : [];
+    
 
 
 
+    res.render("searchList", {searchResult: searchResult, isLoggedIn: isLoggedIn(req), userBookmarks });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('An error occurred while searching');
+  }
 });
+
+app.get('/courseDetails', async (req, res) => {
+  const courseId = req.query.courseid;
+  console.log("courseid here (1)", courseId)
+  const reviews = await reviewCollection.find().toArray();
+  const username = req.session.username;
+
+  const reviewSliderPairs = reviews.map(review => {
+    const sliderValue = {
+      courseContentSliderValue: review.CourseContentRating,
+      courseStructureSliderValue: review.CourseStructureRating,
+      teachingStyleSliderValue: review.TeachingStyleRating,
+      studentSupportSliderValue: review.StudentSupportRating
+    };
+
+    return {
+      review: review,
+      sliderValue: sliderValue
+    };
+  });
+
+  // console.log(reviewSliderPairs);
+  // console.log(sliderValue);
+  res.render("course-detail", {
+    req: req,
+    courseId: courseId,
+    reviewSliderPairs: reviewSliderPairs,
+    // whichCourse: true,
+    username: username
+  });
+});
+
 
 app.post('/addBookmark', async (req, res) => {
   const userId = req.session.uid; // user's _id
@@ -119,50 +160,64 @@ app.post('/addBookmark', async (req, res) => {
   res.sendStatus(200);
 });
 
+app.post('/removeBookmark', async (req, res) => {
+  const userId = req.session.uid; // user's _id
+  const courseId = req.body.courseId; // course's _id
+
+  const result = await bookmarkCollection.deleteOne({ userId: userId, courseId: courseId });
+  if (result.deletedCount === 1) {
+    res.sendStatus(200);
+  } else {
+    res.sendStatus(400); // bookmark not found
+  }
+  console.log('Deleted bookmark from DB');
+
+});
+
 //Filters 
 /* Filter and Sort Course Search Results Section */
 
 // Filter Online Course Providers
 
-app.get('/filter-udemy', (req,res) => {
-  res.render("filter-udemy", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+app.get('/filter-udemy', (req, res) => {
+  res.render("filter-udemy", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
 });
 
-app.get('/filter-coursera', (req,res) => {
-  res.render("filter-coursera",{searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+app.get('/filter-coursera', (req, res) => {
+  res.render("filter-coursera", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
 });
 
-app.get('/filter-allcourses', (req,res) => {
-  res.render("filter-allcourses", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+app.get('/filter-allcourses', (req, res) => {
+  res.render("filter-allcourses", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
 });
 
 // Filter Levels
 
-app.get('/filter-beginner', (req,res) => {
-  res.render("filter-beginner", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+app.get('/filter-beginner', (req, res) => {
+  res.render("filter-beginner", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
 });
 
-app.get('/filter-intermediate', (req,res) => {
-  res.render("filter-intermediate",{searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+app.get('/filter-intermediate', (req, res) => {
+  res.render("filter-intermediate", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
 });
 
-app.get('/filter-advanced', (req,res) => {
-  res.render("filter-advanced", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+app.get('/filter-advanced', (req, res) => {
+  res.render("filter-advanced", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
 });
 
-app.get('/filter-alllevels', (req,res) => {
-  res.render("filter-alllevels", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+app.get('/filter-alllevels', (req, res) => {
+  res.render("filter-alllevels", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
 });
 
 //Sort Course Ratings 
 
-app.get('/sort-hightolow', (req,res) => {
-  res.render("sort-hightolow", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+app.get('/sort-hightolow', (req, res) => {
+  res.render("sort-hightolow", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
 });
 
 
-app.get('/sort-lowtohigh', (req,res) => {
-  res.render("sort-lowtohigh", {searchResult: searchResult,isLoggedIn: isLoggedIn(req) });
+app.get('/sort-lowtohigh', (req, res) => {
+  res.render("sort-lowtohigh", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
 });
 
 /* End of Filter and Sort Course Search Results Section */
@@ -170,7 +225,7 @@ app.get('/sort-lowtohigh', (req,res) => {
 
 
 app.get('/login', (req, res) => {
-  res.render("login",{ isLoggedIn: isLoggedIn(req) });
+  res.render("login", { isLoggedIn: isLoggedIn(req) });
 });
 
 app.get('/sample', (req, res) => {
@@ -178,13 +233,12 @@ app.get('/sample', (req, res) => {
 });
 
 app.post('/login-submit', loginValidation, async (req,res) => {
-  let userId = req.body.userId;
+  let email = req.body.email;
 
-  const result = await userCollection.find({ userId: userId }).project({ email: 1, password: 1, username: 1, avatar: 1, _id: 1 }).toArray();
+  const result = await userCollection.find({ email: email }).project({ password: 1, username: 1, avatar: 1, _id: 1 }).toArray();
   req.session.uid = result[0]._id;
   req.session.authenticated = true;
-  req.session.userId = userId;
-  req.session.email = result[0].email;
+  req.session.email = email;
   req.session.username = result[0].username;
   req.session.avatar = result[0].avatar;
   req.session.cookie.maxAge = expireTime;
@@ -193,36 +247,30 @@ app.post('/login-submit', loginValidation, async (req,res) => {
 });
 
 app.get('/signup', (req, res) => {
-  res.render('signup',{ isLoggedIn: isLoggedIn(req) });
+  res.render('signup', { isLoggedIn: isLoggedIn(req) });
 });
 
 app.post('/signup-submit', signupValidation, async (req, res) => {
-  let userId = req.body.userId;
   let password = req.body.password;
   let username = req.body.username;
   let email = req.body.email;
 
   // check if the id already exists
-  const idCheck = await userCollection.find({ userId: userId }).project({ _id: 1}).toArray();
-  // const emailCheck = await userCollection.find({ email: email }).project({ _id: 1 }).toArray();
-  if (idCheck.length > 0) {
-    res.render('signup-submit', { signupFail: true, errorMessage: `This ID already exists. \n Please choose a different user id.` });
+  const emailCheck = await userCollection.find({ email: email }).project({ _id: 1 }).toArray();
+
+  if (emailCheck.length > 0) {
+    res.render('signup-submit', { signupFail: true, errorMessage: `This email already exists. \n Please choose a different email.` });
     return;
   }
-  // if (emailCheck.length > 0) {
-  //   res.render('signup-submit', { signupFail: true, errorMessage: `This email already exists. \n Please choose a different email.` });
-  //   return;
-  // }
 
   // If inputs are valid, add the member
   let hashedPassword = await bcrypt.hash(password, saltRounds);
 
-  await userCollection.insertOne({ userId: userId, username: username, email: email, password: hashedPassword, user_type: 'user' });
+  await userCollection.insertOne({ username: username, email: email, password: hashedPassword, user_type: 'user' });
   console.log("Inserted user");
 
   // Create a session
   req.session.authenticated = true;
-  req.session.userId = userId;
   req.session.email = email;
   req.session.username = username;
   req.session.user_type = 'user';
@@ -238,10 +286,10 @@ app.get('/logout', (req, res) => {
   res.redirect("/");
 });
 
-app.get('/find-password', (req,res) => {
+app.get('/find-password', (req, res) => {
   res.render('find-password');
 });
-app.post('/find-password', async (req,res) => {
+app.post('/find-password', async (req, res) => {
   const email = req.body.email;
 
   try {
@@ -264,24 +312,22 @@ app.post('/find-password', async (req,res) => {
         from: email_host,
         to: email,
         subject: 'Password Reset',
-        text: `Hi ${user.userId},\n\nYou requested a password reset for your account.
+        text: `Hi ${user.username},\n\nYou requested a password reset for your account.
         \n\nPlease click on the following link within the next hour to reset your password:
         \n\nhttps://coursla.cyclic.app/reset-password/${token}
         \n\nIf you did not request this reset, please ignore this email.
         \n\nThank you,
-        \\n\\ntest : http://localhost:3000/reset-password/${token}
         \nThe Coursla App Team`
 
       };
-        // \n\ntest : http://localhost:3000/reset-password/${token}
 
       await transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
           console.log(error);
-          res.render('find-password', {message: 'Failed to send email. Please try again later.'});
+          res.render('find-password', { message: 'Failed to send email. Please try again later.' });
         } else {
           console.log(info);
-          res.redirect("/login");
+          res.redirect("/login?successMessage=Please check your email");
           // res.render('find-password', { message: 'An email has been sent with further instructions.' });
         }
       });
@@ -302,7 +348,7 @@ app.get('/reset-password/:token', async (req, res) => {
     if (tokenData && tokenData.expireAt > new Date()) {
       const user = await userCollection.findOne({ _id: tokenData.uid });
       console.log(user)
-      res.render('reset-password', { token: token, userId: user.userId, avatar: user.avatar });
+      res.render('reset-password', { token: token, username: user.username, avatar: user.avatar });
     } else {
       res.render('error', { message: 'Invalid or expired token' });
     }
@@ -312,7 +358,7 @@ app.get('/reset-password/:token', async (req, res) => {
   }
 });
 
-app.post('/reset-password-submit', async(req,res) => {
+app.post('/reset-password-submit', async (req, res) => {
   console.log('change password submit');
   /* Check the old password */
   let token = req.body.token;
@@ -320,15 +366,15 @@ app.post('/reset-password-submit', async(req,res) => {
 
   try {
     const tokenData = await tokenCollection.findOne({ token: token });
-    console.log('tokenData',token,tokenData)
+    console.log('tokenData', token, tokenData)
     const user = await userCollection.findOne({ _id: tokenData.uid });
-    console.log('user',user)
+    console.log('user', user)
 
     /* update the new password */
     // If inputs are valid, add the member
     let hashedPassword = await bcrypt.hash(newPassword, saltRounds);
     let uid = user._id;
-    await userCollection.updateOne({_id: new ObjectId(uid)}, {$set: {password: hashedPassword}});
+    await userCollection.updateOne({ _id: new ObjectId(uid) }, { $set: { password: hashedPassword } });
     console.log('password is changed')
     res.redirect("/profile");
 
@@ -340,8 +386,8 @@ app.post('/reset-password-submit', async(req,res) => {
 });
 
 app.get('/profile', sessionValidation, (req,res) => {
-  let { username, email, avatar, userId } = req.session;
-  res.render('profile', {username, email, avatar, userId, isLoggedIn: isLoggedIn(req) });
+  let { username, email, avatar } = req.session;
+  res.render('profile', {username, email, avatar, isLoggedIn: isLoggedIn(req) });
 });
 
 app.get('/change-password', sessionValidation, async (req, res) => {
@@ -377,19 +423,18 @@ app.get('/edit-profile', sessionValidation, async (req, res) => {
   let email = req.session.email;
   let username = req.session.username;
   let avatar = req.session.avatar;
-  let userId = req.session.userId;
-  res.render("edit-profile", {userId, email, username, avatar, isLoggedIn: isLoggedIn(req)});
+  res.render("edit-profile", {email, username, avatar, isLoggedIn: isLoggedIn(req)});
 });
 
-app.post('/edit-profile-submit', sessionValidation, async(req,res) => {
+app.post('/edit-profile-submit', sessionValidation, async (req, res) => {
   let username = req.body.username;
   let avatar = req.body.avatar;
   let email = req.body.email;
   let uid = req.session.uid;
 
   if (username) {
-    await userCollection.updateOne({_id: new ObjectId(uid)}, {$set: {email, username, avatar}});
-    req.session.username= username;
+    await userCollection.updateOne({ _id: new ObjectId(uid) }, { $set: { email, username, avatar } });
+    req.session.username = username;
     req.session.avatar = avatar;
     req.session.email = email;
   }
@@ -399,122 +444,43 @@ app.post('/edit-profile-submit', sessionValidation, async(req,res) => {
 
 
 //show the list of review cards
-app.get('/reviews', async (req, res) => {
-  const reviews = await reviewCollection.find().toArray();
-
-  const username = req.session.username;
-
-  const reviewSliderPairs = reviews.map(review => {
-    const sliderValue = {
-      courseContentSliderValue: review.CourseContentRating,
-      courseStructureSliderValue: review.CourseStructureRating,
-      teachingStyleSliderValue: review.TeachingStyleRating,
-      studentSupportSliderValue: review.StudentSupportRating
-    };
-
-    return {
-      review: review,
-      sliderValue: sliderValue
-    };
-  });
-
-  // console.log(reviewSliderPairs);
-  // console.log(sliderValue);
-  res.render("review", {
-    req: req,
-    reviewSliderPairs: reviewSliderPairs,
-    whichCourse: true,
-    username: username
-  });
-
-});
-
-
-// app.get('/reviews/write', async (req, res) => {
-//   const username = req.session.username;
-//   const editReview = req.params.editReview; // Get the editReview parameter from the URL
-//   const reviewId = req.params.reviewId; // Get the reviewId parameter from the URL
-
-//   // Retrieve the review from the database based on the review ID
-//   const specificReview = await reviewCollection.findOne({ _id: ObjectId(reviewId) });
-
-//   // Fetch all reviews from the database
+// app.get('/reviews', async (req, res) => {
 //   const reviews = await reviewCollection.find().toArray();
 
-//   // Map the review data to slider values and pairs
-//   const sliderValues = {
-//     courseContentSliderValue: specificReview.CourseContentRating,
-//     courseStructureSliderValue: specificReview.CourseStructureRating,
-//     teachingStyleSliderValue: specificReview.TeachingStyleRating,
-//     studentSupportSliderValue: specificReview.StudentSupportRating
-//   };
+//   const username = req.session.username;
 
-//   const reviewSliderPairs = reviews.map(review => ({
-//     username: review.username,
-//     sliderValue: {
+//   const reviewSliderPairs = reviews.map(review => {
+//     const sliderValue = {
 //       courseContentSliderValue: review.CourseContentRating,
 //       courseStructureSliderValue: review.CourseStructureRating,
 //       teachingStyleSliderValue: review.TeachingStyleRating,
 //       studentSupportSliderValue: review.StudentSupportRating
-//     }
-//   }));
+//     };
 
-//   const renderData = {
+//     return {
+//       review: review,
+//       sliderValue: sliderValue
+//     };
+//   });
+
+//   // console.log(reviewSliderPairs);
+//   // console.log(sliderValue);
+//   res.render("review", {
 //     req: req,
-//     sliderValues: sliderValues,
 //     reviewSliderPairs: reviewSliderPairs,
-//     username: username,
-//     editReview: false,
-//     specificReview: specificReview
-//   };
+//     // whichCourse: true,
+//     username: username
+//   });
 
-//   res.render("write-review", renderData);
 // });
 
 
-
-// //edit or delete reviews
-// app.get('/reviews/write/updateReview/:id', async (req, res) => {
-
-//   const username = req.session.username;
-//   const id = req.params.id;
-
-//   const reviews = await reviewCollection.find().toArray();
-
-//   const reviewSliderPairs = reviews.map(review => ({
-//     username: review.username,
-//     // sliderValue: {
-//     //   courseContentSliderValue: review.CourseContentRating,
-//     //   courseStructureSliderValue: review.CourseStructureRating,
-//     //   teachingStyleSliderValue: review.TeachingStyleRating,
-//     //   studentSupportSliderValue: review.StudentSupportRating
-//     // }
-//   }));
-
-//   // const sliderValues = reviews.map(review => ({
-//   //   courseContentSliderValue: review.CourseContentRating,
-//   //   courseStructureSliderValue: review.CourseStructureRating,
-//   //   teachingStyleSliderValue: review.TeachingStyleRating,
-//   //   studentSupportSliderValue: review.StudentSupportRating
-//   // }));
-
-//   // Find the specific review for the current user
-//   const specificReview = reviews.find(review => review.username === username);
-
-//   const renderData = {
-//     req: req,
-//     // sliderValues: sliderValues,
-//     // reviewSliderPairs: reviewSliderPairs,
-//     username: username,
-//     specificReview: specificReview,
-//     editReview: true
-//   };
-//   res.render("write-review", renderData);
-// });
-
-app.get('/reviews/write/:editReview', async (req, res) => {
+// write a review on a specific course
+app.get('/reviews/write/:courseid', async (req, res) => {
   const username = req.session.username;
-  const reviewId = req.body._id;
+  // const reviewId = req.body._id;
+  const courseId = req.params.courseid.replace(':', '');;
+  console.log("courseid here (2)", courseId)
 
   const reviews = await reviewCollection.find().toArray();
 
@@ -535,7 +501,7 @@ app.get('/reviews/write/:editReview', async (req, res) => {
     studentSupportSliderValue: review.StudentSupportRating
   }));
 
-  const editReview = req.params.editReview === '/updateReview';
+  // const editReview = req.params.editReview === '/updateReview';
 
   // Find the specific review for the current user
   const specificReview = reviews.find(review => review.username === username);
@@ -545,51 +511,80 @@ app.get('/reviews/write/:editReview', async (req, res) => {
     sliderValues: sliderValues,
     reviewSliderPairs: reviewSliderPairs,
     username: username,
-    editReview: editReview,
+    courseId: courseId,
+    editReview: false,
     specificReview: specificReview
   };
 
   res.render("write-review", renderData);
 });
 
+
+// app.get('/reviews/write/:editReview', async (req, res) => {
+//   const username = req.session.username;
+//   const reviewId = req.body._id;
+
+//   const reviews = await reviewCollection.find().toArray();
+
+//   const reviewSliderPairs = reviews.map(review => ({
+//     username: review.username,
+//     sliderValue: {
+//       courseContentSliderValue: review.CourseContentRating,
+//       courseStructureSliderValue: review.CourseStructureRating,
+//       teachingStyleSliderValue: review.TeachingStyleRating,
+//       studentSupportSliderValue: review.StudentSupportRating
+//     }
+//   }));
+
+//   const sliderValues = reviews.map(review => ({
+//     courseContentSliderValue: review.CourseContentRating,
+//     courseStructureSliderValue: review.CourseStructureRating,
+//     teachingStyleSliderValue: review.TeachingStyleRating,
+//     studentSupportSliderValue: review.StudentSupportRating
+//   }));
+
+//   const editReview = req.params.editReview === '/updateReview';
+
+//   // Find the specific review for the current user
+//   const specificReview = reviews.find(review => review.username === username);
+
+//   const renderData = {
+//     req: req,
+//     sliderValues: sliderValues,
+//     reviewSliderPairs: reviewSliderPairs,
+//     username: username,
+//     editReview: editReview,
+//     specificReview: specificReview
+//   };
+
+//   res.render("write-review", renderData);
+// });
+
+
+//change the review written for a specific course
 app.get('/reviews/write/updateReview/:id', async (req, res) => {
   const username = req.session.username;
   const reviewId = req.params.id; // Get the review ID from the URL parameter
-
   const reviews = await reviewCollection.find().toArray();
 
   const reviewSliderPairs = reviews.map(review => ({
     username: review.username,
+    // review: review.Review,
     sliderValue: {
       courseContentSliderValue: review.CourseContentRating,
       courseStructureSliderValue: review.CourseStructureRating,
       teachingStyleSliderValue: review.TeachingStyleRating,
       studentSupportSliderValue: review.StudentSupportRating
-    }
-  }));
+    },
+    courseId: review.CourseID
 
-  // const sliderValues = {
-  //   courseContentSliderValue: 0, // Set initial values for the sliders
-  //   courseStructureSliderValue: 0,
-  //   teachingStyleSliderValue: 0,
-  //   studentSupportSliderValue: 0
-  // };
+  }));
 
   // Find the specific review for the current user based on the review ID
   const specificReview = reviews.find(review => review._id.toString() === reviewId);
-
-  console.log("id", reviewId);
-  console.log(specificReview);
-
-
-  // if (specificReview) {
-  //   // Set the slider values if the specific review is found
-  //   sliderValues.courseContentSliderValue = specificReview.CourseContentRating;
-  //   sliderValues.courseStructureSliderValue = specificReview.CourseStructureRating;
-  //   sliderValues.teachingStyleSliderValue = specificReview.TeachingStyleRating;
-  //   sliderValues.studentSupportSliderValue = specificReview.StudentSupportRating;
-  // }
-
+  console.log("specific", specificReview)
+  const courseID = specificReview.CourseID;
+ 
   const renderData = {
     req: req,
     // sliderValues: sliderValues,
@@ -597,11 +592,15 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
     username: username,
     editReview: true,
     specificReview: specificReview,
-    reviewId: reviewId
+    reviewId: reviewId,
+    courseId: courseID
+
   };
 
   res.render("write-review", renderData);
 });
+
+
 
 //delete the review from database
 app.delete('/reviews/deleteReview/:id', async (req, res) => {
@@ -610,11 +609,15 @@ app.delete('/reviews/deleteReview/:id', async (req, res) => {
   // Delete the review from the database based on the review ID
   await reviewCollection.deleteOne({ _id: new ObjectId(reviewId) });
 
-  res.redirect('/reviews'); 
+  res.redirect('/reviews');
 });
 
+
 //write to database
-app.post('/submitReview', async (req, res) => {
+app.post('/submitReview/:id', async (req, res) => {
+  // const courseId = req.params.id;
+  const courseId = req.params.id;
+  console.log("okay", courseId);
   const reviewId = req.body.reviewId;
   const { review,
     courseContentSliderValue,
@@ -625,8 +628,9 @@ app.post('/submitReview', async (req, res) => {
 
   const username = req.session.username; // Replace 'username' with the actual field name
   const email = req.session.email;
-  console.log(req.body);
-  
+
+  console.log("new review", req.body);
+
   if (reviewId) {
     console.log('Update user review and active index');
     // Update an existing review
@@ -639,13 +643,14 @@ app.post('/submitReview', async (req, res) => {
           CourseStructureRating: courseStructureSliderValue,
           TeachingStyleRating: teachingStyleSliderValue,
           StudentSupportRating: studentSupportSliderValue,
-          Time: currentDate
+          Time: currentDate,
+          CourseID: courseId
         }
       }
     );
     console.log('Review updated successfully');
   }
-  
+
   else {
 
     await reviewCollection.insertOne({
@@ -656,12 +661,12 @@ app.post('/submitReview', async (req, res) => {
       StudentSupportRating: studentSupportSliderValue,
       Time: currentDate,
       username: username,
-      email: email
+      email: email,
+      CourseID: courseId
     });
   }
-  // console.log('Inserted user review and active index');
-  // res.status(200).send('Review and active index saved successfully');
-  res.redirect('/reviews');
+
+  res.redirect('/courseDetails?courseid=' + courseId);
 });
 
 app.get('/profileReview', async (req, res) => {

@@ -4,14 +4,15 @@
 
 
 <% if (editReview) {%>
-   
+
     <div class="slider" name="<%= type %>">
         <div class="slider-box slider-box-1 <% if (value  >= 1) { %>active<% } %>"></div>
         <div class="slider-box slider-box-2 <% if (value >= 2) { %>active<% } %>"></div>
         <div class="slider-box slider-box-3 <% if (value >= 3) { %>active<% } %>"></div>
         <div class="slider-box slider-box-4 <% if (value  >= 4) { %>active<% } %>"></div>
         <div class="slider-box slider-box-5 <% if (value  >= 5) { %>active<% } %>"></div>
-        <input type="hidden" name="<%= type %>SliderValue" value="<%= value ? value[type + 'SliderValue'] : '' %>" />
+        <input type="hidden" name="<%= type %>SliderValue" value="<%= value%>" />
+
     </div>
 
     <% } else {%>

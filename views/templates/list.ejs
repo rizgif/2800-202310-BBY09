@@ -1,5 +1,17 @@
+   <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+<script>
+  function handleClick(courseid) {
+    console.log('Clicked on', courseid);
 
-    <!-- <li>Title: <%= result.Title %></li> -->
+    // Send a POST request to the server route
+    $.get('/courseDetails', function(response) {
+      console.log('Redirecting to new page');
+      window.location.href = '/courseDetails?courseid=' + courseid;
+    });
+  }
+</script>
+   
+   <!-- <li>Title: <%= result.Title %></li> -->
     <!-- <li>Provider: <%= result.Provider %>
     <li>Difficulty: <%= result.Course_Difficulty %>
     <li>Rating: <%= result.Course_Rating %></li>
@@ -8,21 +20,60 @@
     <li>Description: <%= result.Course_Description %></li> -->
 
 
-<div class="CourseCard-StyledCourseCard">
-    <div class="Coursecard-InfoRatingWrapper">
 
-        <div class="CourseCard-NumRatingWrapper-syjs0d-2 joEEbw">
+
+<div class="CourseCard-StyledCourseCard" onclick="handleClick('<%= result._id.toString() %>')">
+
+
+    <div class="card-thumbnail">
+        <% const randomNumber = Math.floor(Math.random() * 9) + 1; %>
+        <img src="/image/randomimage/<%= randomNumber %>.jpeg" alt="Image Description">
+     
+       
+    </div>
+    <div class="card-info">
+        <div class="Card-CourseName"><%= result.Title %></div>
+
+        <div class="card-rating">
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+        </div>
+       
+        <div class="Card-CourseDifficulty"><%= result.Course_Difficulty %></div>
+    </div>
+    
+</div>
+
+
+<% if (isLoggedIn) { %>
+    <button class="Course-Bookmark <%= userBookmarks && userBookmarks.includes(result._id.toString()) ? 'bookmarked' : '' %>" type="button" data-course-id="<%= result._id %>" onclick="toggleBookmark('<%= result._id %>')">
+<% } else { %>
+    <button class="Course-Bookmark" type="button" data-course-id="<%= result._id %>" onclick="toggleBookmark('<%= result._id %>')">
+<% } %>
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+            <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+        </svg>
+    </button>
+ 
+
+        <!-- <div class="CourseCard-NumRatingWrapper-syjs0d-2 joEEbw">
             <div class="CardNumRating-StyledCardNumRating">
-                 
-                 <div class="CardNumRating-CardNumRatingNumber">
-                    <img  src="/image/udemy.png" alt="Image Description">
 
+               
+               
+                 <div class="CardNumRating-CardNumRatingNumber">
+              
+                    <img src="/image/randomimage/<%= randomNumber %>.jpeg" style='width:200px; height:200px'alt="Image Description">
+                    
                  </div>
           
             </div>
-        </div>
+        </div> -->
     
-        <div class="CourseCard_CardInfo">
+        <!-- <div class="CourseCard_CardInfo">
             <div class="Card-CourseName"><%= result.Title %></div>
             <div class="Card-CourseProvider"><b>Provider:</b> <%= result.Provider %></div>
             <div class="Card-CourseRatingCoursla"><b>Coursla Rating:</b> </div>
@@ -31,6 +82,7 @@
             
         </div>
     </div>
+    
     <% if (result._id) { %>
         <button class="Course-Bookmark" type="button" data-course-id="<%= result._id %>" onclick="toggleBookmark('<%= result._id %>')">
         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
@@ -43,3 +95,4 @@
         <img src="/image/bookmark.png" alt="Bookmark" data-tooltip="true" data-tip="Save Course" data-for="GLOBAL_TOOLTIP" currentitem="false">
     </button> -->
 </div>
+

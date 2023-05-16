@@ -86,9 +86,17 @@
     font-weight: bold;
     margin-top: 5%;
     margin-right: 5%;
-    justify-content:center;
+    justify-content:center; 
 }
 
+.rating-wrapper .review-slider {
+    /* font-size: 23px;
+    text-align: right;
+    font-weight: bold; */
+    margin-top: 2%;
+    /* margin-right: 5%;
+    justify-content:center; */
+}
 .all-rating {
     display: flex;
     flex-direction: column;

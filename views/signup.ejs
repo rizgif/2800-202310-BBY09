@@ -8,14 +8,7 @@
         <form action='/signup-submit' method='post' class="needs-validation" novalidate>
             <h1 class="h3 fw-normal">Create user</h1>
 
-            <div class="form-floating">
-                <input name="userId" type="text" class="form-control" id="userId" placeholder="ID" required>
-                <label for="userId">ID</label>
-                <div class="invalid-feedback">
-                    Please enter an id.
-                </div>
-            </div>
-
+            <p class="form-indication">Please provide the email address you will use to log in to our website.</p>
             <div class="form-floating">
                 <input name="email" type="email" class="form-control" id="email" placeholder="name@example.com" required>
                 <label for="email">Email address</label>
@@ -26,12 +19,13 @@
 
             <div class="form-floating">
                 <input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password" required>
-                <label for="floatingPassword">Password</label>
+                <label for="password">Pasword</label>
                 <div class="invalid-feedback">
-                    Please enter a password.
+                Please choose a password.
                 </div>
             </div>
 
+            <p class="form-indication">Please enter a username that you would like to use on our website. <br/>You can always change this username later on your profile page.</p>
             <div class="form-floating">
                 <input name="username" type="text" class="form-control" id="username" placeholder="Username" required>
                 <label for="username">Username</label>
