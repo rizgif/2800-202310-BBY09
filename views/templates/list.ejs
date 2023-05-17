@@ -6,16 +6,9 @@
     </div>
     <div class="card-info">
         <div class="Card-CourseName"><%= result.Title %></div>
-
-        <div class="card-rating">
-            <span class="star">&#9733;</span>
-            <span class="star">&#9733;</span>
-            <span class="star">&#9733;</span>
-            <span class="star">&#9733;</span>
-            <span class="star">&#9733;</span>
-        </div>
-
-        <div class="Card-CourseDifficulty"><%= result.Course_Difficulty %></div>
+        <div class="Card-CourseRating">Course Rating: <%= result.Course_Rating %></div>
+        <div class="Card-CourseProvider">Provider: <%= result.Provider %></div>
+        <div class="Card-CourseDifficulty">Level: <%= result.Course_Difficulty %></div>
     </div>
 
     <% if (isLoggedIn) { %>
