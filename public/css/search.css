@@ -16,3 +16,6 @@
     margin: 10px;
 }
 
+#level, #provider {
+    margin: 10px; /* Adjust the margin value as per your requirement */
+  }
