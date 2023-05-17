@@ -2,160 +2,156 @@
 
     <link rel="stylesheet" href="/css/write-review-card.css">
 
+    <% console.log(reviewId) %>
 
-        <% if (hasReview) { %>
-            <!-- Chelsea note: update later (not the 80% task) -->
-            <p>You have already submitted a review. You cannot submit another review.</p>
-            <button type="submit" id="submitBtn">Edit your review</button>
-            <% } else {%>
+    <% if (hasReview) { %>
+        <!-- Chelsea note: update later (not the 80% task) -->
+        <p>You have already submitted a review. You cannot submit another review.</p>
+        <a class="btn btn-primary" type="submit" id="submitBtn" href="/reviews/write/updateReview/<%= reviewId %>">Edit your review</a>
 
-                <% if (editReview) { %>
-                    <h class="edit-title">Edit Review</h>
-                        <% } %>
+        <% } else {%>
 
-                            <!-- writing a review -->
-                            <form action="/submitReview/<%= courseId %>" method="post">
-                                
-                                    <div class="write-review-grid">
-                                        <div class="user-profile">
-                                            <%= username %>
-                                        </div>
-                                        <div class="time-stamp"></div>
-                                        <% if (editReview) { %>
-                                            <textarea name="review"
-                                                class="write-review"><%= specificReview.Review %></textarea>
-                                            <% } else {%>
-                                                <textarea name="review" class="write-review"
-                                                    placeholder="Write your review..."></textarea>
-                                                <% } %>
+            <% if (editReview) { %>
+                <h class="edit-title">Edit Review</h>
+                <% } %>
 
+                    <!-- writing a review -->
+                    <form action="/submitReview/<%= courseId %>" method="post">
 
-
-                                                    <div class="ratings">
-                                                        <div class="review-section-1">
-                                                            <div class="review-category">Course Content</div>
-                                                            <div class="review-slider">
-                                                                <% if (editReview) { %>
-                                                                    <%- include("templates/write-slider", {
-                                                                        type: "courseContent" , value:
-                                                                        specificReview.CourseContentRating,
-                                                                        editReview:editReview, id:reviewId }) %>
-                                                                        <% } else { %>
-                                                                            <%- include("templates/write-slider", {
-                                                                                type: "courseContent" }) %>
-                                                                                <% } %>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="review-section-2">
-                                                            <div class="review-category">Course Structure</div>
-                                                            <div class="review-slider">
-                                                                <% if (editReview) { %>
-                                                                    <%- include("templates/write-slider", {
-                                                                        type: "courseStructure" , value:
-                                                                        specificReview.CourseStructureRating,
-                                                                        editReview:editReview, id:reviewId }) %>
-                                                                        <% } else { %>
-                                                                            <%- include("templates/write-slider", {
-                                                                                type: "courseStructure" }) %>
-                                                                                <% } %>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="review-section-3">
-                                                            <div class="review-category">Teaching Style</div>
-                                                            <div class="review-slider">
-                                                                <% if (editReview) { %>
-                                                                    <%- include("templates/write-slider", {
-                                                                        type: "teachingStyle" , value:
-                                                                        specificReview.TeachingStyleRating,
-                                                                        editReview:editReview, id:reviewId }) %>
-                                                                        <% } else { %>
-                                                                            <%- include("templates/write-slider", {
-                                                                                type: "teachingStyle" }) %>
-                                                                                <% } %>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="review-section-4">
-                                                            <div class="review-category">Student Support</div>
-                                                            <div class="review-slider">
-                                                                <% if (editReview) { %>
-                                                                    <%- include("templates/write-slider", {
-                                                                        type: "studentSupport" , value:
-                                                                        specificReview.StudentSupportRating,
-                                                                        editReview:editReview, id:reviewId }) %>
-                                                                        <% } else { %>
-                                                                            <%- include("templates/write-slider", {
-                                                                                type: "studentSupport" }) %>
-                                                                                <% } %>
-                                                            </div>
-                                                        </div>
+                        <div class="write-review-grid">
+                            <div class="user-profile">
+                                <%= username %>
+                            </div>
+                            <div class="time-stamp"></div>
+                            <% if (editReview) { %>
+                                <textarea name="review" class="write-review"><%= specificReview.Review %></textarea>
+                                <% } else {%>
+                                    <textarea name="review" class="write-review"
+                                        placeholder="Write your review..."></textarea>
+                                    <% } %>
 
 
-                                                    </div>
 
-                                                    <button id="submit-review-btn" class="btn-submit-review"
-                                                        type="submit">SUBMIT</button>
-                                                    <input type="hidden" id="timestamp-input" name="currentDate"
-                                                        value="">
-
+                                        <div class="ratings">
+                                            <div class="review-section-1">
+                                                <div class="review-category">Course Content</div>
+                                                <div class="review-slider">
                                                     <% if (editReview) { %>
-                                                        <!-- Hidden field to pass the review ID -->
-                                                        <input type="hidden" name="reviewId" value="<%= reviewId %>">
-                                                        <% } %>
-                                    </div>
-                            </form>
-                            <% } %>
+                                                        <%- include("templates/write-slider", { type: "courseContent" ,
+                                                            value: specificReview.CourseContentRating,
+                                                            editReview:editReview, id:reviewId }) %>
+                                                            <% } else { %>
+                                                                <%- include("templates/write-slider", {
+                                                                    type: "courseContent" }) %>
+                                                                    <% } %>
+                                                </div>
+                                            </div>
+
+                                            <div class="review-section-2">
+                                                <div class="review-category">Course Structure</div>
+                                                <div class="review-slider">
+                                                    <% if (editReview) { %>
+                                                        <%- include("templates/write-slider", { type: "courseStructure"
+                                                            , value: specificReview.CourseStructureRating,
+                                                            editReview:editReview, id:reviewId }) %>
+                                                            <% } else { %>
+                                                                <%- include("templates/write-slider", {
+                                                                    type: "courseStructure" }) %>
+                                                                    <% } %>
+                                                </div>
+                                            </div>
+
+                                            <div class="review-section-3">
+                                                <div class="review-category">Teaching Style</div>
+                                                <div class="review-slider">
+                                                    <% if (editReview) { %>
+                                                        <%- include("templates/write-slider", { type: "teachingStyle" ,
+                                                            value: specificReview.TeachingStyleRating,
+                                                            editReview:editReview, id:reviewId }) %>
+                                                            <% } else { %>
+                                                                <%- include("templates/write-slider", {
+                                                                    type: "teachingStyle" }) %>
+                                                                    <% } %>
+                                                </div>
+                                            </div>
+
+                                            <div class="review-section-4">
+                                                <div class="review-category">Student Support</div>
+                                                <div class="review-slider">
+                                                    <% if (editReview) { %>
+                                                        <%- include("templates/write-slider", { type: "studentSupport" ,
+                                                            value: specificReview.StudentSupportRating,
+                                                            editReview:editReview, id:reviewId }) %>
+                                                            <% } else { %>
+                                                                <%- include("templates/write-slider", {
+                                                                    type: "studentSupport" }) %>
+                                                                    <% } %>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+                                        <button id="submit-review-btn" class="btn-submit-review"
+                                            type="submit">SUBMIT</button>
+                                        <input type="hidden" id="timestamp-input" name="currentDate" value="">
+
+                                        <% if (editReview) { %>
+                                            <!-- Hidden field to pass the review ID -->
+                                            <input type="hidden" name="reviewId" value="<%= reviewId %>">
+                                            <% } %>
+                        </div>
+                    </form>
+        <% } %>        
 
 
 
-                                <script>
-                                    // document.getElementById('submitBtn').addEventListener('click', function (event) {
-                                    //     // event.preventDefault(); // Prevent the form from being submitted
+                        <script>
+                            // document.getElementById('submitBtn').addEventListener('click', function (event) {
+                            //     // event.preventDefault(); // Prevent the form from being submitted
 
-                                    //     // Redirect the user to the desired URL
-                                    //     window.location.href = '/reviews/write/updateReview/' + courseId; // Replace with the URL you want to redirect to
-                                    // });
+                            //     // Redirect the user to the desired URL
+                            //     window.location.href = '/reviews/write/updateReview/' + courseId; // Replace with the URL you want to redirect to
+                            // });
 
-                                    const sliders = document.querySelectorAll('.slider');
+                            const sliders = document.querySelectorAll('.slider');
 
-                                    sliders.forEach(function (slider) {
-                                        const sliderBoxes = slider.querySelectorAll('.slider-box');
+                            sliders.forEach(function (slider) {
+                                const sliderBoxes = slider.querySelectorAll('.slider-box');
 
-                                        sliderBoxes.forEach(function (box, index) {
-                                            box.addEventListener('click', function () {
-                                                updateSlider(slider, index);
-                                            });
-                                        });
+                                sliderBoxes.forEach(function (box, index) {
+                                    box.addEventListener('click', function () {
+                                        updateSlider(slider, index);
+                                    });
+                                });
 
-                                        function updateSlider(slider, activeIndex) {
-                                            const sliderBoxes = slider.querySelectorAll('.slider-box');
-                                            const hiddenInput = slider.querySelector('input[type="hidden"]');
+                                function updateSlider(slider, activeIndex) {
+                                    const sliderBoxes = slider.querySelectorAll('.slider-box');
+                                    const hiddenInput = slider.querySelector('input[type="hidden"]');
 
-                                            sliderBoxes.forEach(function (box, index) {
-                                                if (index <= activeIndex) {
-                                                    box.classList.add('active');
-                                                } else {
-                                                    box.classList.remove('active');
-                                                }
-                                            });
-
-                                            hiddenInput.value = activeIndex + 1; // Update the hidden input value with the selected index + 1
+                                    sliderBoxes.forEach(function (box, index) {
+                                        if (index <= activeIndex) {
+                                            box.classList.add('active');
+                                        } else {
+                                            box.classList.remove('active');
                                         }
-
                                     });
 
-                                    document.getElementById('submit-review-btn').addEventListener('click', function () {
-                                        // Get the current timestamp
-                                        var currentDate = new Date().toISOString().split('T')[0];
+                                    hiddenInput.value = activeIndex + 1; // Update the hidden input value with the selected index + 1
+                                }
 
-                                        // Assign the timestamp value to the hidden input field in the form
-                                        document.getElementById('timestamp-input').value = currentDate;
-                                    });
+                            });
+
+                            document.getElementById('submit-review-btn').addEventListener('click', function () {
+                                // Get the current timestamp
+                                var currentDate = new Date().toISOString().split('T')[0];
+
+                                // Assign the timestamp value to the hidden input field in the form
+                                document.getElementById('timestamp-input').value = currentDate;
+                            });
 
 
-                                </script>
+                        </script>
 
 
-                                <%- include("templates/footer") %>
+                        <%- include("templates/footer") %>

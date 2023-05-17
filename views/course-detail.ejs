@@ -1,110 +1,117 @@
 <% if (isLoggedIn) { %>
   <%- include("templates/header") %>
-<% } else { %>
-  <%- include("templates/header-beforeLogin") %>
-<% } %>
+    <% } else { %>
+      <%- include("templates/header-beforeLogin") %>
+        <% } %>
 
-<!--Course Detail-->
-<div class="course-detail">
-  <div class="course-detail-buttons">
-    <a target="_blank" href="<%= courseInfo.Course_URL %>" class="btn share-link">
-      Link to the course
-      <span class="material-symbols-outlined">
-        exit_to_app
-      </span>
-    </a>
-  </div>
-  <h2>
-    <%= courseInfo.Title %>
-  </h2>
-  <div class="course-detail-ratings">
-    <div class="detail-rating-box">
-      <p>
-        <span class="rating-number">
-          <%= typeof (courseInfo.Course_Rating)  == "number" ? courseInfo.Course_Rating.toFixed(1) : "N/A" %></span> /5
-      </p>
-      <strong>Provider Rating</strong>
-    </div>
-    <div class="detail-rating-box">
-      <p>
-        <span class="rating-number">Dev</span> /5
-      </p>
-      <strong>Coursla Rating</strong>
-    </div>
-  </div>
-  <ul class="course-detail-overview">
-    <li class="provider">
-        <div class="content">
-          <% if (courseInfo.Provider?.toLowerCase() == 'udemy') { %>
-            <img src="/image/logo-udemy.svg" alt="Udemy">
-          <% }%>
-          <% if (courseInfo.Provider?.toLowerCase() == 'coursera') { %>
-            <img src="/image/logo-coursera.svg" alt="Coursera">
-          <% }%>
-        </div>
-        <span class="title">Provider</span>
-    </li>
-    <li class="provider">
-      <div class="content">
-        <span class="level-label">
-          <%= courseInfo.Course_Difficulty %>
-        </span>
-      </div>
-      <span class="title">Level</span>
-    </li>
+          <!--Course Detail-->
+          <div class="course-detail">
+            <div class="course-detail-buttons">
+              <a target="_blank" href="<%= courseInfo.Course_URL %>" class="btn share-link">
+                Link to the course
+                <span class="material-symbols-outlined">
+                  exit_to_app
+                </span>
+              </a>
+            </div>
+            <h2>
+              <%= courseInfo.Title %>
+            </h2>
+            <div class="course-detail-ratings">
+              <div class="detail-rating-box">
+                <p>
+                  <span class="rating-number">
+                    <%= typeof (courseInfo.Course_Rating)=="number" ? courseInfo.Course_Rating.toFixed(1) : "N/A" %>
+                  </span> /5
+                </p>
+                <strong>Provider Rating</strong>
+              </div>
+              <div class="detail-rating-box">
+                <p>
+                  <span class="rating-number">Dev</span> /5
+                </p>
+                <strong>Coursla Rating</strong>
+              </div>
+            </div>
+            <ul class="course-detail-overview">
+              <li class="provider">
+                <div class="content">
+                  <% if (courseInfo.Provider?.toLowerCase()=='udemy' ) { %>
+                    <img src="/image/logo-udemy.svg" alt="Udemy">
+                    <% }%>
+                      <% if (courseInfo.Provider?.toLowerCase()=='coursera' ) { %>
+                        <img src="/image/logo-coursera.svg" alt="Coursera">
+                        <% }%>
+                </div>
+                <span class="title">Provider</span>
+              </li>
+              <li class="provider">
+                <div class="content">
+                  <span class="level-label">
+                    <%= courseInfo.Course_Difficulty %>
+                  </span>
+                </div>
+                <span class="title">Level</span>
+              </li>
 
-      <li class="enrollment">
-        <div class="content">
-          Dev
-        </div>
-        <span class="title">Enrollment</span>
-      </li>
-  </ul>
-  <% if (courseInfo.Provider?.toLowerCase() == 'coursera') { %>
-  <div class="course-detail-info">
-    <dl>
-      <dt>Instructor/Organization</dt>
-      <dd><%= courseInfo.Organization %></dd>
-    </dl>
-    <dl>
-      <dt>Description</dt>
-      <dd><%= courseInfo.Course_Description %></dd>
-    </dl>
-  </div>
-  <% }%>
-</div>
-
-
-
-
-<!--Reviews-->
-
-    <%- include("all-reviews", { overallCategorySums: overallCategorySums,  num: Totalvote,  CourslaRating: CourslaRating}) %>
-
-
-        <!-- read reviews from each user -->
-        <!-- need to connect the course collection -->
-        <div class="number-ratings" style="margin-top: 8%;font-size: 23px; font-weight: bold">
-          <% if (reviewSliderPairs.length > 1) { %>
-          <%= reviewSliderPairs.length %> Student Ratings
-
-          <% } else if (reviewSliderPairs.length == 1){ %>
-            <%= reviewSliderPairs.length %> Student Rating
-            <% } %>
-
-        </div>
-
-        <!-- add css later -->
-        <a class="write-review-link" href="/reviews/write/:<%= courseId %>">
-          <button class="btn btn-primary">Write a Review</button>
-        </a>
-
-        <% reviewSliderPairs.forEach(pair=> { %>
-          <%- include("read-review", { review: pair.review, sliderValue: pair.sliderValue, username: username, courseId:
-            courseId }) %>
-            <% }) %>
+              <li class="enrollment">
+                <div class="content">
+                  Dev
+                </div>
+                <span class="title">Enrollment</span>
+              </li>
+            </ul>
+            <% if (courseInfo.Provider?.toLowerCase()=='coursera' ) { %>
+              <div class="course-detail-info">
+                <dl>
+                  <dt>Instructor/Organization</dt>
+                  <dd>
+                    <%= courseInfo.Organization %>
+                  </dd>
+                </dl>
+                <dl>
+                  <dt>Description</dt>
+                  <dd>
+                    <%= courseInfo.Course_Description %>
+                  </dd>
+                </dl>
+              </div>
+              <% }%>
+          </div>
 
 
 
 
-              <%- include("templates/footer") %>
+          <!--Reviews-->
+
+          <%- include("all-reviews", { overallCategorySums: overallCategorySums, num: Totalvote, CourslaRating:
+            CourslaRating}) %>
+
+
+            <!-- read reviews from each user -->
+            <!-- need to connect the course collection -->
+            <div class="number-ratings" style="margin-top: 8%;font-size: 23px; font-weight: bold">
+              <% if (reviewSliderPairs.length> 1) { %>
+                <%= reviewSliderPairs.length %> Student Ratings
+
+                  <% } else if (reviewSliderPairs.length==1){ %>
+                    <%= reviewSliderPairs.length %> Student Rating
+                      <% } else if (reviewSliderPairs.length==0) {%>
+                        <p>Would you like to be the first person to leave a review for this course? </p>
+                        <% } %>
+            </div>
+
+            <!-- add css later -->
+            <a class="write-review-link" href="/reviews/write/:<%= courseId %>">
+              <button class="btn btn-primary">Write a Review</button>
+            </a>
+
+            <% reviewSliderPairs.forEach(pair=> { %>
+              <%- include("read-review", { review: pair.review, sliderValue: pair.sliderValue, username: username,
+                courseId: courseId }) %>
+                <% }) %>
+
+
+
+
+                  <%- include("templates/footer") %>

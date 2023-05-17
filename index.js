@@ -547,7 +547,7 @@ app.get('/reviews/write/:courseid', async (req, res) => {
   }
 
   const courseId = req.params.courseid.replace(':', '');;
-  // console.log("courseid here (2)", courseId)
+  console.log("courseid here (2)", courseId)
 
   const reviews = await reviewCollection.find().toArray();
 
@@ -571,12 +571,13 @@ app.get('/reviews/write/:courseid', async (req, res) => {
   // const editReview = req.params.editReview === '/updateReview';
 
   // Find the specific review for the current user
-  const specificReview = reviews.find(review => review.username === username && review.courseId === courseId);
-
-
+  const specificReview = reviews.find(review => review.username === username && review.CourseID === courseId);
   console.log("existing review", specificReview);
+  const reviewId = specificReview._id.toString();
   const hasReview = Boolean(specificReview);
+  console.log("review id", reviewId)
 
+  console.log("do you?" , hasReview);
 
   const renderData = {
     req: req,
@@ -586,7 +587,8 @@ app.get('/reviews/write/:courseid', async (req, res) => {
     courseId: courseId,
     editReview: false,
     specificReview: specificReview,
-    hasReview: hasReview
+    hasReview: hasReview,
+    reviewId: reviewId
   };
 
   res.render("write-review", renderData);
@@ -600,6 +602,7 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
   const reviewId = req.params.id; // Get the review ID from the URL parameter
   const reviews = await reviewCollection.find().toArray();
 
+  console.log(username);
   const reviewSliderPairs = reviews.map(review => ({
     username: review.username,
     // review: review.Review,
@@ -627,7 +630,6 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
     specificReview: specificReview,
     reviewId: reviewId,
     courseId: courseID,
-
     hasReview: false
   };
 
@@ -643,7 +645,8 @@ app.delete('/reviews/deleteReview/:id', async (req, res) => {
   // Delete the review from the database based on the review ID
   await reviewCollection.deleteOne({ _id: new ObjectId(reviewId) });
 
-  res.redirect('/reviews');
+  // res.redirect('/reviews');
+  res.redirect('/course-detail?courseId=' + courseId);
 });
 
 
@@ -700,7 +703,7 @@ app.post('/submitReview/:id', async (req, res) => {
     });
   }
 
-  res.redirect('/course-details?courseid=' + courseId);
+  res.redirect('/course-detail?courseId=' + courseId);
 });
 
 app.get('/profileReview', async (req, res) => {
