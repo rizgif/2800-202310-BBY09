@@ -115,26 +115,8 @@ margin-bottom: 5px;
 }
 
 .CourseCard-Container{
-  padding-left: 10px;
-  padding-right: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  position: relative;
+  z-index: 1;
 }
-#scrollUpButton {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 40px;
-  height: 40px;
-  background-color: #555;
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  display: none;
-}
-
-#scrollUpButton i {
-  font-size: 20px;
-  line-height: 40px;
-  text-align: center;
-}
-
