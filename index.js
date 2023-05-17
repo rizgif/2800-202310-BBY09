@@ -98,18 +98,19 @@ app.post('/searchSubmit', async (req, res) => {
 
   try {
     searchResult = await courseCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
-      _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, 
-      Course_URL: 1, Organization: 1, Course_Description: 1}).toArray();
+      _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1,
+      Course_URL: 1, Organization: 1, Course_Description: 1
+    }).toArray();
 
-    const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray(); 
-    const searchResultCount = searchResult.length; 
+    const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
+    const searchResultCount = searchResult.length;
     storedsearchResult = searchResult;
 
     res.render("searchList", {
-     
-      searchResult: searchResult, 
-      isLoggedIn: isLoggedIn(req), 
-      userBookmarks, 
+
+      searchResult: searchResult,
+      isLoggedIn: isLoggedIn(req),
+      userBookmarks,
       searchResultCount: searchResultCount,
       courseSearch
     });
@@ -127,15 +128,15 @@ app.get('/course-detail', async (req, res) => {
   const username = req.session.username;
 
   const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
-  console.log('courseInfo',courseInfo)
+  console.log('courseInfo', courseInfo);
 
-  const reviewSliderPairs = reviews.map(review => {
-    const sliderValue = {
-      courseContentSliderValue: review.CourseContentRating,
-      courseStructureSliderValue: review.CourseStructureRating,
-      teachingStyleSliderValue: review.TeachingStyleRating,
-      studentSupportSliderValue: review.StudentSupportRating
-    };
+  // const reviewSliderPairs = reviews.map(review => {
+  //   const sliderValue = {
+  //     courseContentSliderValue: review.CourseContentRating,
+  //     courseStructureSliderValue: review.CourseStructureRating,
+  //     teachingStyleSliderValue: review.TeachingStyleRating,
+  //     studentSupportSliderValue: review.StudentSupportRating
+  //   };
 
   const reviewSliderPairs = reviews
     .filter(review => review.CourseID === courseId)
@@ -153,6 +154,7 @@ app.get('/course-detail', async (req, res) => {
 
       };
     });
+
 
 
 
@@ -181,7 +183,7 @@ app.get('/course-detail', async (req, res) => {
 
   async function updateCourse(courseId, overallCategorySums, totalvote) {
     // Update the course document with the specified courseId
-    await datasetCollection.updateOne(
+    await courseCollection.updateOne(
       { _id: new ObjectId(courseId) },
       {
         $set: {
@@ -202,7 +204,7 @@ app.get('/course-detail', async (req, res) => {
     // whichCourse: true,
     username: username,
     courseInfo: courseInfo || {},
-    isLoggedIn: isLoggedIn(req)
+    isLoggedIn: isLoggedIn(req),
     overallCategorySums: overallCategorySums,
     Totalvote: totalvote,
     CourslaRating: CourslaRating
