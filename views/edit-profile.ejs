@@ -5,28 +5,28 @@
 <% } %>
 
 <main class="form-wrapper profile-section-info">
-    <div class="profile-container-avatar">
-        <%- include("templates/profile-avatar", {avatar}) %>
-
-<!--        <div class="add-photo">-->
-<!--            <input id="upload-images" type="file" accept="image/jpeg, image/png, image/jpg" hidden>-->
-<!--            <label for="upload-images">-->
-<!--                <a type="button" class="btn btn-add-photo" aria-label="add photos">-->
-<!--              <span class="material-symbols-outlined">-->
-<!--                add_a_photo-->
-<!--              </span>-->
-<!--                    <p>-->
-<!--                        Add Photos <br />-->
-<!--                        (<i class="add-photo-number">0</i>/5)-->
-<!--                    </p>-->
-<!--                </a>-->
-<!--            </label>-->
-<!--            <output id="upload-output">-->
-<!--            </output>-->
-<!--        </div>-->
-    </div>
-    <form action='/edit-profile-submit' method='post' class="needs-validation" novalidate>
+    <form id="form-profile" class="needs-validation" novalidate onsubmit="return false;">
         <h2 class="h3 fw-normal">Edit Profile</h2>
+        <div class="avatar-container">
+            <div class="avatar-container-inner">
+                <%- include("templates/profile-avatar", {avatar}) %>
+        
+                <div class="add-photo">
+                    <input type="text" id="avatar" name="avatar" hidden/>
+                    <input id="upload-images" type="file" value="<%- avatar %>" accept="image/jpeg, image/png, image/jpg" hidden>
+                    <label for="upload-images">
+                        <a type="button" class="btn btn-add-photo" aria-label="add photos">
+                            <span class="material-symbols-outlined">
+                                add_a_photo
+                            </span>
+                        </a>
+                    </label>
+                </div>
+            </div>
+            <button type="button" id="remove-profile" class="btn remove-profile">
+                Remove Profile
+            </button>
+        </div>
 
         <div class="form-floating readonly">
             <input name="email" type="email" class="form-control" id="email" value="<%= email %>" readonly>
@@ -42,9 +42,111 @@
         </div>
 
         <div class="sign-btns-container">
-            <button class="w-100 btn btn-lg btn-primary" type="submit">Save</button>
+            <button id="btn-submit" class="w-100 btn btn-lg btn-primary" type="submit">Save</button>
+            <%- include("templates/loader") %>
         </div>
     </form>
 </main>
 
 <%- include("templates/footer") %>
+
+<script>
+const input = document.getElementById("upload-images");
+const output = document.getElementsByClassName("img-avatar")?.[0];
+const usernameInput = document.getElementById("username");
+const urlOutput = document.getElementById("avatar");
+const btnRemove = document.getElementById("remove-profile")
+const btnSubmit = document.getElementById("btn-submit");
+
+// displays selected images to preview.
+function displayImages(imgUrl) {
+  // Insert dynamic elements to preview selected images.
+  let images = "";
+  output.setAttribute("src", imgUrl)
+}
+
+input.addEventListener("change", () => {
+    // Update images from selected images data
+    let imgFile = input.files?.[0];
+    let imgUrl = URL.createObjectURL(imgFile);
+    input.src = imgUrl;
+
+    // Show previews
+    displayImages(imgUrl);
+});
+
+// Bind click events to remove selected preview item.
+btnRemove.addEventListener("click", () => {
+    input.value = '';
+    displayImages("/image/avatar.png");
+});
+
+// Initialize Firebase
+firebase.initializeApp(<%- JSON.stringify(firebaseConfig) %>);
+
+function uploadImage(file) {
+    btnSubmit.setAttribute("disabled", true)
+    try {
+        const ref = firebase.storage().ref();
+        // const name = +new Date() + "-" + file.name;
+        const name = `<%- uid; %>`;
+        const metadata = {
+            contentType: file.type
+        };
+        const task = ref.child(name).put(file, metadata);
+        task
+            .then(snapshot => snapshot.ref.getDownloadURL())
+            .then(url => {
+                urlOutput.setAttribute("value", url);
+                console.log('image uploaded successfully');
+                post({
+                    avatar: url,
+                    username: usernameInput.value
+                });
+            })
+            .catch(console.error);
+                
+
+    } catch(e) {
+        btnSubmit.removeAttribute("disabled")
+        connsole.error(e);
+    }
+    
+}
+
+const post = async (data) => {
+  const response = await fetch('/edit-profile-submit', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  })
+  .then(response => {
+    if (response.ok) {
+      window.location.href = '/profile';
+    } else {
+      console.error('Error:', response.status);
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+
+}
+
+// Form submission
+const form = document.getElementById("form-profile")
+$(form).submit(async function(e) {
+  e.preventDefault(); // Prevent the default form submission
+
+  let imgFile = input.files?.[0];
+
+  if (imgFile) {
+    uploadImage(imgFile); 
+  } else {
+    post({
+        avatar: output.src,
+        username: usernameInput.value
+    })
+  }
+});
+</script>

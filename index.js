@@ -29,6 +29,27 @@ app.use(bodyParser.json());
 
 const expireTime = 12 * 60 * 60 * 1000; //expires after 12 hour  (hours * minutes * seconds * millis)
 
+// save firebase config to use firebase image storage
+const {
+  FIREBASE_apiKey,
+  FIREBASE_authDomain,
+  FIREBASE_projectId,
+  FIREBASE_storageBucket,
+  FIREBASE_messagingSenderId,
+  FIREBASE_appId,
+  FIREBASE_measurementId
+ } = process.env;
+
+const firebaseConfig = {
+  apiKey: FIREBASE_apiKey,
+  authDomain: FIREBASE_authDomain,
+  projectId: FIREBASE_projectId,
+  storageBucket: FIREBASE_storageBucket,
+  messagingSenderId: FIREBASE_messagingSenderId,
+  appId: FIREBASE_appId,
+  measurementId: FIREBASE_measurementId
+};
+
 
 /* secret information section */
 const mongodb_host = process.env.MONGODB_HOST;
@@ -516,25 +537,23 @@ app.post('/change-password-submit', sessionValidation, async (req, res) => {
   res.redirect("/profile");
 });
 
+
 app.get('/edit-profile', sessionValidation, async (req, res) => {
   let email = req.session.email;
   let username = req.session.username;
   let avatar = req.session.avatar;
-  res.render("edit-profile", { email, username, avatar, isLoggedIn: isLoggedIn(req) });
+  let uid = req.session.uid;
+  res.render("edit-profile", {email, username, avatar, firebaseConfig, uid: new ObjectId(uid).toString(),isLoggedIn: isLoggedIn(req)});
 });
 
 app.post('/edit-profile-submit', sessionValidation, async (req, res) => {
   let username = req.body.username;
   let avatar = req.body.avatar;
-  let email = req.body.email;
   let uid = req.session.uid;
 
-  if (username) {
-    await userCollection.updateOne({ _id: new ObjectId(uid) }, { $set: { email, username, avatar } });
-    req.session.username = username;
-    req.session.avatar = avatar;
-    req.session.email = email;
-  }
+  await userCollection.updateOne({_id: new ObjectId(uid)}, {$set: { username, avatar}});
+  req.session.username= username;
+  req.session.avatar = avatar;
 
   res.redirect("/profile");
 });

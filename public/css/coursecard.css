@@ -115,6 +115,8 @@ margin-bottom: 5px;
 }
 
 .CourseCard-Container{
-  padding-left: 10px;
-  padding-right: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  position: relative;
+  z-index: 1;
 }

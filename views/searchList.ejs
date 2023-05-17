@@ -5,11 +5,15 @@
 <% } %>
 <div class="row justify-content-center">
     <div class="col-sm-8">
-      <form action="/searchSubmit" method="post" class="form-inline my-2 my-lg-0 d-flex justify-content-center">
-        <div class="form-group mx-2 mb-2" style="width:300px;">
+      <form action="/searchSubmit" method="post" class="form-inline my-2 my-lg-0 d-flex justify-content-center" style="padding-right: 5px;">
+        <div class="form-group mx-2 mb-2" style="width:312px;">
             <input name="courseSearch" type="text" class="form-control" id="courseSearch" placeholder="Search courses">
         </div>
-        <button type="submit" class="btn btn-main-search mb-2">Search</button>
+        <button type="submit" class="btn btn-main-search mb-2" style="width:50px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
+          </svg>
+        </button>
       </form>
     </div>
 </div>
@@ -55,8 +59,13 @@
       </div>
 </div>
 
+<button id="searchList-scrollUp" onclick="scrollToTop()" title="Scroll Up">
+  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#6A994E" class="bi bi-arrow-up-circle-fill" viewBox="0 0 16 16">
+    <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
+  </svg>
+</button>
 
-<p>'<%= searchResultCount %>'Results for "<%= courseSearch %>"</p>
+<div class="searchList-resultNum">'<%= searchResultCount %>'Results for "<%= courseSearch %>"</div>
 
 <% for(let i=0; i < searchResult.length; i++) { %>
   <%- include('templates/list', { result: searchResult[i], userBookmarks: userBookmarks })  %>

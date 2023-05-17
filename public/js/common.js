@@ -31,4 +31,3 @@ const loadInputValidation = () => {
       }, false)
     })
 }
-
