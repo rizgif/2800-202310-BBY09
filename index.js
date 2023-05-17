@@ -572,26 +572,44 @@ app.get('/reviews/write/:courseid', async (req, res) => {
 
   // Find the specific review for the current user
   const specificReview = reviews.find(review => review.username === username && review.CourseID === courseId);
-  console.log("existing review", specificReview);
-  const reviewId = specificReview._id.toString();
   const hasReview = Boolean(specificReview);
-  console.log("review id", reviewId)
 
-  console.log("do you?" , hasReview);
+  if (specificReview) {
+    console.log("existing review", specificReview);
+    const reviewId = specificReview._id.toString();
 
-  const renderData = {
-    req: req,
-    sliderValues: sliderValues,
-    reviewSliderPairs: reviewSliderPairs,
-    username: username,
-    courseId: courseId,
-    editReview: false,
-    specificReview: specificReview,
-    hasReview: hasReview,
-    reviewId: reviewId
-  };
+    console.log("review id", reviewId)
+    console.log("do you?", hasReview);
 
-  res.render("write-review", renderData);
+    const renderData = {
+      req: req,
+      sliderValues: sliderValues,
+      reviewSliderPairs: reviewSliderPairs,
+      username: username,
+      courseId: courseId,
+      editReview: true,
+      specificReview: specificReview,
+      hasReview: hasReview,
+      reviewId: reviewId
+    }
+    res.render("write-review", renderData);
+  } else {
+
+    const renderData = {
+      req: req,
+      sliderValues: sliderValues,
+      reviewSliderPairs: reviewSliderPairs,
+      username: username,
+      courseId: courseId,
+      editReview: false,
+      // specificReview: specificReview,
+      hasReview: hasReview
+      // reviewId: reviewId
+    };
+    res.render("write-review", renderData);
+  }
+
+
 
 });
 
@@ -640,13 +658,14 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
 
 //delete the review from database
 app.delete('/reviews/deleteReview/:id', async (req, res) => {
-  const reviewId = req.params.id;
+  const courseId = req.params.id;
 
   // Delete the review from the database based on the review ID
-  await reviewCollection.deleteOne({ _id: new ObjectId(reviewId) });
+  await reviewCollection.deleteOne({ CourseID: courseId });
 
   // res.redirect('/reviews');
-  res.redirect('/course-detail?courseId=' + courseId);
+  res.redirect(`/course-detail?courseId=${courseId}`);
+  // res.redirect('/course-detail?courseId=' + courseId);
 });
 
 

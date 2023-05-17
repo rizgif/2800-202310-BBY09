@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="/css/edit-review.css">
+
 <div class="setting">
   <div class="dropdown">
     <button class="edit-button" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -8,9 +9,10 @@
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
       <a class="dropdown-item edit-review-link" href="#" data-review-id="<%= review._id.toString() %>">Edit this
         review</a>
-      <a class="dropdown-item delete-review-link" href="#" data-review-id="<%= review._id.toString() %>">Delete this
+      <a class="dropdown-item delete-review-link" href="#" data-review-id="<%= review.CourseID %>">Delete this
         review</a>
 
+        <% console.log("course2 course", review.CourseID ) %>
     </div>
   </div>
 </div>
@@ -46,7 +48,7 @@
     $(document).on('click', '.delete-review-link', function (e) {
       e.preventDefault();
 
-      const reviewId = $(this).data('review-id');
+      const courseId = $(this).data('review-id');
 
       // Show the custom modal
       $('#deleteReviewModal').css('display', 'block');
@@ -55,7 +57,7 @@
       $('#confirmDeleteBtn').on('click', function () {
         // Send a delete request to the server
         $.ajax({
-          url: '/reviews/deleteReview/' + reviewId,
+          url: '/reviews/deleteReview/' + courseId,
           type: 'DELETE',
           success: function (result) {
             // Handle success response
