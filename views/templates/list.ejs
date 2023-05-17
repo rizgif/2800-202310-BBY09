@@ -1,34 +1,12 @@
-   <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
-<script>
-  function handleClick(courseid) {
-    console.log('Clicked on', courseid);
-
-    // Send a POST request to the server route
-    $.get('/course-details', function(response) {
-      console.log('Redirecting to new page');
-      window.location.href = '/course-details?courseId=' + courseid;
-    });
-  }
-</script>
-   
-   <!-- <li>Title: <%= result.Title %></li> -->
-    <!-- <li>Provider: <%= result.Provider %>
-    <li>Difficulty: <%= result.Course_Difficulty %>
-    <li>Rating: <%= result.Course_Rating %></li>
-    <li> URL: <%= result.Course_URL %></li>
-    <li>Organization: <%= result.Organization %></li>
-    <li>Description: <%= result.Course_Description %></li> -->
-
-
-
-<div class="CourseCard-Container">
+<!--Please don't remove this <a> tag and don't add scripts above when merge I am making and cleaning these 3 times... -->
+<a class="CourseCard-Container" herf=`/course-details?courseId=<%= result._id.toString() %>`>
     <div class="CourseCard-StyledCourseCard">
 
-        <div class="card-thumbnail" onclick="handleClick('<%= result._id.toString() %>')">
+        <div class="card-thumbnail">
             <% const randomNumber = Math.floor(Math.random() * 9) + 1; %>
             <img src="/image/randomimage/<%= randomNumber %>.jpeg" alt="Image Description">
         </div>
-        <div class="card-info" onclick="handleClick('<%= result._id.toString() %>')">
+        <div class="card-info">
             <div class="Card-CourseName"><%= result.Title %></div>
 
             <div class="card-rating">
@@ -52,4 +30,4 @@
                 </svg>     
             </button>
     </div>
-</div>
+</a>
