@@ -1,4 +1,6 @@
-async function toggleBookmark(courseId) {
+async function toggleBookmark(e, courseId) {
+    e.stopPropagation();
+    e.preventDefault();
   
     const bookmarkButton = document.querySelector(`.Course-Bookmark[data-course-id="${courseId}"]`);
     if (bookmarkButton.classList.contains('bookmarked')) {
