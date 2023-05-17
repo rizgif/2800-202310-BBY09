@@ -103,3 +103,9 @@
     font-weight: 600;
     font-size: 1.2em;
 }
+
+
+/* review cards */
+.write-review-link {
+    height: 50px;
+}
