@@ -121,7 +121,7 @@ app.post('/searchSubmit', async (req, res) => {
   }
 });
 
-app.get('/course-detail', async (req, res) => {
+app.get('/course-details', async (req, res) => {
   const courseId = req.query.courseId;
   const reviews = await reviewCollection.find().toArray();
   const username = req.session.username;
