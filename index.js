@@ -269,7 +269,7 @@ app.get('/bookmarks', async (req, res) => {
         $unwind: '$courseDetails'
       }
     ]).toArray();
-    console.log('bookmarked courses: ', bookmarkedCourses); // log the array to the console
+    // console.log('bookmarked courses: ', bookmarkedCourses); // log the array to the console
     const userId = req.session.uid;
     const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
 
