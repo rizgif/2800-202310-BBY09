@@ -1,9 +1,11 @@
 window.addEventListener('scroll', function() {
     var button = document.getElementById('searchList-scrollUp');
-    if (window.pageYOffset > 200) {
-        button.classList.add('show');
-    } else {
-        button.classList.remove('show');
+    if (button) {
+        if (window.pageYOffset > 200) {
+            button.classList.add('show');
+        } else {
+            button.classList.remove('show');
+        }
     }
 });
 
