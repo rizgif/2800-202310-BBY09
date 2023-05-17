@@ -65,7 +65,7 @@
           success: function (result) {
             // Handle success response
             console.log('Review deleted successfully');
-            // You can perform any additional actions here, such as updating the UI or reloading the reviews list
+
             $('.grid-container').each(function () {
               var username = $(this).find('.user_info').text().toString().trim(); // Assuming username is within an element with class "username"
               console.log(username);

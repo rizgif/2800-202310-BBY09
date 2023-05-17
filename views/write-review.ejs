@@ -6,7 +6,7 @@
         <!-- Chelsea note: update later (not the 80% task) -->
         <p>You have already submitted a review. You cannot submit another review.</p>
         <a class="btn btn-primary" type="submit" id="submitBtn" href="/reviews/write/updateReview/<%= reviewId %>">Edit your review</a>
-        <a class="btn btn-secondary" type="submit" id="submitBtn" href="/course-detail?courseId=<%= courseId %>">Cancel</a>
+        <a class="btn btn-secondary" type="submit" id="submitBtn" href="/course-details?courseId=<%= courseId %>">Cancel</a>
         <% } else {%>
 
             <% if (editReview) { %>
