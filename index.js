@@ -90,43 +90,13 @@ app.get('/', async (req, res) => {
   res.render("index", { isLoggedIn: isLoggedIn(req) });
 });
 
-let searchResult;
-
-// app.post('/searchSubmit', async (req, res) => {
-//   var courseSearch = req.body.courseSearch;
-//   const userId = req.session.uid;
-//
-//   try {
-//     searchResult = await courseCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
-//       _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1,
-//       Course_URL: 1, Organization: 1, Course_Description: 1}).toArray();
-//
-//     const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
-//     const searchResultCount = searchResult.length;
-//     storedsearchResult = searchResult;
-//
-//     res.render("searchList", {
-//
-//       searchResult: searchResult,
-//       isLoggedIn: isLoggedIn(req),
-//       userBookmarks,
-//       searchResultCount: searchResultCount,
-//       courseSearch
-//     });
-//     // console.log("userBookamrks: ", userBookmarks)
-//
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send('An error occurred while searching');
-//   }
-// });
 
 app.get('/search-results', async (req, res) => {
   const userId = req.session.uid;
   const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
 
-  const courseSearch = req.query.courseSearch;
 
+  const courseSearch = req.query.courseSearch;
   const provider = req.query.provider?.toLowerCase(); // 'coursera', 'udemy',
   const level = req.query.level?.toLowerCase(); // 'all', 'beginner', 'intermediate', 'advanced'
   const rating = req.query.rating?.toLowerCase(); // "high", "low"
@@ -136,7 +106,7 @@ app.get('/search-results', async (req, res) => {
   const condition = {Title: { $regex: `${courseSearch}`, $options: 'i' }}
   if (provider) condition.Provider = { $regex: `${provider}`, $options: 'i' };
   if (level) condition.Course_Difficulty = { $regex: `${level}`, $options: 'i' };
-  if (rating) condition.Course_Rating = { $regex: `${rating}`, $options: 'i' };
+  if (rating) condition.Course_Rating = { $regex: `${rating}`, $options: 'i' };  
 
   console.log('condition', condition)
 
