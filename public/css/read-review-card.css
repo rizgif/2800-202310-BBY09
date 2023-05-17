@@ -107,7 +107,16 @@
     font-size:14px;
     font-weight: bold;
     margin-left: 4%;
+    display: flex;
 }
+
+.img-avatar {
+    width: 40px;
+    height: 40px;
+    margin-right: 5px;
+    border-radius: 50%;
+    border: 1px solid #98B66E;
+  }
 
 .time_stamp {
     /* background-color: #D7D3C1; */

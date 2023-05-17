@@ -38,7 +38,7 @@ const {
   FIREBASE_messagingSenderId,
   FIREBASE_appId,
   FIREBASE_measurementId
- } = process.env;
+} = process.env;
 
 const firebaseConfig = {
   apiKey: FIREBASE_apiKey,
@@ -146,27 +146,54 @@ app.get('/course-details', async (req, res) => {
   const courseId = req.query.courseId;
   const reviews = await reviewCollection.find().toArray();
   const username = req.session.username;
+  const email = req.session.email;
 
   const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
   // console.log('courseInfo', courseInfo);
 
-  const reviewSliderPairs = reviews
-    .filter(review => review.CourseID === courseId)
-    .map(review => {
-      const sliderValue = {
-        courseContentSliderValue: review.CourseContentRating,
-        courseStructureSliderValue: review.CourseStructureRating,
-        teachingStyleSliderValue: review.TeachingStyleRating,
-        studentSupportSliderValue: review.StudentSupportRating
-      };
+  // const reviewSliderPairs = reviews
+  //   .filter(review => review.CourseID === courseId)
+  //   .map(review => {
+  //     const sliderValue = {
+  //       courseContentSliderValue: review.CourseContentRating,
+  //       courseStructureSliderValue: review.CourseStructureRating,
+  //       teachingStyleSliderValue: review.TeachingStyleRating,
+  //       studentSupportSliderValue: review.StudentSupportRating
+  //     };
 
-      return {
-        review: review,
-        sliderValue: sliderValue,
+  //     // const user = await userCollection.findOne({ email: review.email });
 
-      };
-    });
+  //     return {
+  //       review: review,
+  //       sliderValue: sliderValue,
+  //       // user: user
+  //     };
+  //   });
 
+
+  const reviewSliderPairs = await Promise.all(
+    reviews
+      .filter(review => review.CourseID === courseId)
+      .map(async review => {
+        const sliderValue = {
+          courseContentSliderValue: review.CourseContentRating,
+          courseStructureSliderValue: review.CourseStructureRating,
+          teachingStyleSliderValue: review.TeachingStyleRating,
+          studentSupportSliderValue: review.StudentSupportRating
+        };
+  
+        const user = await userCollection.findOne({ email: review.email });
+        const avatar = user ? user.avatar : null;
+  
+        return {
+          review: review,
+          sliderValue: sliderValue,
+          avatar: avatar
+        };
+
+      })
+  );
+  
   const totalvote = reviewSliderPairs.length;
   const numCategory = 4;
 
@@ -184,11 +211,7 @@ app.get('/course-details', async (req, res) => {
     overallCategorySums.studentSupport += parseInt(pair.sliderValue.studentSupportSliderValue);
   });
 
-  // console.log("Category Sums:", overallCategorySums);
-
   const CourslaRating = (Object.values(overallCategorySums).reduce((sum, value) => sum + value, 0) / (numCategory * totalvote)).toFixed(1);
-
-  // console.log("overall rating", CourslaRating)
 
   async function updateCourse(courseId, overallCategorySums, totalvote) {
     // Update the course document with the specified courseId
@@ -210,13 +233,12 @@ app.get('/course-details', async (req, res) => {
     req: req,
     courseId: courseId,
     reviewSliderPairs: reviewSliderPairs,
-    // whichCourse: true,
     username: username,
     courseInfo: courseInfo || {},
     isLoggedIn: isLoggedIn(req),
     overallCategorySums: overallCategorySums,
     Totalvote: totalvote,
-    CourslaRating: CourslaRating
+    CourslaRating: CourslaRating,
   });
 });
 
@@ -543,7 +565,7 @@ app.get('/edit-profile', sessionValidation, async (req, res) => {
   let username = req.session.username;
   let avatar = req.session.avatar;
   let uid = req.session.uid;
-  res.render("edit-profile", {email, username, avatar, firebaseConfig, uid: new ObjectId(uid).toString(),isLoggedIn: isLoggedIn(req)});
+  res.render("edit-profile", { email, username, avatar, firebaseConfig, uid: new ObjectId(uid).toString(), isLoggedIn: isLoggedIn(req) });
 });
 
 app.post('/edit-profile-submit', sessionValidation, async (req, res) => {
@@ -551,8 +573,8 @@ app.post('/edit-profile-submit', sessionValidation, async (req, res) => {
   let avatar = req.body.avatar;
   let uid = req.session.uid;
 
-  await userCollection.updateOne({_id: new ObjectId(uid)}, {$set: { username, avatar}});
-  req.session.username= username;
+  await userCollection.updateOne({ _id: new ObjectId(uid) }, { $set: { username, avatar } });
+  req.session.username = username;
   req.session.avatar = avatar;
 
   res.redirect("/profile");
@@ -561,13 +583,16 @@ app.post('/edit-profile-submit', sessionValidation, async (req, res) => {
 // write a review on a specific course
 app.get('/reviews/write/:courseid', async (req, res) => {
   const username = req.session.username;
+  const avatar = req.session.avatar;
+
+  // console.log(avatar);
   // console.log(username);
   if (username == null) {
     return res.redirect("/login");
   }
 
   const courseId = req.params.courseid.replace(':', '');;
-  console.log("courseid here (2)", courseId)
+  // console.log("courseid here (2)", courseId)
 
   const reviews = await reviewCollection.find().toArray();
 
@@ -578,7 +603,8 @@ app.get('/reviews/write/:courseid', async (req, res) => {
       courseStructureSliderValue: review.CourseStructureRating,
       teachingStyleSliderValue: review.TeachingStyleRating,
       studentSupportSliderValue: review.StudentSupportRating
-    }
+    },
+    avatar: review.avatar
   }));
 
   const sliderValues = reviews.map(review => ({
@@ -620,6 +646,7 @@ app.get('/reviews/write/:courseid', async (req, res) => {
       sliderValues: sliderValues,
       reviewSliderPairs: reviewSliderPairs,
       username: username,
+      avatar: avatar,
       courseId: courseId,
       editReview: false,
       // specificReview: specificReview,
@@ -677,7 +704,7 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
 //delete the review from database
 app.post('/reviews/deleteReview/:id', async (req, res) => {
   const courseId = req.params.id;
-  
+
   // Get the review ID before deleting the review
   const deletedReview = await reviewCollection.findOne({ CourseID: courseId });
   const deletedReviewId = deletedReview._id.toString();
