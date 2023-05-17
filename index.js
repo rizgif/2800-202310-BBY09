@@ -657,7 +657,7 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
 
 
 //delete the review from database
-app.delete('/reviews/deleteReview/:id', async (req, res) => {
+app.post('/reviews/deleteReview/:id', async (req, res) => {
   const courseId = req.params.id;
 
   // Delete the review from the database based on the review ID
