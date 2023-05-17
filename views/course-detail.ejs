@@ -60,6 +60,7 @@
         <span class="title">Enrollment</span>
       </li>
   </ul>
+  <% if (courseInfo.Provider?.toLowerCase() == 'coursera') { %>
   <div class="course-detail-info">
     <dl>
       <dt>Instructor/Organization</dt>
@@ -70,6 +71,7 @@
       <dd><%= courseInfo.Course_Description %></dd>
     </dl>
   </div>
+  <% }%>
 </div>
 
 
