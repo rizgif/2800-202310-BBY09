@@ -113,3 +113,8 @@
 font-weight: bold;
 margin-bottom: 5px;
 }
+
+.CourseCard-Container{
+  padding-left: 10px;
+  padding-right: 10px;
+}
