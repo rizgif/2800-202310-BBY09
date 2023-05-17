@@ -519,7 +519,8 @@ app.get('/reviews/write/:courseid', async (req, res) => {
   // const editReview = req.params.editReview === '/updateReview';
 
   // Find the specific review for the current user
-  const specificReview = reviews.find(review => review.username === username);
+  const specificReview = reviews.find(review => review.username === username && review.courseId === courseId);
+
 
   console.log("existing review", specificReview);
   const hasReview = Boolean(specificReview);

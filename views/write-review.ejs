@@ -2,7 +2,7 @@
 
     <link rel="stylesheet" href="/css/write-review-card.css">
 
-    <% console.log(courseId) %>
+    <% console.log("write review", courseId) %>
 
         <% if (hasReview) { %>
             <!-- Chelsea note: update later (not the 80% task) -->
@@ -18,7 +18,7 @@
 
                             <!-- writing a review -->
                             <form action="/submitReview/<%= courseId %>" method="post">
-                                <%= console.log("id here", courseId) %>
+                                
                                     <div class="write-review-grid">
                                         <div class="user-profile">
                                             <%= username %>
@@ -114,12 +114,12 @@
 
 
                                 <script>
-                                    document.getElementById('submitBtn').addEventListener('click', function (event) {
-                                        // event.preventDefault(); // Prevent the form from being submitted
+                                    // document.getElementById('submitBtn').addEventListener('click', function (event) {
+                                    //     // event.preventDefault(); // Prevent the form from being submitted
 
-                                        // Redirect the user to the desired URL
-                                        window.location.href = '/reviews/write/updateReview/' + courseId; // Replace with the URL you want to redirect to
-                                    });
+                                    //     // Redirect the user to the desired URL
+                                    //     window.location.href = '/reviews/write/updateReview/' + courseId; // Replace with the URL you want to redirect to
+                                    // });
 
                                     const sliders = document.querySelectorAll('.slider');
 
