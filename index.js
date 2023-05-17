@@ -234,7 +234,12 @@ app.post('/removeBookmark', async (req, res) => {
 
 app.get('/bookmarks', async (req, res) => {
   try {
+    const userId = req.session.uid;
+
     const bookmarkedCourses = await database.db(mongodb_database).collection('bookmarks').aggregate([
+      {
+        $match: { userId: userId } // Match the bookmarks for the current user
+      },
       {
         $lookup: {
           from: 'courses',
@@ -258,11 +263,13 @@ app.get('/bookmarks', async (req, res) => {
         $unwind: '$courseDetails'
       }
     ]).toArray();
-    // console.log('bookmarked courses: ', bookmarkedCourses); // log the array to the console
-    const userId = req.session.uid;
+    console.log('bookmarked courses: ', bookmarkedCourses); // log the array to the console
+    
     const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
 
     res.render('bookmarks', { bookmarkedCourses, isLoggedIn: isLoggedIn(req), userBookmarks });
+    //res.render('bookmarks', { isLoggedIn: isLoggedIn(req), userBookmarks });
+    //console.log('userBookmarks', userBookmarks)
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
