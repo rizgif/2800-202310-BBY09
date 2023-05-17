@@ -1,24 +1,43 @@
-<div class="CourseCard-StyledCourseCard">
-    <div class="Coursecard-InfoRatingWrapper">
-
-        <div class="CourseCard-NumRatingWrapper-syjs0d-2 joEEbw">
-            <div class="CardNumRating-StyledCardNumRating">
-                 
-                 <div class="CardNumRating-CardNumRatingNumber">
-                    <img  src="/image/udemy.png" alt="Image Description">
-
-                 </div>
-          
-            </div>
-        </div>
+<script>
+    function handleClick(courseid) {
+      console.log('Clicked on', courseid);
+  
+      // Send a POST request to the server route
+      $.get('/courseDetails', function(response) {
+        console.log('Redirecting to new page');
+        window.location.href = '/courseDetails?courseid=' + courseid;
+      });
+    }
+</script>
+<div class="CourseCard-Container">
+    <div class="CourseCard-StyledCourseCard">
     
-        <div class="CourseCard_CardInfo">
-            <div class="Card-CourseName"><%= result.courseDetails.Title %></div>
-            <div class="Card-CourseProvider"><b>Provider:</b> <%= result.courseDetails.Provider %></div>
-            <div class="Card-CourseRatingCoursla"><b>Coursla Rating:</b> </div>
-            <div class="Card-CourseRating"><b>Provider Rating:</b> <%= result.courseDetails.Course_Rating %></div>
-            <div class="Card-CourseDifficulty"><b>Level:</b> <%= result.courseDetails.Course_Difficulty %></div>
-            
+        <div class="card-thumbnail" onclick="handleClick('<%= result._id.toString() %>')">
+            <% const randomNumber = Math.floor(Math.random() * 9) + 1; %>
+            <img src="/image/randomimage/<%= randomNumber %>.jpeg" alt="Image Description">
         </div>
+        <div class="card-info" onclick="handleClick('<%= result._id.toString() %>')">
+            <div class="Card-CourseName"><%= result.courseDetails.Title %></div>
+    
+            <div class="card-rating">
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+            </div>
+            
+            <div class="Card-CourseDifficulty"><%= result.courseDetails.Course_Difficulty %></div>
+        </div>
+        <% if (isLoggedIn) { %>
+            <% const bookmarkedCourseIds = userBookmarks.map(b => b.courseId); %>
+            <button class="Course-Bookmark <%= bookmarkedCourseIds.includes(result.courseDetails._id.toString()) ? 'bookmarked' : '' %>" type="button" data-course-id="<%= result.courseDetails._id %>" onclick="toggleBookmark('<%= result.courseDetails._id %>')">
+        <% } else { %>
+            <button class="Course-Bookmark" type="button" data-course-id="<%= result.courseDetails._id %>" onclick="toggleBookmark('<%= result.courseDetails._id %>')">
+        <% } %>
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                </svg> 
+            </button>
     </div>
 </div>
