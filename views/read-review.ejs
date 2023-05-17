@@ -28,7 +28,7 @@
             <div class="user_review">
                 <%= review.Review %>
                 <% if (review.username === username) { %>
-                    <%- include("edit-review", {username: username, id: review._id.toString()}) %>
+                    <%- include("edit-review", {username: username, id: review._id.toString(), courseId: courseId}) %>
                         <% } %>
             </div>
          

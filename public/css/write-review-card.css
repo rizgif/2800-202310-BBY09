@@ -1,15 +1,15 @@
 .write-review-grid {
     display: grid;
     grid-template-columns: 1fr 0.8fr 0.8fr;
-    grid-template-rows: 0.3fr 1.5fr 1.6fr 0.4fr;
+    grid-template-rows: 0.4fr 1.5fr 1.6fr 0.4fr;
     grid-gap: 10px;
-    margin-top: 10%;
+    margin-top: 5%;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 10%;
     padding: 2%;
     height: auto;
-    width: 90vw;
+    /* width: 90vw; */
     border-radius: 15px;
     background-color: #D7D3C1;
     overflow: hidden;
@@ -20,8 +20,9 @@
     grid-row: 1;
     margin-left: 5%;
     margin-top: 5%;
-    padding: 3%;
+    /* padding: 3%; */
     font-size: 20px;
+    font-weight: bold;
 }
 
 .time-stamp {
@@ -107,9 +108,9 @@
 }
 
 .edit-title{
-    margin: 5%;
-    margin-top: 25%;
+    /* margin: 5%; */
+    /* margin-top: 25%; */
     font-size: 25px;
     padding: 2%;
-    top: 50px;
+    top: 60px;
 }

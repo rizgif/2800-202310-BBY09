@@ -26,7 +26,7 @@
     margin-bottom: 10%;
     padding: 5%;
     height: auto;
-    width: 90vw;
+    /* width: 90vw; */
     border-radius: 15px;
     background-color: #D7D3C1;
     overflow: hidden;
@@ -125,4 +125,10 @@
     
     font-size: 2rem; /* Adjust the font size as desired */
     align-self: flex-end;
+}
+
+.number-ratings{
+    border-top: 1px solid black;
+    padding-top: 4%;
+    padding-bottom: 2%;
 }
