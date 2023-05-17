@@ -137,14 +137,64 @@ app.get('/course-detail', async (req, res) => {
       studentSupportSliderValue: review.StudentSupportRating
     };
 
-    return {
-      review: review,
-      sliderValue: sliderValue
-    };
+  const reviewSliderPairs = reviews
+    .filter(review => review.CourseID === courseId)
+    .map(review => {
+      const sliderValue = {
+        courseContentSliderValue: review.CourseContentRating,
+        courseStructureSliderValue: review.CourseStructureRating,
+        teachingStyleSliderValue: review.TeachingStyleRating,
+        studentSupportSliderValue: review.StudentSupportRating
+      };
+
+      return {
+        review: review,
+        sliderValue: sliderValue,
+
+      };
+    });
+
+
+
+  const totalvote = reviewSliderPairs.length;
+  const numCategory = 4;
+
+  const overallCategorySums = {
+    courseContent: 0,
+    courseStructure: 0,
+    teachingStyle: 0,
+    studentSupport: 0
+  };
+
+  reviewSliderPairs.forEach(pair => {
+    overallCategorySums.courseContent += parseInt(pair.sliderValue.courseContentSliderValue);
+    overallCategorySums.courseStructure += parseInt(pair.sliderValue.courseStructureSliderValue);
+    overallCategorySums.teachingStyle += parseInt(pair.sliderValue.teachingStyleSliderValue);
+    overallCategorySums.studentSupport += parseInt(pair.sliderValue.studentSupportSliderValue);
   });
 
-  // console.log(reviewSliderPairs);
-  // console.log(sliderValue);
+  // console.log("Category Sums:", overallCategorySums);
+
+  const CourslaRating = (Object.values(overallCategorySums).reduce((sum, value) => sum + value, 0) / (numCategory * totalvote)).toFixed(1);
+
+  // console.log("overall rating", CourslaRating)
+
+  async function updateCourse(courseId, overallCategorySums, totalvote) {
+    // Update the course document with the specified courseId
+    await datasetCollection.updateOne(
+      { _id: new ObjectId(courseId) },
+      {
+        $set: {
+          OverallCategorySums: overallCategorySums,
+          Totalvote: totalvote,
+          CourslaRating: CourslaRating
+        }
+      }
+    );
+  }
+
+  updateCourse(courseId, overallCategorySums, reviewSliderPairs.length);
+
   res.render("course-detail", {
     req: req,
     courseId: courseId,
@@ -153,6 +203,9 @@ app.get('/course-detail', async (req, res) => {
     username: username,
     courseInfo: courseInfo || {},
     isLoggedIn: isLoggedIn(req)
+    overallCategorySums: overallCategorySums,
+    Totalvote: totalvote,
+    CourslaRating: CourslaRating
   });
 });
 
@@ -284,7 +337,7 @@ app.get('/sample', (req, res) => {
   res.render("sample");
 });
 
-app.post('/login-submit', loginValidation, async (req,res) => {
+app.post('/login-submit', loginValidation, async (req, res) => {
   let email = req.body.email;
 
   const result = await userCollection.find({ email: email }).project({ password: 1, username: 1, avatar: 1, _id: 1 }).toArray();
@@ -437,9 +490,9 @@ app.post('/reset-password-submit', async (req, res) => {
 
 });
 
-app.get('/profile', sessionValidation, (req,res) => {
+app.get('/profile', sessionValidation, (req, res) => {
   let { username, email, avatar } = req.session;
-  res.render('profile', {username, email, avatar, isLoggedIn: isLoggedIn(req) });
+  res.render('profile', { username, email, avatar, isLoggedIn: isLoggedIn(req) });
 });
 
 app.get('/change-password', sessionValidation, async (req, res) => {
@@ -475,7 +528,7 @@ app.get('/edit-profile', sessionValidation, async (req, res) => {
   let email = req.session.email;
   let username = req.session.username;
   let avatar = req.session.avatar;
-  res.render("edit-profile", {email, username, avatar, isLoggedIn: isLoggedIn(req)});
+  res.render("edit-profile", { email, username, avatar, isLoggedIn: isLoggedIn(req) });
 });
 
 app.post('/edit-profile-submit', sessionValidation, async (req, res) => {
@@ -494,45 +547,16 @@ app.post('/edit-profile-submit', sessionValidation, async (req, res) => {
   res.redirect("/profile");
 });
 
-
-//show the list of review cards
-// app.get('/reviews', async (req, res) => {
-//   const reviews = await reviewCollection.find().toArray();
-
-//   const username = req.session.username;
-
-//   const reviewSliderPairs = reviews.map(review => {
-//     const sliderValue = {
-//       courseContentSliderValue: review.CourseContentRating,
-//       courseStructureSliderValue: review.CourseStructureRating,
-//       teachingStyleSliderValue: review.TeachingStyleRating,
-//       studentSupportSliderValue: review.StudentSupportRating
-//     };
-
-//     return {
-//       review: review,
-//       sliderValue: sliderValue
-//     };
-//   });
-
-//   // console.log(reviewSliderPairs);
-//   // console.log(sliderValue);
-//   res.render("review", {
-//     req: req,
-//     reviewSliderPairs: reviewSliderPairs,
-//     // whichCourse: true,
-//     username: username
-//   });
-
-// });
-
-
 // write a review on a specific course
 app.get('/reviews/write/:courseid', async (req, res) => {
   const username = req.session.username;
-  // const reviewId = req.body._id;
+  // console.log(username);
+  if (username == null) {
+    return res.redirect("/login");
+  }
+
   const courseId = req.params.courseid.replace(':', '');;
-  console.log("courseid here (2)", courseId)
+  // console.log("courseid here (2)", courseId)
 
   const reviews = await reviewCollection.find().toArray();
 
@@ -556,7 +580,12 @@ app.get('/reviews/write/:courseid', async (req, res) => {
   // const editReview = req.params.editReview === '/updateReview';
 
   // Find the specific review for the current user
-  const specificReview = reviews.find(review => review.username === username);
+  const specificReview = reviews.find(review => review.username === username && review.courseId === courseId);
+
+
+  console.log("existing review", specificReview);
+  const hasReview = Boolean(specificReview);
+
 
   const renderData = {
     req: req,
@@ -565,52 +594,13 @@ app.get('/reviews/write/:courseid', async (req, res) => {
     username: username,
     courseId: courseId,
     editReview: false,
-    specificReview: specificReview
+    specificReview: specificReview,
+    hasReview: hasReview
   };
 
   res.render("write-review", renderData);
+
 });
-
-
-// app.get('/reviews/write/:editReview', async (req, res) => {
-//   const username = req.session.username;
-//   const reviewId = req.body._id;
-
-//   const reviews = await reviewCollection.find().toArray();
-
-//   const reviewSliderPairs = reviews.map(review => ({
-//     username: review.username,
-//     sliderValue: {
-//       courseContentSliderValue: review.CourseContentRating,
-//       courseStructureSliderValue: review.CourseStructureRating,
-//       teachingStyleSliderValue: review.TeachingStyleRating,
-//       studentSupportSliderValue: review.StudentSupportRating
-//     }
-//   }));
-
-//   const sliderValues = reviews.map(review => ({
-//     courseContentSliderValue: review.CourseContentRating,
-//     courseStructureSliderValue: review.CourseStructureRating,
-//     teachingStyleSliderValue: review.TeachingStyleRating,
-//     studentSupportSliderValue: review.StudentSupportRating
-//   }));
-
-//   const editReview = req.params.editReview === '/updateReview';
-
-//   // Find the specific review for the current user
-//   const specificReview = reviews.find(review => review.username === username);
-
-//   const renderData = {
-//     req: req,
-//     sliderValues: sliderValues,
-//     reviewSliderPairs: reviewSliderPairs,
-//     username: username,
-//     editReview: editReview,
-//     specificReview: specificReview
-//   };
-
-//   res.render("write-review", renderData);
-// });
 
 
 //change the review written for a specific course
@@ -636,7 +626,7 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
   const specificReview = reviews.find(review => review._id.toString() === reviewId);
   console.log("specific", specificReview)
   const courseID = specificReview.CourseID;
- 
+
   const renderData = {
     req: req,
     // sliderValues: sliderValues,
@@ -645,8 +635,9 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
     editReview: true,
     specificReview: specificReview,
     reviewId: reviewId,
-    courseId: courseID
+    courseId: courseID,
 
+    hasReview: false
   };
 
   res.render("write-review", renderData);
@@ -718,7 +709,7 @@ app.post('/submitReview/:id', async (req, res) => {
     });
   }
 
-  res.redirect('/courseDetails?courseid=' + courseId);
+  res.redirect('/course-details?courseid=' + courseId);
 });
 
 app.get('/profileReview', async (req, res) => {
