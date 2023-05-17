@@ -1,0 +1,89 @@
+<% if (isLoggedIn) { %>
+    <%- include("templates/header") %>
+<% } else { %>
+    <%- include("templates/header-beforeLogin") %>
+<% } %>
+
+<div class="search-wrapper">
+    <form action="/search-results" method="get">
+        <div class="search-bar row justify-content-center">
+            <div class="form-group mx-2 mb-2" style="width:300px;">
+                <input value="<%= courseSearch %>" name="courseSearch" type="text" class="form-control"
+                       id="courseSearch" placeholder="Search courses">
+            </div>
+            <button type="submit" class="btn btn-main-search mb-2" style="width:50px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search"
+                     viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
+                </svg>
+            </button>
+        </div>
+
+        <div class="filter-bar row justify-content-center">
+          <div class="btn-group">
+              <select id="provider" name="provider" class="form-select">
+                  <option value="default" selected>Provider</option>
+                  <option value="udemy">Udemy</option>
+                  <option value="coursera">Coursera</option>
+              </select>
+              <select id="level" name="level" class="form-select">
+                  <option value="default" selected>Level</option>
+                  <option value="all">All</option>
+                  <option value="beginner">Beginner</option>
+                  <option value="intermediate">Intermediate</option>
+                  <option value="advanced">Advanced</option>
+              </select>
+           
+              
+          </div>
+          <button id="applyFilters" class="btn btn-primary">Apply Filters</button>
+      </div>
+      
+
+
+    </form>
+
+
+    <p>'<%= searchResultCount %>'Results for "<%= courseSearch %>"</p>
+
+    <% for(let i = 0; i < searchResultCount; i++) { %>
+        <%- include('templates/list', { result: searchResult[i], userBookmarks: userBookmarks }) %>
+    <% } %>
+
+</div>
+
+<script>
+  $("#applyFilters").on("change", async () => {
+    const provider = $("#provider").val();
+    const level = $("#level").val();
+
+
+    const searchParams = new URLSearchParams({
+    provider: provider !== "default" ? provider : "",
+    level: level !== "default" ? level : "",
+    courseSearch: "<%= courseSearch %>",
+  });
+
+  const queryString = searchParams.toString();
+  const url = `/search-results?${queryString}`;
+
+    fetch(url)
+      .then(response => {
+        if (response.ok) {
+          // Success, handle the response here
+          window.location.replace(url);
+        } else {
+          // Handle the error response here
+          console.error("Error:", response.status);
+        }
+      })
+      .catch(error => {
+        // Handle any network or other errors here
+        console.error("Error:", error);
+      });
+  })
+</script>
+
+<%- include("templates/footer") %>
+
+

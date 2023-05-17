@@ -111,30 +111,45 @@ app.get('/', async (req, res) => {
   res.render("index", { isLoggedIn: isLoggedIn(req) });
 });
 
-let searchResult;
 
-app.post('/searchSubmit', async (req, res) => {
-  var courseSearch = req.body.courseSearch;
+app.get('/search-results', async (req, res) => {
   const userId = req.session.uid;
+  const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
+
+
+  const courseSearch = req.query.courseSearch;
+  const provider = req.query.provider?.toLowerCase(); // 'coursera', 'udemy',
+  const level = req.query.level?.toLowerCase(); // 'all', 'beginner', 'intermediate', 'advanced'
+  const rating = req.query.rating?.toLowerCase(); // "high", "low"
+
+  console.log(courseSearch, provider, level, rating)
+
+  const condition = {Title: { $regex: `${courseSearch}`, $options: 'i' }}
+  if (provider) condition.Provider = { $regex: `${provider}`, $options: 'i' };
+  if (level) condition.Course_Difficulty = { $regex: `${level}`, $options: 'i' };
+  if (rating) condition.Course_Rating = { $regex: `${rating}`, $options: 'i' };  
+
+  console.log('condition', condition)
 
   try {
-    searchResult = await courseCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
-      _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1,
-      Course_URL: 1, Organization: 1, Course_Description: 1
+    const searchResult = await courseCollection.find(condition).project({
+      _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, CourslaRating: 1,
     }).toArray();
+    console.log(searchResult)
+    const searchResultCount = searchResult?.length;
 
     const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
-    const searchResultCount = searchResult.length;
-    storedsearchResult = searchResult;
 
-    res.render("searchList", {
+    res.render("search-results", {
       searchResult: searchResult,
+      searchResultCount: searchResultCount,
       isLoggedIn: isLoggedIn(req),
       userBookmarks,
-      searchResultCount: searchResultCount,
-      courseSearch
+      courseSearch,
+      provider,
+      level,
+      rating
     });
-    // console.log("userBookamrks: ", userBookmarks)
 
   } catch (error) {
     console.error(error);
