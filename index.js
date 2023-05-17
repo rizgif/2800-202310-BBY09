@@ -130,14 +130,6 @@ app.get('/course-detail', async (req, res) => {
   const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
   console.log('courseInfo', courseInfo);
 
-  // const reviewSliderPairs = reviews.map(review => {
-  //   const sliderValue = {
-  //     courseContentSliderValue: review.CourseContentRating,
-  //     courseStructureSliderValue: review.CourseStructureRating,
-  //     teachingStyleSliderValue: review.TeachingStyleRating,
-  //     studentSupportSliderValue: review.StudentSupportRating
-  //   };
-
   const reviewSliderPairs = reviews
     .filter(review => review.CourseID === courseId)
     .map(review => {
@@ -154,9 +146,6 @@ app.get('/course-detail', async (req, res) => {
 
       };
     });
-
-
-
 
   const totalvote = reviewSliderPairs.length;
   const numCategory = 4;

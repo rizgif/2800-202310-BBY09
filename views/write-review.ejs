@@ -2,7 +2,6 @@
 
     <link rel="stylesheet" href="/css/write-review-card.css">
 
-    <% console.log("write review", courseId) %>
 
         <% if (hasReview) { %>
             <!-- Chelsea note: update later (not the 80% task) -->
@@ -12,9 +11,7 @@
 
                 <% if (editReview) { %>
                     <h class="edit-title">Edit Review</h>
-                    <% console.log(specificReview.CourseID) %>
                         <% } %>
-
 
                             <!-- writing a review -->
                             <form action="/submitReview/<%= courseId %>" method="post">
@@ -159,12 +156,6 @@
 
 
                                 </script>
-
-
-
-
-
-
 
 
                                 <%- include("templates/footer") %>
