@@ -34,7 +34,7 @@
                   <option value="advanced">Advanced</option>
               </select>
               <select id="sort" name="sort" class="form-select">
-                  <option value="default" selected>Sort</option>
+                  <option value="default" selected>Rating</option>
                   <option value="highToLow">High to Low</option>
                   <option value="lowToHigh">Low to High</option>
               </select>
@@ -69,6 +69,7 @@
     provider: provider !== "default" ? provider : "",
     level: level !== "default" ? level : "",
     courseSearch: "<%= courseSearch %>",
+    sort: sort !== "default" ? sort : "", // Include the selected sort option in the query params
   });
 
   const queryString = searchParams.toString();
