@@ -33,6 +33,11 @@
                   <option value="intermediate">Intermediate</option>
                   <option value="advanced">Advanced</option>
               </select>
+              <select id="sort" name="sort" class="form-select">
+                  <option value="default" selected>Sort</option>
+                  <option value="highToLow">High to Low</option>
+                  <option value="lowToHigh">Low to High</option>
+              </select>
            
               
           </div>
@@ -56,6 +61,8 @@
   $("#applyFilters").on("change", async () => {
     const provider = $("#provider").val();
     const level = $("#level").val();
+    const sort = $("#sort").val(); // Get the selected sort option
+
 
 
     const searchParams = new URLSearchParams({
