@@ -837,6 +837,10 @@ app.get('/profileReview', async (req, res) => {
 
 });
 
+app.get('/my-reviews', (req, res) => {
+  res.render("my-reviews", { isLoggedIn: isLoggedIn(req) });
+});
+
 app.use(express.static(__dirname + "/public"));
 
 app.get("*", (req, res) => {
