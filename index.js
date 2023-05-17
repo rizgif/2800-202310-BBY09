@@ -104,7 +104,7 @@ app.post('/searchSubmit', async (req, res) => {
     const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray(); 
     const searchResultCount = searchResult.length; 
 
-    res.render("searchList2", {
+    res.render("searchList", {
       searchResult: searchResult, 
       isLoggedIn: isLoggedIn(req), 
       userBookmarks, 
@@ -194,10 +194,10 @@ app.get('/bookmarks', async (req, res) => {
             { $match: { $expr: { $eq: ['$_id', '$$courseId'] } } },
             {
               $project: {
-                _id: 0,
+                _id: 1,
                 Title: 1,
-                Provider: 1,
-                Course_Rating: 1,
+                // Provider: 1,
+                // Course_Rating: 1,
                 Course_Difficulty: 1
               }
             }
@@ -210,8 +210,10 @@ app.get('/bookmarks', async (req, res) => {
       }
     ]).toArray();
     console.log('bookmarked courses: ', bookmarkedCourses); // log the array to the console
+    const userId = req.session.uid;
+    const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
 
-    res.render('bookmarks', { bookmarkedCourses, isLoggedIn: isLoggedIn(req) });
+    res.render('bookmarks', { bookmarkedCourses, isLoggedIn: isLoggedIn(req), userBookmarks });
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');

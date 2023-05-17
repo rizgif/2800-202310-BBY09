@@ -22,16 +22,13 @@
 
 
 
-<div class="CourseCard-StyledCourseCard" onclick="handleClick('<%= result._id.toString() %>')">
+<div class="CourseCard-StyledCourseCard">
 
-
-    <div class="card-thumbnail">
+    <div class="card-thumbnail" onclick="handleClick('<%= result._id.toString() %>')">
         <% const randomNumber = Math.floor(Math.random() * 9) + 1; %>
         <img src="/image/randomimage/<%= randomNumber %>.jpeg" alt="Image Description">
-     
-       
     </div>
-    <div class="card-info">
+    <div class="card-info" onclick="handleClick('<%= result._id.toString() %>')">
         <div class="Card-CourseName"><%= result.Title %></div>
 
         <div class="card-rating">
