@@ -14,7 +14,7 @@
     </div>
 
      <div class="Card-CourseDifficulty"><%= result.Course_Difficulty %></div>
-        </div>
+       
         <% if (isLoggedIn) { %>
             <% const bookmarkedCourseIds = userBookmarks.map(b => b.courseId); %>
             <button class="Course-Bookmark <%= bookmarkedCourseIds.includes(result._id.toString()) ? 'bookmarked' : '' %>" type="button" data-course-id="<%= result._id %>" onclick="toggleBookmark(event,'<%= result._id %>')">
