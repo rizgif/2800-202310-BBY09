@@ -107,9 +107,9 @@ app.post('/searchSubmit', async (req, res) => {
     storedsearchResult = searchResult;
 
     res.render("searchList", {
-      searchResult: searchResult, 
-      isLoggedIn: isLoggedIn(req), 
-      userBookmarks, 
+      searchResult: searchResult,
+      isLoggedIn: isLoggedIn(req),
+      userBookmarks,
       searchResultCount: searchResultCount,
       courseSearch
     });
@@ -127,7 +127,7 @@ app.get('/course-details', async (req, res) => {
   const username = req.session.username;
 
   const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
-  console.log('courseInfo', courseInfo);
+  // console.log('courseInfo', courseInfo);
 
   const reviewSliderPairs = reviews
     .filter(review => review.CourseID === courseId)
@@ -610,8 +610,6 @@ app.get('/reviews/write/:courseid', async (req, res) => {
     res.render("write-review", renderData);
   }
 
-
-
 });
 
 
@@ -621,7 +619,7 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
   const reviewId = req.params.id; // Get the review ID from the URL parameter
   const reviews = await reviewCollection.find().toArray();
 
-  console.log(username);
+  // console.log(username);
   const reviewSliderPairs = reviews.map(review => ({
     username: review.username,
     // review: review.Review,
@@ -660,13 +658,21 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
 //delete the review from database
 app.post('/reviews/deleteReview/:id', async (req, res) => {
   const courseId = req.params.id;
+  
+  // Get the review ID before deleting the review
+  const deletedReview = await reviewCollection.findOne({ CourseID: courseId });
+  const deletedReviewId = deletedReview._id.toString();
 
   // Delete the review from the database based on the review ID
   await reviewCollection.deleteOne({ CourseID: courseId });
 
-  // res.redirect('/reviews');
-  res.redirect(`/course-detail?courseId=${courseId}`);
-  // res.redirect('/course-detail?courseId=' + courseId);
+  // Delete the corresponding review ID from the array in the user document
+  await userCollection.updateOne(
+    { ReviewID: deletedReviewId },
+    { $pull: { ReviewID: deletedReviewId } }
+  );
+
+  res.redirect(`/course-details?courseId=${courseId}`);
 });
 
 
@@ -674,8 +680,9 @@ app.post('/reviews/deleteReview/:id', async (req, res) => {
 app.post('/submitReview/:id', async (req, res) => {
   // const courseId = req.params.id;
   const courseId = req.params.id;
-  console.log("okay", courseId);
-  const reviewId = req.body.reviewId;
+  const reviewId = req.body.id;
+  // console.log("okay", courseId);
+
   const { review,
     courseContentSliderValue,
     courseStructureSliderValue,
@@ -683,11 +690,11 @@ app.post('/submitReview/:id', async (req, res) => {
     studentSupportSliderValue,
     currentDate } = req.body;
 
+  // const reviewId = req.body.reviewId;
   const username = req.session.username; // Replace 'username' with the actual field name
   const email = req.session.email;
 
-  console.log("new review", req.body);
-
+  // if there is a exisiting review, direct user to edit their existing review
   if (reviewId) {
     console.log('Update user review and active index');
     // Update an existing review
@@ -721,9 +728,47 @@ app.post('/submitReview/:id', async (req, res) => {
       email: email,
       CourseID: courseId
     });
-  }
 
-  res.redirect('/course-detail?courseId=' + courseId);
+
+    const insertedReview = await reviewCollection.findOne({
+      Review: review,
+      email: email
+    });
+    console.log(email);
+    // console.log("reviews", insertedReview);
+    console.log("inserted review", insertedReview._id.toString());
+
+    const reviewCount = await reviewCollection.countDocuments({
+      email: email
+    });
+
+    console.log("Number of reviews:", reviewCount);
+
+    if (reviewCount > 1) {
+
+      await userCollection.updateOne(
+        { email: email }, // Specify the query criteria
+        {
+          $push: {
+            ReviewID: insertedReview._id.toString()
+          }
+        }
+      );
+    }
+    else {
+
+      await userCollection.updateOne(
+        { email: email }, // Specify the query criteria
+        {
+          $set: {
+            ReviewID: [insertedReview._id.toString()]
+          }
+        }
+      );
+    }
+
+    res.redirect('/course-details?courseId=' + courseId);
+  }
 });
 
 app.get('/profileReview', async (req, res) => {
