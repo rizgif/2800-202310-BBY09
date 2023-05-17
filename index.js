@@ -583,14 +583,13 @@ app.post('/edit-profile-submit', sessionValidation, async (req, res) => {
 // write a review on a specific course
 app.get('/reviews/write/:courseid', async (req, res) => {
   const username = req.session.username;
-  const avatar = req.session.avatar;
+ 
 
-  // console.log(avatar);
+  console.log(avatar);
   // console.log(username);
   if (username == null) {
     return res.redirect("/login");
   }
-
   const courseId = req.params.courseid.replace(':', '');;
   // console.log("courseid here (2)", courseId)
 
@@ -604,7 +603,6 @@ app.get('/reviews/write/:courseid', async (req, res) => {
       teachingStyleSliderValue: review.TeachingStyleRating,
       studentSupportSliderValue: review.StudentSupportRating
     },
-    avatar: review.avatar
   }));
 
   const sliderValues = reviews.map(review => ({
@@ -636,9 +634,12 @@ app.get('/reviews/write/:courseid', async (req, res) => {
       editReview: true,
       specificReview: specificReview,
       hasReview: hasReview,
-      reviewId: reviewId
+      reviewId: reviewId,
+      avatar: avatar
     }
+    // console.log(avatar)
     res.render("write-review", renderData);
+
   } else {
 
     const renderData = {
@@ -662,6 +663,7 @@ app.get('/reviews/write/:courseid', async (req, res) => {
 //change the review written for a specific course
 app.get('/reviews/write/updateReview/:id', async (req, res) => {
   const username = req.session.username;
+  const avatar = req.session.avatar;
   const reviewId = req.params.id; // Get the review ID from the URL parameter
   const reviews = await reviewCollection.find().toArray();
 
@@ -693,7 +695,8 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
     specificReview: specificReview,
     reviewId: reviewId,
     courseId: courseID,
-    hasReview: false
+    hasReview: false,
+    avatar: avatar
   };
 
   res.render("write-review", renderData);
