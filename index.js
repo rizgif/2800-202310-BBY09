@@ -583,9 +583,8 @@ app.post('/edit-profile-submit', sessionValidation, async (req, res) => {
 // write a review on a specific course
 app.get('/reviews/write/:courseid', async (req, res) => {
   const username = req.session.username;
- 
-
-  console.log(avatar);
+  const avatar = req.session.avatar;
+  
   // console.log(username);
   if (username == null) {
     return res.redirect("/login");
