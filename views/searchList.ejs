@@ -5,11 +5,15 @@
 <% } %>
 <div class="row justify-content-center">
     <div class="col-sm-8">
-      <form action="/searchSubmit" method="post" class="form-inline my-2 my-lg-0 d-flex justify-content-center">
-        <div class="form-group mx-2 mb-2" style="width:300px;">
+      <form action="/searchSubmit" method="post" class="form-inline my-2 my-lg-0 d-flex justify-content-center" style="padding-right: 5px;">
+        <div class="form-group mx-2 mb-2" style="width:312px;">
             <input name="courseSearch" type="text" class="form-control" id="courseSearch" placeholder="Search courses">
         </div>
-        <button type="submit" class="btn btn-main-search mb-2">Search</button>
+        <button type="submit" class="btn btn-main-search mb-2" style="width:50px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
+          </svg>
+        </button>
       </form>
     </div>
 </div>
