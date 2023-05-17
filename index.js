@@ -115,8 +115,8 @@ app.post('/searchSubmit', async (req, res) => {
   }
 });
 
-app.get('/courseDetails', async (req, res) => {
-  const courseId = req.query.courseid;
+app.get('/course-detail', async (req, res) => {
+  const courseId = req.query.courseId;
   const reviews = await reviewCollection.find().toArray();
   const username = req.session.username;
 
@@ -145,7 +145,7 @@ app.get('/courseDetails', async (req, res) => {
     reviewSliderPairs: reviewSliderPairs,
     // whichCourse: true,
     username: username,
-    courseInfo: courseInfo,
+    courseInfo: courseInfo || {},
     isLoggedIn: isLoggedIn(req)
   });
 });

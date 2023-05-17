@@ -1,16 +1,4 @@
-   <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
-<script>
-  function handleClick(courseid) {
-    console.log('Clicked on', courseid);
 
-    // Send a POST request to the server route
-    $.get('/courseDetails', function(response) {
-      console.log('Redirecting to new page');
-      window.location.href = '/courseDetails?courseid=' + courseid;
-    });
-  }
-</script>
-   
    <!-- <li>Title: <%= result.Title %></li> -->
     <!-- <li>Provider: <%= result.Provider %>
     <li>Difficulty: <%= result.Course_Difficulty %>
@@ -19,10 +7,7 @@
     <li>Organization: <%= result.Organization %></li>
     <li>Description: <%= result.Course_Description %></li> -->
 
-
-
-
-<div class="CourseCard-StyledCourseCard" onclick="handleClick('<%= result._id.toString() %>')">
+<a class="CourseCard-StyledCourseCard" href="/course-detail?courseId=<%= result._id.toString() %>">
 
 
     <div class="card-thumbnail">
@@ -45,7 +30,7 @@
         <div class="Card-CourseDifficulty"><%= result.Course_Difficulty %></div>
     </div>
     
-</div>
+</a>
 
 
  

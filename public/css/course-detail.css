@@ -1,18 +1,21 @@
-.course-detail-wrapper {
+.course-detail {
     margin-top: 20px;
     padding: 0 20px;
-    height: 50px;
-    border:1px solid red;
+}
+.course-detail > h2 {
+    font-weight: 600;
 }
 .course-detail-buttons {
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    height: 50px;
 }
 .share-link {
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    padding: 0;
     color: var(--color-primary-green) !important;
 }
 .share-link .material-symbols-outlined {
@@ -22,4 +25,81 @@
 
 .course-detail-ratings {
     display: flex;
+    margin: 28px 0;
+    gap: 26px;
+}
+
+.detail-rating-box {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 24px 10px;
+    border-radius: 10px;
+    background-color: var(--color-bg-gray);
+}
+.detail-rating-box > p {
+    display: flex;
+    align-items: flex-start;
+    line-height: 1.5;
+    font-weight: 600;
+    color: #6c6c6c;
+    margin-bottom: 10px;
+    padding-left: 14px;
+}
+.detail-rating-box >strong {
+    font-weight: 600;
+    font-size: 14px;
+}
+.detail-rating-box .rating-number {
+    margin-right: 4px;
+    font-size: 40px;
+    font-weight: 900;
+    color: var(--color-primary-green);
+    line-height: 1;
+}
+
+
+.course-detail-overview {
+    display: flex;
+    width: 100%;
+}
+.course-detail-overview > li {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    text-align: center;
+    width: 33.33%;
+}
+.course-detail-overview .provider img {
+    width: 90px;
+}
+.course-detail-overview .title {
+    font-weight: 400;
+}
+.level-label {
+    display: flex;
+    padding: 8px 18px;
+    background-color: var(--color-primary-green);
+    color: #fff;
+    border-radius: 20px;
+}
+.course-detail-overview .enrollment .content {
+    font-weight: 900;
+    font-size: 24px;
+}
+.course-detail-info {
+    margin-top: 40px;
+    line-height: 1.5;
+}
+
+.course-detail-info dl {
+    margin-bottom: 20px;
+}
+.course-detail-info dt {
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 1.2em;
 }
