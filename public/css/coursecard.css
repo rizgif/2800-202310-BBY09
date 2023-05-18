@@ -9,8 +9,17 @@
     max-width: 600px;
     border-radius: 20px;
     box-shadow: 0 0px 5px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s; /* Add a transition for a smooth effect */
    
 }
+
+
+.CourseCard-StyledCourseCard:hover {
+  transform: scale(1.03) translate(0.1rem, -0.25rem); /* Apply the desired transformations on hover */
+}
+
+
+
 
 .filter-btn {
 	padding-right: 5px;
