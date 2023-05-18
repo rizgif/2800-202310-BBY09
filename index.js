@@ -755,7 +755,7 @@ app.post('/reviews/deleteReview/:id', async (req, res) => {
 
 //write to database
 app.post('/submitReview/:id', async (req, res) => {
-
+  const uid = req.session.uid;
   const username = req.session.username; // Replace 'username' with the actual field name
   const email = req.session.email;
   const courseId = req.params.id;
@@ -840,6 +840,20 @@ app.post('/submitReview/:id', async (req, res) => {
       );
     }
 
+    // Easter-egg: If the user has written 5 reviews, give them a badge
+    if (reviewCount + 1 === 5) {
+      await userCollection.updateOne(
+        { _id: uid }, // Specify the query criteria
+        {
+          $push: {
+            Badges: "Reviewer"
+          }
+        }
+      );
+
+      res.redirect('/course-details?easterEgg=true&courseId=' + courseId);
+      return false;
+    }
 
   }
 

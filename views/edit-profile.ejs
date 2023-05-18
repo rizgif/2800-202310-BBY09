@@ -144,7 +144,7 @@ $(form).submit(async function(e) {
     uploadImage(imgFile); 
   } else {
     post({
-        avatar: output.src,
+        avatar: output.src.includes('image/avatar.png') ? output.src : null,
         username: usernameInput.value
     })
   }
