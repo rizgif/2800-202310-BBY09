@@ -11,6 +11,9 @@
     align-items: center;
     height: 50px;
 }
+.course-detail-buttons button {
+    align-self: unset;
+}
 .share-link {
     display: flex;
     justify-content: flex-end;
@@ -64,6 +67,7 @@
 .course-detail-overview {
     display: flex;
     width: 100%;
+    justify-content: center;
 }
 .course-detail-overview > li {
     display: flex;

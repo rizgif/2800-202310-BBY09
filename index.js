@@ -121,6 +121,7 @@ app.get('/search-results', async (req, res) => {
   const provider = req.query.provider?.toLowerCase(); // 'coursera', 'udemy',
   const level = req.query.level?.toLowerCase(); // 'all', 'beginner', 'intermediate', 'advanced'
   const rating = req.query.rating?.toLowerCase(); // "high", "low"
+  const sort = req.query.sort; // "high to low", "lowtohigh"
 
   console.log(courseSearch, provider, level, rating)
 
@@ -129,18 +130,29 @@ app.get('/search-results', async (req, res) => {
   if (level) condition.Course_Difficulty = { $regex: `${level}`, $options: 'i' };
   if (rating) condition.Course_Rating = { $regex: `${rating}`, $options: 'i' };
 
+  const sortOptions = {};
+  if (sort === 'high to low') {
+    sortOptions.Course_Rating = -1; // Sort by Course_Rating in descending order
+  } else if (sort === 'lowtohigh') {
+    sortOptions.Course_Rating = 1; // Sort by Course_Rating in ascending order
+  }
+
   console.log('condition', condition)
 
   try {
     const searchResult = await courseCollection.find(condition).project({
-      _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, CourslaRating: 1,
-    }).toArray();
+      _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, CourslaRating: 1, imageNum: 1,
+    }).sort(sortOptions).toArray();
     console.log(searchResult)
     const searchResultCount = searchResult?.length;
 
     const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
 
+ 
+
+
     res.render("search-results", {
+
       searchResult: searchResult,
       searchResultCount: searchResultCount,
       isLoggedIn: isLoggedIn(req),
@@ -148,7 +160,8 @@ app.get('/search-results', async (req, res) => {
       courseSearch,
       provider,
       level,
-      rating
+      rating,
+      sort,
     });
 
   } catch (error) {
@@ -161,6 +174,9 @@ app.get('/course-details', async (req, res) => {
   const courseId = req.query.courseId;
   const reviews = await reviewCollection.find().toArray();
   const username = req.session.username;
+  const userId = req.session.uid;
+
+  const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
   const email = req.session.email;
 
   const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
@@ -232,6 +248,7 @@ app.get('/course-details', async (req, res) => {
     overallCategorySums: overallCategorySums,
     Totalvote: totalvote,
     CourslaRating: CourslaRating,
+    userBookmarks
   });
 });
 
@@ -286,9 +303,10 @@ app.get('/bookmarks', async (req, res) => {
               $project: {
                 _id: 1,
                 Title: 1,
-                // Provider: 1,
-                // Course_Rating: 1,
-                Course_Difficulty: 1
+                Provider: 1,
+                Course_Rating: 1,
+                Course_Difficulty: 1,
+                imageNum: 1
               }
             }
           ],
@@ -351,8 +369,8 @@ app.get('/filter-alllevels', (req, res) => {
 
 //Sort Course Ratings 
 
-app.get('/sort-hightolow', (req, res) => {
-  res.render("sort-hightolow", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
+app.get('/sort-high to low', (req, res) => {
+  res.render("sort-high to low", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
 });
 
 
