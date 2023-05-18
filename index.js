@@ -179,6 +179,7 @@ app.get('/course-details', async (req, res) => {
   const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
   const email = req.session.email;
 
+  const userInfo = await userCollection.findOne({ _id: new ObjectId(userId) });
   const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
 
   const reviewSliderPairs = await Promise.all(
@@ -237,9 +238,10 @@ app.get('/course-details', async (req, res) => {
     );
   }
 
-  console.log(reviewSliderPairs)
+  // console.log(reviewSliderPairs)
   updateCourse(courseId, overallCategorySums, reviewSliderPairs.length);
 
+  console.log('userInfo',userInfo)
   res.render("course-detail", {
     req: req,
     courseId: courseId,
@@ -251,7 +253,8 @@ app.get('/course-details', async (req, res) => {
     Totalvote: totalvote,
     CourslaRating: CourslaRating,
     userBookmarks,
-    easterEgg: false
+    easterEgg: false,
+    userInfo
   });
 });
 
@@ -844,17 +847,21 @@ app.post('/submitReview/:id', async (req, res) => {
     // Easter-egg: If the user has written 5 reviews, give them a badge
     if (reviewCount === 5) {
       console.log('User has written 5 reviews, give them a badge');
-      await userCollection.updateOne(
-        { _id: uid }, // Specify the query criteria
-        {
-          $push: {
-            Badges: "Reviewer"
-          }
-        }
+
+      const response = await userCollection.updateOne(
+        { _id: new ObjectId(uid) },
+        {$set: {Badges: "Reviewer"}}
       );
+      console.log('response',response)
 
       res.redirect('/course-details?easterEgg=true&courseId=' + courseId);
       return false;
+    } else if (reviewCount <5 ) {
+      // to prevent user remove review and get badge
+      await userCollection.updateOne(
+        { _id: new ObjectId(uid) },
+        {$set: {Badges: " "}}
+      );
     }
 
   }

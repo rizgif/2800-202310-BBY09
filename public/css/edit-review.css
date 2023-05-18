@@ -1,5 +1,6 @@
 .review-setting {
     margin-top: 20px;
+    margin-bottom: -10px;
 }
 .review-setting .dropdown {
     display: flex;

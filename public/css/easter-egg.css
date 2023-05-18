@@ -79,6 +79,7 @@
 }
 .easter-crown {
   display: inline;
+  margin: 0 3px;
 }
 .easter-crown img {
   width: 16px;

@@ -13,13 +13,15 @@
 
         <div class="review-grid">
 
+            <div class="time_stamp">
+                <%= review.Time %>
+            </div>
             <div class="user_info">
                 <img class="img-avatar" src="<%= avatar || "/image/avatar.png" %>" alt="">
                 <%= review.username %>
-
-            </div>
-            <div class="time_stamp">
-                <%= review.Time %>
+                <% if(userInfo?.Badges === 'Reviewer') { %>
+                    <span class="easter-crown lg"><img src="/image/crown.png" alt="5 reviews user"></span>
+                <% } %>
             </div>
             <div class="user_review">
                 <%- review.Review.replaceAll('\n', '<br>') %>
