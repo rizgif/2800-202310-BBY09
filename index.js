@@ -863,23 +863,26 @@ app.get('/profileReview', async (req, res) => {
 });
 
 app.get('/my-reviews', async (req, res) => {
-  const courseId = req.query.courseId;
+  // const courseId = req.query.courseId;
   const reviews = await reviewCollection.find({ email: req.session.email }).toArray();
   // const reviews = await reviewCollection.find().toArray();
+  console.log("email:", req.session.email);
   const username = req.session.username;
-  const userId = req.session.uid;
-  const email = req.session.email;
+  let courseId;
+  // const userId = req.session.uid;
+  // const email = req.session.email;
   const reviewGroups = {};
-
+  console.log("reviews: ", reviews.length);
   // Group reviews by courseId
   reviews.forEach(review => {
-    const courseId = review.CourseID;
+    courseId = review.CourseID;
     if (!reviewGroups[courseId]) {
       reviewGroups[courseId] = [];
     }
     reviewGroups[courseId].push(review);
+    console.log("courseId: ", reviewGroups);
   });
-
+  
   const reviewSliderPairs = [];
 
   //const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
@@ -887,9 +890,8 @@ app.get('/my-reviews', async (req, res) => {
   // Retrieve course information for each group
   for (const courseId in reviewGroups) {
     const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
-
+    
     const groupReviews = reviewGroups[courseId];
-
     const groupSliderPairs = await Promise.all(
       groupReviews.map(async review => {
         const sliderValue = {

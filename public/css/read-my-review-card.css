@@ -136,10 +136,43 @@
 
 }
 
+.provider-wrapper {
+    display: flex;
+    justify-content: space-around;
+    /* align-items: center; */
+    margin-bottom: 10px;
+    
+  }
+  
+  .my-review-provider-thumbnail {
+    flex-direction: row;
+    /* width: 100%; */
+    /* height: 50px; */
+    margin-right: 10px; /* Adjust the margin as needed */
+  }
+  
+  .my-review-provider-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+  
+  .my-review-provider-title {
+    flex-direction: row;
+    /* display: flex; */
+    align-items: center;
+  }
+  
+  .my-review-provider-title p {
+    font-size: 16px; /* Adjust the font size as needed */
+    font-weight: bold;
+    text-align: center;
+  }
 
-/* Thumbnail image */
+/* Thumbnail image
 .my-review-provider-thumbnail img {
     width: 100%;
     height: auto;
     border-radius: 10px; 
-  }
+  } */
