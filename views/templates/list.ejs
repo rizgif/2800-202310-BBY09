@@ -2,14 +2,16 @@
     <div class="CourseCard-StyledCourseCard">
 
     <div class="card-thumbnail">
-        <% const randomNumber = Math.floor(Math.random() * 9) + 1; %>
-        <img src="/image/randomimage/<%= randomNumber %>.jpeg" alt="Image Description">
+        
+        <img src="/image/randomimage/<%= result.imageNum %>.jpeg" alt="Image <%= result.imageNum %>">
+
     </div>
     <div class="card-info">
         <div class="Card-CourseName"><%= result.Title %></div>
         <div class="Card-CourseRating">Course Rating: <%= result.Course_Rating %></div>
         <div class="Card-CourseProvider">Provider: <%= result.Provider %></div>
         <div class="Card-CourseDifficulty">Level: <%= result.Course_Difficulty %></div>
+     
     </div>
 
      <div class="Card-CourseDifficulty"><%= result.Course_Difficulty %></div>
