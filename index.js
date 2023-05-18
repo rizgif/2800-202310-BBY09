@@ -141,7 +141,7 @@ app.get('/search-results', async (req, res) => {
 
   try {
     const searchResult = await courseCollection.find(condition).project({
-      _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, CourslaRating: 1,
+      _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, CourslaRating: 1, imageNum: 1,
     }).sort(sortOptions).toArray();
     console.log(searchResult)
     const searchResultCount = searchResult?.length;
