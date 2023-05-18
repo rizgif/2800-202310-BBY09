@@ -2,17 +2,19 @@
 <% const sum=parseInt(sliderValue.courseContentSliderValue) + parseInt(sliderValue.studentSupportSliderValue) +
     parseInt(sliderValue.courseStructureSliderValue) + parseInt(sliderValue.teachingStyleSliderValue); %>
 
-    <div class="provider">
-        <div class="provider-wrapper">
-            <div class="provider-picture">
-                <img src="/image/randomimage/<%= imgNum %>.jpeg" alt="Image <%= imgNum %>">
-            </div>
-            <div class="provider-title">
-                <p>Title: <%= title %></p>
+    <a href="/course-details?courseId=<%= courseId %>">
+        <div class="provider">
+            <div class="provider-wrapper">
+                <div class="my-review-provider-thumbnail">
+                    <img src="/image/randomimage/<%= imgNum %>.jpeg" alt="Image <%= imgNum %>">
+                </div>
+                <div class="my-review-provider-title">
+                    <p> <%= title %> </p>
+                </div>
             </div>
         </div>
-    </div>
-    
+    </a>
+
     <!-- read from database -->
     <div class="grid-container">
 
