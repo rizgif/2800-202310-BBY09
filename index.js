@@ -111,30 +111,45 @@ app.get('/', async (req, res) => {
   res.render("index", { isLoggedIn: isLoggedIn(req) });
 });
 
-let searchResult;
 
-app.post('/searchSubmit', async (req, res) => {
-  var courseSearch = req.body.courseSearch;
+app.get('/search-results', async (req, res) => {
   const userId = req.session.uid;
+  const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
+
+
+  const courseSearch = req.query.courseSearch;
+  const provider = req.query.provider?.toLowerCase(); // 'coursera', 'udemy',
+  const level = req.query.level?.toLowerCase(); // 'all', 'beginner', 'intermediate', 'advanced'
+  const rating = req.query.rating?.toLowerCase(); // "high", "low"
+
+  console.log(courseSearch, provider, level, rating)
+
+  const condition = {Title: { $regex: `${courseSearch}`, $options: 'i' }}
+  if (provider) condition.Provider = { $regex: `${provider}`, $options: 'i' };
+  if (level) condition.Course_Difficulty = { $regex: `${level}`, $options: 'i' };
+  if (rating) condition.Course_Rating = { $regex: `${rating}`, $options: 'i' };  
+
+  console.log('condition', condition)
 
   try {
-    searchResult = await courseCollection.find({ Title: { $regex: courseSearch, $options: 'i' } }).project({
-      _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1,
-      Course_URL: 1, Organization: 1, Course_Description: 1
+    const searchResult = await courseCollection.find(condition).project({
+      _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, CourslaRating: 1,
     }).toArray();
+    console.log(searchResult)
+    const searchResultCount = searchResult?.length;
 
     const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
-    const searchResultCount = searchResult.length;
-    storedsearchResult = searchResult;
 
-    res.render("searchList", {
+    res.render("search-results", {
       searchResult: searchResult,
+      searchResultCount: searchResultCount,
       isLoggedIn: isLoggedIn(req),
       userBookmarks,
-      searchResultCount: searchResultCount,
-      courseSearch
+      courseSearch,
+      provider,
+      level,
+      rating
     });
-    // console.log("userBookamrks: ", userBookmarks)
 
   } catch (error) {
     console.error(error);
@@ -227,6 +242,7 @@ app.get('/course-details', async (req, res) => {
     );
   }
 
+  console.log(courseInfo)
   updateCourse(courseId, overallCategorySums, reviewSliderPairs.length);
 
   res.render("course-detail", {
@@ -277,7 +293,12 @@ app.post('/removeBookmark', async (req, res) => {
 
 app.get('/bookmarks', async (req, res) => {
   try {
+    const userId = req.session.uid;
+
     const bookmarkedCourses = await database.db(mongodb_database).collection('bookmarks').aggregate([
+      {
+        $match: { userId: userId } // Match the bookmarks for the current user
+      },
       {
         $lookup: {
           from: 'courses',
@@ -301,11 +322,13 @@ app.get('/bookmarks', async (req, res) => {
         $unwind: '$courseDetails'
       }
     ]).toArray();
-    // console.log('bookmarked courses: ', bookmarkedCourses); // log the array to the console
-    const userId = req.session.uid;
+    console.log('bookmarked courses: ', bookmarkedCourses); // log the array to the console
+    
     const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
 
     res.render('bookmarks', { bookmarkedCourses, isLoggedIn: isLoggedIn(req), userBookmarks });
+    //res.render('bookmarks', { isLoggedIn: isLoggedIn(req), userBookmarks });
+    //console.log('userBookmarks', userBookmarks)
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
@@ -842,6 +865,10 @@ app.get('/profileReview', async (req, res) => {
     reviewSliderPairs: reviewSliderPairs
   });
 
+});
+
+app.get('/my-reviews', (req, res) => {
+  res.render("my-reviews", { isLoggedIn: isLoggedIn(req) });
 });
 
 app.use(express.static(__dirname + "/public"));

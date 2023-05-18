@@ -1,29 +1,24 @@
-<!--Please don't remove this <a> tag and don't add scripts above when merge I am making and cleaning these 3 times... -->
 <a class="CourseCard-Container" href="/course-details?courseId=<%= result._id.toString() %>">
     <div class="CourseCard-StyledCourseCard">
 
-        <div class="card-thumbnail">
-            <% const randomNumber = Math.floor(Math.random() * 9) + 1; %>
-            <img src="/image/randomimage/<%= randomNumber %>.jpeg" alt="Image Description">
-        </div>
-        <div class="card-info">
-            <div class="Card-CourseName"><%= result.Title %></div>
+    <div class="card-thumbnail">
+        <% const randomNumber = Math.floor(Math.random() * 9) + 1; %>
+        <img src="/image/randomimage/<%= randomNumber %>.jpeg" alt="Image Description">
+    </div>
+    <div class="card-info">
+        <div class="Card-CourseName"><%= result.Title %></div>
+        <div class="Card-CourseRating">Course Rating: <%= result.Course_Rating %></div>
+        <div class="Card-CourseProvider">Provider: <%= result.Provider %></div>
+        <div class="Card-CourseDifficulty">Level: <%= result.Course_Difficulty %></div>
+    </div>
 
-            <div class="card-rating">
-                <span class="star">&#9733;</span>
-                <span class="star">&#9733;</span>
-                <span class="star">&#9733;</span>
-                <span class="star">&#9733;</span>
-                <span class="star">&#9733;</span>
-            </div>
-        
-            <div class="Card-CourseDifficulty"><%= result.Course_Difficulty %></div>
-        </div>
+     <div class="Card-CourseDifficulty"><%= result.Course_Difficulty %></div>
+       
         <% if (isLoggedIn) { %>
             <% const bookmarkedCourseIds = userBookmarks.map(b => b.courseId); %>
-            <button class="Course-Bookmark <%= bookmarkedCourseIds.includes(result._id.toString()) ? 'bookmarked' : '' %>" type="button" data-course-id="<%= result._id %>" onclick="toggleBookmark(event,'<%= result._id %>')">
+            <button class="Course-Bookmark <%= bookmarkedCourseIds.includes(result._id.toString()) ? 'bookmarked' : '' %>" type="button" data-course-id="<%= result._id %>" onclick="toggleBookmark(event,'<%= result._id %>'); return false;">
         <% } else { %>
-            <button class="Course-Bookmark" type="button" data-course-id="<%= result._id %>" onclick="toggleBookmark('<%= result._id %>', event)">
+            <button class="Course-Bookmark" type="button" data-course-id="<%= result._id %>" onclick="toggleBookmark(event, '<%= result._id %>' ); return false;">
         <% } %>
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
