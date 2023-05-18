@@ -920,7 +920,7 @@ app.get('/my-reviews', async (req, res) => {
 
   const reviewSliderPairs = [];
 
-  const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
+  //const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
 
   // Retrieve course information for each group
   for (const courseId in reviewGroups) {
@@ -992,7 +992,7 @@ app.get('/my-reviews', async (req, res) => {
 
   res.render("my-review", {
     req: req,
-    courseId: courseId,
+    // courseId: courseId,
     reviewSliderPairs: reviewSliderPairs,
     username: username,
     isLoggedIn: isLoggedIn(req),
