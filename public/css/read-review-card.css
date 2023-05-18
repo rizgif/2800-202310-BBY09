@@ -99,6 +99,8 @@
 
 
 .user_info {
+    display: flex;
+    align-items: center;
     grid-area: a1;
     /* background-color: #D7D3C1; */
     margin-left: 1%;
@@ -113,7 +115,7 @@
 .img-avatar {
     width: 40px;
     height: 40px;
-    margin-right: 5px;
+    margin-right: 10px;
     border-radius: 50%;
     border: 1px solid #98B66E;
   }
@@ -128,7 +130,6 @@
 }
 
 .user_review {
-    background-color: white;
     height: 60px;
     grid-area: a4;
     padding-top: 1%;
