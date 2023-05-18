@@ -33,6 +33,11 @@
                   <option value="intermediate">Intermediate</option>
                   <option value="advanced">Advanced</option>
               </select>
+              <select id="sort" name="sort" class="form-select">
+                  <option value="default" selected>Rating</option>
+                  <option value="highToLow">High to Low</option>
+                  <option value="lowToHigh">Low to High</option>
+              </select>
            
               
           </div>
@@ -53,15 +58,18 @@
 </div>
 
 <script>
-  $("#applyFilters").on("change", async () => {
+  $("#applyFilters").on("click", async () => {
     const provider = $("#provider").val();
     const level = $("#level").val();
+    const sort = $("#sort").val(); // Get the selected sort option
+
 
 
     const searchParams = new URLSearchParams({
     provider: provider !== "default" ? provider : "",
     level: level !== "default" ? level : "",
     courseSearch: "<%= courseSearch %>",
+    sort: sort !== "default" ? sort : "", // Include the selected sort option in the query params
   });
 
   const queryString = searchParams.toString();

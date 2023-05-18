@@ -16,6 +16,8 @@
     margin: 10px;
 }
 
-#level, #provider {
+#level, #provider, #sort {
     margin: 10px; /* Adjust the margin value as per your requirement */
+    width: 100px;
+    font-size: 12px;
   }
