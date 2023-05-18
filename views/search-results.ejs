@@ -82,7 +82,7 @@
     provider: provider !== "default" ? provider : "",
     level: level !== "default" ? level : "",
     courseSearch: "<%= courseSearch %>",
-    sort: sort !== "default" ? sort : "", // Include the selected sort option in the query params
+    sort: sort !== "default" ? sort : "high to low", // Include the selected sort option in the query params
   });
 
   const queryString = searchParams.toString();
