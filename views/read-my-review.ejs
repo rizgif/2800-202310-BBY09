@@ -1,8 +1,21 @@
+<link rel="stylesheet" href="/css/read-my-review-card.css">
 <% const sum=parseInt(sliderValue.courseContentSliderValue) + parseInt(sliderValue.studentSupportSliderValue) +
     parseInt(sliderValue.courseStructureSliderValue) + parseInt(sliderValue.teachingStyleSliderValue); %>
 
+    <div class="provider">
+        <div class="provider-wrapper">
+            <div class="provider-picture">
+                <img src="/image/randomimage/<%= imgNum %>.jpeg" alt="Image <%= imgNum %>">
+            </div>
+            <div class="provider-title">
+                <p>Title: <%= title %></p>
+            </div>
+        </div>
+    </div>
+    
     <!-- read from database -->
     <div class="grid-container">
+
         <div class="rating">
             <div class="rating-wrapper">
                 <div class="rating-label">

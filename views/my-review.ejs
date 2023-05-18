@@ -8,7 +8,7 @@
 
 <% reviewSliderPairs.forEach(pair=> { %>
     <%- include("read-my-review", { review: pair.review, sliderValue: pair.sliderValue, username: username,
-      courseId: courseId, avatar: pair.avatar }) %>
+      courseId: courseId, avatar: pair.avatar, imgNum: pair.courseImageNum, title: pair.courseTitle }) %>
 <% }) %>
 
 <%- include("templates/footer") %>

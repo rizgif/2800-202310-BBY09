@@ -874,20 +874,34 @@ app.get('/profileReview', async (req, res) => {
 
 app.get('/my-reviews', async (req, res) => {
   const courseId = req.query.courseId;
-  const reviews = await reviewCollection.find().toArray();
+  const reviews = await reviewCollection.find({ email: req.session.email }).toArray();
+  // const reviews = await reviewCollection.find().toArray();
   const username = req.session.username;
   const userId = req.session.uid;
-
-  // const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
   const email = req.session.email;
-  // console.log("email: ", email)
+  const reviewGroups = {};
+
+  // Group reviews by courseId
+  reviews.forEach(review => {
+    const courseId = review.CourseID;
+    if (!reviewGroups[courseId]) {
+      reviewGroups[courseId] = [];
+    }
+    reviewGroups[courseId].push(review);
+  });
+
+  const reviewSliderPairs = [];
 
   const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
 
-  const reviewSliderPairs = await Promise.all(
-    reviews
-      .filter(review => review.email === email)
-      .map(async review => {
+  // Retrieve course information for each group
+  for (const courseId in reviewGroups) {
+    const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
+
+    const groupReviews = reviewGroups[courseId];
+
+    const groupSliderPairs = await Promise.all(
+      groupReviews.map(async review => {
         const sliderValue = {
           courseContentSliderValue: review.CourseContentRating,
           courseStructureSliderValue: review.CourseStructureRating,
@@ -901,11 +915,16 @@ app.get('/my-reviews', async (req, res) => {
         return {
           review: review,
           sliderValue: sliderValue,
-          avatar: avatar
+          avatar: avatar,
+          courseId: courseId, // Pass the courseId to the template
+          courseImageNum: courseInfo.imageNum, // Get the imageNum from courseInfo
+          courseTitle: courseInfo.Title // Get the title from courseInfo
         };
-
       })
-  );
+    );
+
+    reviewSliderPairs.push(...groupSliderPairs);
+  }
 
   const totalvote = reviewSliderPairs.length;
   const numCategory = 4;
