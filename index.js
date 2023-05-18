@@ -164,27 +164,6 @@ app.get('/course-details', async (req, res) => {
   const email = req.session.email;
 
   const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
-  // console.log('courseInfo', courseInfo);
-
-  // const reviewSliderPairs = reviews
-  //   .filter(review => review.CourseID === courseId)
-  //   .map(review => {
-  //     const sliderValue = {
-  //       courseContentSliderValue: review.CourseContentRating,
-  //       courseStructureSliderValue: review.CourseStructureRating,
-  //       teachingStyleSliderValue: review.TeachingStyleRating,
-  //       studentSupportSliderValue: review.StudentSupportRating
-  //     };
-
-  //     // const user = await userCollection.findOne({ email: review.email });
-
-  //     return {
-  //       review: review,
-  //       sliderValue: sliderValue,
-  //       // user: user
-  //     };
-  //   });
-
 
   const reviewSliderPairs = await Promise.all(
     reviews
@@ -406,6 +385,11 @@ app.post('/login-submit', loginValidation, async (req, res) => {
   req.session.avatar = result[0].avatar;
   req.session.cookie.maxAge = expireTime;
 
+
+  const courseId = req.session.courseId;
+  if (courseId) {
+    return res.redirect('/course-details?courseId=' + courseId);
+  }
   res.redirect('/');
 });
 
@@ -607,12 +591,17 @@ app.post('/edit-profile-submit', sessionValidation, async (req, res) => {
 app.get('/reviews/write/:courseid', async (req, res) => {
   const username = req.session.username;
   const avatar = req.session.avatar;
+  const courseId = req.params.courseid.replace(':', '');
+
 
   // console.log(username);
   if (username == null) {
+
+    req.session.courseId = courseId;
     return res.redirect("/login");
   }
-  const courseId = req.params.courseid.replace(':', '');;
+
+
   // console.log("courseid here (2)", courseId)
 
   const reviews = await reviewCollection.find().toArray();
