@@ -220,8 +220,6 @@ app.get('/course-details', async (req, res) => {
       }
     );
   }
-
-  console.log(reviewSliderPairs)
   updateCourse(courseId, overallCategorySums, reviewSliderPairs.length);
 
   res.render("course-detail", {
@@ -593,16 +591,11 @@ app.get('/reviews/write/:courseid', async (req, res) => {
   const avatar = req.session.avatar;
   const courseId = req.params.courseid.replace(':', '');
 
-
-  // console.log(username);
   if (username == null) {
 
     req.session.courseId = courseId;
     return res.redirect("/login");
   }
-
-
-  // console.log("courseid here (2)", courseId)
 
   const reviews = await reviewCollection.find().toArray();
 
@@ -623,19 +616,13 @@ app.get('/reviews/write/:courseid', async (req, res) => {
     studentSupportSliderValue: review.StudentSupportRating
   }));
 
-  // const editReview = req.params.editReview === '/updateReview';
-
   // Find the specific review for the current user
   const specificReview = reviews.find(review => review.username === username && review.CourseID === courseId);
   const hasReview = Boolean(specificReview);
 
   if (specificReview) {
-    console.log("existing review", specificReview);
+    
     const reviewId = specificReview._id.toString();
-
-    console.log("review id", reviewId)
-    console.log("do you?", hasReview);
-
     const renderData = {
       req: req,
       sliderValues: sliderValues,
@@ -790,10 +777,7 @@ app.post('/submitReview/:id', async (req, res) => {
       Review: review,
       email: email
     });
-    console.log(email);
-    // console.log("reviews", insertedReview);
-    console.log("inserted review", insertedReview._id.toString());
-
+    
     const reviewCount = await reviewCollection.countDocuments({
       email: email
     });
