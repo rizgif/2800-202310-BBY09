@@ -132,7 +132,7 @@
 
     <% reviewSliderPairs.forEach(pair=> { %>
         <%- include("read-review", { review: pair.review, sliderValue: pair.sliderValue, username: username,
-        courseId: courseId, avatar: pair.avatar, Badges: pair.Badges }) %>
+        courseId: courseId, avatar: pair.avatar, Badges: pair.Badges, myReviewPage: myReviewPage }) %>
     <% }) %>
 
 </div>

@@ -1,4 +1,6 @@
 <link rel="stylesheet" href="/css/read-review-card.css">
+
+<% console.log("my review page: ", myReviewPage) %>
 <% const sum=parseInt(sliderValue.courseContentSliderValue) + parseInt(sliderValue.studentSupportSliderValue) +
     parseInt(sliderValue.courseStructureSliderValue) + parseInt(sliderValue.teachingStyleSliderValue); %>
 
@@ -27,7 +29,7 @@
             <div class="user_review">
                 <%- review.Review.replaceAll('\n', '<br>') %>
                     <% if (review.username===username) { %>
-                        <%- include("edit-review", {username: username, id: review._id.toString(), courseId: courseId})
+                        <%- include("edit-review", {username: username, id: review._id.toString(), courseId: courseId, myReviewPage: myReviewPage})
                             %>
                             <% } %>
             </div>

@@ -1,0 +1,115 @@
+<link rel="stylesheet" href="/css/edit-review.css">
+
+<% if(myReviewPage) { %>
+  <% console.log("edit on my review page", myReviewPage) %>
+    <% } else { %>
+      <% console.log("on course detail page") %>
+        <% } %>
+
+          <div class="setting review-setting">
+            <div class="dropdown">
+              <button class="btn edit-button" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <img src="/image/setting.png" alt="Setting" />
+              </button>
+
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item edit-review-link" href="#" data-review-id="<%= review._id.toString() %>">Edit
+                  this
+                  review</a>
+                <% if(myReviewPage) { %>
+                  <a class="dropdown-item delete-review-link" href="#" data-course-id="<%= review.CourseID %>">Delete
+                    this
+                    review from my page</a>
+                  <% } else { %>
+                    <a class="dropdown-item delete-review-link" href="#" data-course-id="<%= review.CourseID %>">Delete
+                      this
+                      review</a>
+                    <% } %>
+
+    </div>
+  </div>
+</div>
+
+<!-- Add a modal container -->
+<div id=" deleteReviewModal" class="modal review-modal">
+                          <div class="modal-content">
+                            <h2 class="modal-header">Confirm Delete</h2>
+                            <p>Are you sure you want to delete this review?</p>
+                            <% if (myReviewPage) { %>
+                              <input type="hidden" id="desiredCourse" data-CourseID="<%= review.CourseID%>">
+                              <% } else {%>
+                                <input type="hidden" id="desiredUsername" data-username="<%= review.username%>">
+                                <% } %>
+                                  <div class="modal-buttons">
+                                    <button id="confirmDeleteBtn" class="btn-confirm">Delete</button>
+                                    <button id="cancelDeleteBtn" class="btn-cancel">Cancel</button>
+                                  </div>
+                          </div>
+              </div>
+
+
+
+              <script>
+                $(document).ready(function () {
+                  $(document).on('click', '.edit-review-link', function (e) {
+                    e.preventDefault();
+
+                    const reviewId = $(this).data('review-id');
+                    console.log("i am here", reviewId)
+
+                    // Redirect to the edit review page with the review ID
+                    window.location.href = '/reviews/write/updateReview/' + reviewId;
+                  });
+                });
+
+                $(document).ready(function () {
+                  // Handle delete review link click
+                  $(document).on('click', '.delete-review-link', function (e) {
+                    e.preventDefault();
+
+                    const courseId = $(this).data('course-id');
+
+                    // Show the custom modal
+                    $('#deleteReviewModal').css('display', 'block');
+
+                    //delete button clicked and delete the review from the database
+                    $('#confirmDeleteBtn').on('click', function () {
+                      // Send a delete request to the server
+                      $.ajax({
+                        url: '/reviews/deleteReview/' + courseId,
+                        type: 'POST',
+                        success: function (result) {
+                          // Handle success response
+                          console.log('Review deleted successfully');
+
+                          $('.grid-container').each(function () {
+                            var username = $(this).find('.user_info').text().toString().trim(); // Assuming username is within an element with class "username"
+                            console.log(username);
+                            const desiredUsername = $('#desiredUsername').data('username').toString().trim();
+
+                            console.log(desiredUsername);
+                            if (username === desiredUsername) {
+                              $(this).remove();
+                            }
+                          });
+                        },
+                        error: function (error) {
+                          // Handle error response
+                          console.error('Failed to delete review:', error);
+                        }
+                      });
+
+                      // Hide the modal
+                      $('#deleteReviewModal').css('display', 'none');
+                    });
+                  });
+
+                  // cancel button clicked and hide the modal
+                  $('#cancelDeleteBtn').on('click', function () {
+                    $('#deleteReviewModal').css('display', 'none');
+                  });
+                });
+
+
+              </script>
