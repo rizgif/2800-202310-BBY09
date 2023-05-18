@@ -76,7 +76,7 @@
                 <dl>
                   <dt>Description</dt>
                   <dd>
-                    <%= courseInfo.Course_Description %>
+                    <%- courseInfo.Course_Description?.replaceAll('   ', '<br><br>').replaceAll('ÔøΩ\\t', '<br>- &nbsp;&nbsp;&nbsp;&nbsp;').replaceAll('\\n', '<br>') %>
                   </dd>
                 </dl>
               </div>
