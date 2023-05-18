@@ -16,7 +16,8 @@ const {
   signupValidation,
   isValidSession,
   isAdmin,
-  isLoggedIn
+  isLoggedIn,
+  reviewValidation
 } = require('./middleware');
 
 const saltRounds = 12;
@@ -148,7 +149,7 @@ app.get('/search-results', async (req, res) => {
 
     const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
 
- 
+
 
 
     res.render("search-results", {
@@ -639,7 +640,7 @@ app.get('/reviews/write/:courseid', async (req, res) => {
   const hasReview = Boolean(specificReview);
 
   if (specificReview) {
-    
+
     const reviewId = specificReview._id.toString();
     const renderData = {
       req: req,
@@ -667,8 +668,8 @@ app.get('/reviews/write/:courseid', async (req, res) => {
       courseId: courseId,
       editReview: false,
       // specificReview: specificReview,
-      hasReview: hasReview
-      // reviewId: reviewId
+      hasReview: hasReview,
+
     };
     res.render("write-review", renderData);
   }
@@ -742,9 +743,9 @@ app.post('/reviews/deleteReview/:id', async (req, res) => {
 
 
 //write to database
-app.post('/submitReview/:id', async (req, res) => {
+app.post('/submitReview/:id', reviewValidation, async (req, res) => {
 
-  const username = req.session.username; // Replace 'username' with the actual field name
+  const username = req.session.username;
   const email = req.session.email;
   const courseId = req.params.id;
   const Existingreviews = await reviewCollection.findOne({ CourseID: courseId, email: email });
@@ -756,6 +757,13 @@ app.post('/submitReview/:id', async (req, res) => {
     studentSupportSliderValue,
     currentDate } = req.body;
 
+    // const errorMessage = await reviewValidation(req.body);
+  console.log(req.errorMessage)
+
+  // if (req.errorMessage) {
+  //   // Render the write-review page with the error message as a variable
+  //   return res.render('write-review', { errorMessage: req.errorMessage });
+  // }
 
   // if there is a exisiting review, direct user to edit their existing review
   if (Existingreviews) {
@@ -790,12 +798,12 @@ app.post('/submitReview/:id', async (req, res) => {
       CourseID: courseId
     });
 
-
+    console.log(review);
     const insertedReview = await reviewCollection.findOne({
       Review: review,
       email: email
     });
-    
+
     const reviewCount = await reviewCollection.countDocuments({
       email: email
     });
