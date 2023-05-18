@@ -124,10 +124,10 @@ app.get('/search-results', async (req, res) => {
 
   console.log(courseSearch, provider, level, rating)
 
-  const condition = {Title: { $regex: `${courseSearch}`, $options: 'i' }}
+  const condition = { Title: { $regex: `${courseSearch}`, $options: 'i' } }
   if (provider) condition.Provider = { $regex: `${provider}`, $options: 'i' };
   if (level) condition.Course_Difficulty = { $regex: `${level}`, $options: 'i' };
-  if (rating) condition.Course_Rating = { $regex: `${rating}`, $options: 'i' };  
+  if (rating) condition.Course_Rating = { $regex: `${rating}`, $options: 'i' };
 
   console.log('condition', condition)
 
@@ -196,10 +196,10 @@ app.get('/course-details', async (req, res) => {
           teachingStyleSliderValue: review.TeachingStyleRating,
           studentSupportSliderValue: review.StudentSupportRating
         };
-  
+
         const user = await userCollection.findOne({ email: review.email });
         const avatar = user ? user.avatar : null;
-  
+
         return {
           review: review,
           sliderValue: sliderValue,
@@ -208,7 +208,7 @@ app.get('/course-details', async (req, res) => {
 
       })
   );
-  
+
   const totalvote = reviewSliderPairs.length;
   const numCategory = 4;
 
@@ -323,7 +323,7 @@ app.get('/bookmarks', async (req, res) => {
       }
     ]).toArray();
     console.log('bookmarked courses: ', bookmarkedCourses); // log the array to the console
-    
+
     const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
 
     res.render('bookmarks', { bookmarkedCourses, isLoggedIn: isLoggedIn(req), userBookmarks });
@@ -607,7 +607,7 @@ app.post('/edit-profile-submit', sessionValidation, async (req, res) => {
 app.get('/reviews/write/:courseid', async (req, res) => {
   const username = req.session.username;
   const avatar = req.session.avatar;
-  
+
   // console.log(username);
   if (username == null) {
     return res.redirect("/login");
@@ -705,7 +705,7 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
 
   // Find the specific review for the current user based on the review ID
   const specificReview = reviews.find(review => review._id.toString() === reviewId);
-  console.log("specific", specificReview)
+  // console.log("specific", specificReview)
   const courseID = specificReview.CourseID;
 
   const renderData = {
@@ -749,10 +749,11 @@ app.post('/reviews/deleteReview/:id', async (req, res) => {
 
 //write to database
 app.post('/submitReview/:id', async (req, res) => {
-  // const courseId = req.params.id;
+
+  const username = req.session.username; // Replace 'username' with the actual field name
+  const email = req.session.email;
   const courseId = req.params.id;
-  const reviewId = req.body.id;
-  // console.log("okay", courseId);
+  const Existingreviews = await reviewCollection.findOne({ CourseID: courseId, email: email });
 
   const { review,
     courseContentSliderValue,
@@ -761,16 +762,17 @@ app.post('/submitReview/:id', async (req, res) => {
     studentSupportSliderValue,
     currentDate } = req.body;
 
-  // const reviewId = req.body.reviewId;
-  const username = req.session.username; // Replace 'username' with the actual field name
-  const email = req.session.email;
+  // const reviewId = req.body.id;
+  // console.log("okay", reviewId);
+
+
 
   // if there is a exisiting review, direct user to edit their existing review
-  if (reviewId) {
+  if (Existingreviews) {
     console.log('Update user review and active index');
     // Update an existing review
     await reviewCollection.updateOne(
-      { _id: new ObjectId(reviewId) }, // Specify the query criteria
+      { _id: new ObjectId(Existingreviews._id.toString()) }, // Specify the query criteria
       {
         $set: {
           Review: review,
@@ -784,9 +786,7 @@ app.post('/submitReview/:id', async (req, res) => {
       }
     );
     console.log('Review updated successfully');
-  }
-
-  else {
+  } else {
 
     await reviewCollection.insertOne({
       Review: review,
@@ -838,8 +838,10 @@ app.post('/submitReview/:id', async (req, res) => {
       );
     }
 
-    res.redirect('/course-details?courseId=' + courseId);
+
   }
+
+  res.redirect('/course-details?courseId=' + courseId);
 });
 
 app.get('/profileReview', async (req, res) => {
