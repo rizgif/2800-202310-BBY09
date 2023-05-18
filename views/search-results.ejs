@@ -27,21 +27,21 @@
         <div class="filter-bar row justify-content-center">
           <div class="btn-group">
               <select id="provider" name="provider" class="form-select">
-                  <option value="default" selected>Provider</option>
-                  <option value="udemy">Udemy</option>
-                  <option value="coursera">Coursera</option>
+                  <option value="default" <% if (provider == "default") { %> selected <% } %>>Provider</option>
+                  <option value="udemy" <% if (provider == "udemy") { %> selected <% } %>>Udemy</option>
+                  <option value="coursera" <% if (provider == "coursera") { %> selected <% } %>>Coursera</option>
               </select>
               <select id="level" name="level" class="form-select">
-                  <option value="default" selected>Level</option>
-                  <option value="all">All</option>
-                  <option value="beginner">Beginner</option>
-                  <option value="intermediate">Intermediate</option>
-                  <option value="advanced">Advanced</option>
+                  <option value="default" <% if (level == "default") { %> selected <% } %>>Level</option>
+                  <option value="all" <% if (level == "all") { %> "selected" <% } %>>All</option>
+                  <option value="beginner" <% if (level == "beginner") { %> selected <% } %>>Beginner</option>
+                  <option value="intermediate" <% if (level == "intermidate") { %> "selected" <% } %>>Intermediate</option>
+                  <option value="advanced" <% if (level == "advanced") { %> selected <% } %>>Advanced</option>
               </select>
               <select id="sort" name="sort" class="form-select">
-                  <option value="default" selected>Rating</option>
-                  <option value="high to low">High to Low</option>
-                  <option value="lowtohigh">Low to High</option>
+                  <option value="default" <% if (sort == "sort") { %> selected <% } %>>Rating</option>
+                  <option value="high to low"  <% if (sort == "high to low") { %> selected <% } %>>High to Low</option>
+                  <option value="low to high"  <% if (sort == "lowtohigh") { %> selected <% } %>>Low to High</option>
               </select>
           </div>
           <button id="applyFilters" class="btn btn-primary">Apply Filters</button>
@@ -71,6 +71,7 @@
 </div>
 
 <script>
+  let searchParams;
   $("#applyFilters").on("click", async () => {
     const provider = $("#provider").val();
     const level = $("#level").val();
@@ -78,12 +79,14 @@
 
 
 
-    const searchParams = new URLSearchParams({
+  searchParams = new URLSearchParams({
     provider: provider !== "default" ? provider : "",
     level: level !== "default" ? level : "",
     courseSearch: "<%= courseSearch %>",
     sort: sort !== "default" ? sort : "high to low", // Include the selected sort option in the query params
   });
+
+  console.log(searchParams)
 
   const queryString = searchParams.toString();
   const url = `/search-results?${queryString}`;

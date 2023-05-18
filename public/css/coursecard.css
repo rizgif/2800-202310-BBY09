@@ -36,9 +36,14 @@
     align-self: flex-start;
 }
 
+.Course-Bookmark svg path {
+    stroke: #000;
+    stroke-width: 1px;
+    fill: transparent;
+}
 .Course-Bookmark.bookmarked svg path {
-  fill: #BC4749;
-
+    fill: #BC4749;
+    stroke: #BC4749;
 }
 
 /* .Coursecard-InfoRatingWrapper {

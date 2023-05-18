@@ -122,7 +122,7 @@ app.get('/search-results', async (req, res) => {
   const provider = req.query.provider?.toLowerCase(); // 'coursera', 'udemy',
   const level = req.query.level?.toLowerCase(); // 'all', 'beginner', 'intermediate', 'advanced'
   const rating = req.query.rating?.toLowerCase(); // "high", "low"
-  const sort = req.query.sort; // "high to low", "lowtohigh"
+  const sort = req.query.sort; // "high to low", "low to high"
 
   console.log(courseSearch, provider, level, rating)
 
@@ -132,11 +132,16 @@ app.get('/search-results', async (req, res) => {
   if (rating) condition.Course_Rating = { $regex: `${rating}`, $options: 'i' };
 
   const sortOptions = {};
-  if (sort === 'high to low') {
-    sortOptions.Course_Rating = -1; // Sort by Course_Rating in descending order
-  } else if (sort === 'lowtohigh') {
+
+  // Set default sort option to "high to low"
+  sortOptions.Course_Rating = -1; // Sort by Course_Rating in descending order
+
+  if (sort === 'low to high') {
+    // Change sort option to "low to high" when specified
     sortOptions.Course_Rating = 1; // Sort by Course_Rating in ascending order
   }
+
+
 
   console.log('condition', condition)
 
@@ -144,12 +149,14 @@ app.get('/search-results', async (req, res) => {
     const searchResult = await courseCollection.find(condition).project({
       _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, CourslaRating: 1, imageNum: 1,
     }).sort(sortOptions).toArray();
-    console.log(searchResult)
+    //console.log(searchResult)
     const searchResultCount = searchResult?.length;
 
     const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
 
 
+
+ 
 
 
     res.render("search-results", {
@@ -179,10 +186,10 @@ app.get('/course-details', async (req, res) => {
 
   const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
   const email = req.session.email;
-
+  
   const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
 
-  const reviewSliderPairs = await Promise.all(
+  let reviewSliderPairs = await Promise.all(
     reviews
       .filter(review => review.CourseID === courseId)
       .map(async review => {
@@ -199,7 +206,8 @@ app.get('/course-details', async (req, res) => {
         return {
           review: review,
           sliderValue: sliderValue,
-          avatar: avatar
+          avatar: avatar,
+          Badges: user?.Badges || ""
         };
 
       })
@@ -237,7 +245,16 @@ app.get('/course-details', async (req, res) => {
       }
     );
   }
+
+  // console.log(reviewSliderPairs)
   updateCourse(courseId, overallCategorySums, reviewSliderPairs.length);
+
+  // reviewSliderPairs =  await Promise.all(
+  //   reviewSliderPairs.map(async (pair) => {
+  //     const userInfo = await userCollection.findOne({ email: pair.review.email });
+  //     return {...pair, userInfo}
+  //   }
+  // ));
 
   res.render("course-detail", {
     req: req,
@@ -249,7 +266,8 @@ app.get('/course-details', async (req, res) => {
     overallCategorySums: overallCategorySums,
     Totalvote: totalvote,
     CourslaRating: CourslaRating,
-    userBookmarks
+    userBookmarks,
+    easterEgg: false,
   });
 });
 
@@ -330,57 +348,6 @@ app.get('/bookmarks', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
-
-
-
-//Filters 
-/* Filter and Sort Course Search Results Section */
-
-// Filter Online Course Providers
-
-app.get('/filter-udemy', (req, res) => {
-  res.render("filter-udemy", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
-});
-
-app.get('/filter-coursera', (req, res) => {
-  res.render("filter-coursera", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
-});
-
-app.get('/filter-allcourses', (req, res) => {
-  res.render("filter-allcourses", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
-});
-
-// Filter Levels
-
-app.get('/filter-beginner', (req, res) => {
-  res.render("filter-beginner", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
-});
-
-app.get('/filter-intermediate', (req, res) => {
-  res.render("filter-intermediate", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
-});
-
-app.get('/filter-advanced', (req, res) => {
-  res.render("filter-advanced", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
-});
-
-app.get('/filter-alllevels', (req, res) => {
-  res.render("filter-alllevels", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
-});
-
-//Sort Course Ratings 
-
-app.get('/sort-high to low', (req, res) => {
-  res.render("sort-high to low", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
-});
-
-
-app.get('/sort-lowtohigh', (req, res) => {
-  res.render("sort-lowtohigh", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
-});
-
-/* End of Filter and Sort Course Search Results Section */
-
 
 
 app.get('/login', (req, res) => {
@@ -743,9 +710,9 @@ app.post('/reviews/deleteReview/:id', async (req, res) => {
 
 
 //write to database
-app.post('/submitReview/:id', reviewValidation, async (req, res) => {
-
-  const username = req.session.username;
+app.post('/submitReview/:id', async (req, res) => {
+  const uid = req.session.uid;
+  const username = req.session.username; // Replace 'username' with the actual field name
   const email = req.session.email;
   const courseId = req.params.id;
   const Existingreviews = await reviewCollection.findOne({ CourseID: courseId, email: email });
@@ -833,6 +800,31 @@ app.post('/submitReview/:id', reviewValidation, async (req, res) => {
       );
     }
 
+    // Easter-egg: If the user has written 5 reviews, give them a badge
+    if (reviewCount === 5) {
+      console.log('User has written 5 reviews, give them a badge');
+
+      const response = await userCollection.updateOne(
+        { _id: new ObjectId(uid) },
+        {$set: {Badges: "Reviewer"}}
+      );
+      // console.log('response',response)
+
+      res.redirect('/course-details?easterEgg=true&courseId=' + courseId);
+      return false;
+    } else if (reviewCount > 5) {
+      // to make sure they have badge
+      await userCollection.updateOne(
+        { _id: new ObjectId(uid) },
+        {$set: {Badges: "Reviewer"}}
+      )
+    } else {
+      // to prevent user remove review and get badge
+      await userCollection.updateOne(
+        { _id: new ObjectId(uid) },
+        {$set: {Badges: " "}}
+      );
+    }
 
   }
 
@@ -864,8 +856,105 @@ app.get('/profileReview', async (req, res) => {
 
 });
 
-app.get('/my-reviews', (req, res) => {
-  res.render("my-reviews", { isLoggedIn: isLoggedIn(req) });
+app.get('/my-reviews', async (req, res) => {
+  const courseId = req.query.courseId;
+  const reviews = await reviewCollection.find({ email: req.session.email }).toArray();
+  // const reviews = await reviewCollection.find().toArray();
+  const username = req.session.username;
+  const userId = req.session.uid;
+  const email = req.session.email;
+  const reviewGroups = {};
+
+  // Group reviews by courseId
+  reviews.forEach(review => {
+    const courseId = review.CourseID;
+    if (!reviewGroups[courseId]) {
+      reviewGroups[courseId] = [];
+    }
+    reviewGroups[courseId].push(review);
+  });
+
+  const reviewSliderPairs = [];
+
+  const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
+
+  // Retrieve course information for each group
+  for (const courseId in reviewGroups) {
+    const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
+
+    const groupReviews = reviewGroups[courseId];
+
+    const groupSliderPairs = await Promise.all(
+      groupReviews.map(async review => {
+        const sliderValue = {
+          courseContentSliderValue: review.CourseContentRating,
+          courseStructureSliderValue: review.CourseStructureRating,
+          teachingStyleSliderValue: review.TeachingStyleRating,
+          studentSupportSliderValue: review.StudentSupportRating
+        };
+
+        const user = await userCollection.findOne({ email: review.email });
+        const avatar = user ? user.avatar : null;
+
+        return {
+          review: review,
+          sliderValue: sliderValue,
+          avatar: avatar,
+          courseId: courseId, // Pass the courseId to the template
+          courseImageNum: courseInfo.imageNum, // Get the imageNum from courseInfo
+          courseTitle: courseInfo.Title // Get the title from courseInfo
+        };
+      })
+    );
+
+    reviewSliderPairs.push(...groupSliderPairs);
+  }
+
+  const totalvote = reviewSliderPairs.length;
+  const numCategory = 4;
+
+  const overallCategorySums = {
+    courseContent: 0,
+    courseStructure: 0,
+    teachingStyle: 0,
+    studentSupport: 0
+  };
+
+  reviewSliderPairs.forEach(pair => {
+    overallCategorySums.courseContent += parseInt(pair.sliderValue.courseContentSliderValue);
+    overallCategorySums.courseStructure += parseInt(pair.sliderValue.courseStructureSliderValue);
+    overallCategorySums.teachingStyle += parseInt(pair.sliderValue.teachingStyleSliderValue);
+    overallCategorySums.studentSupport += parseInt(pair.sliderValue.studentSupportSliderValue);
+  });
+
+  const CourslaRating = (Object.values(overallCategorySums).reduce((sum, value) => sum + value, 0) / (numCategory * totalvote)).toFixed(1);
+
+  async function updateCourse(courseId, overallCategorySums, totalvote) {
+    // Update the course document with the specified courseId
+    await courseCollection.updateOne(
+      { _id: new ObjectId(courseId) },
+      {
+        $set: {
+          OverallCategorySums: overallCategorySums,
+          Totalvote: totalvote,
+          CourslaRating: CourslaRating
+        }
+      }
+    );
+  }
+
+  console.log(reviewSliderPairs)
+  updateCourse(courseId, overallCategorySums, reviewSliderPairs.length);
+
+  res.render("my-review", {
+    req: req,
+    courseId: courseId,
+    reviewSliderPairs: reviewSliderPairs,
+    username: username,
+    isLoggedIn: isLoggedIn(req),
+    overallCategorySums: overallCategorySums,
+    Totalvote: totalvote
+  });
 });
 
 app.use(express.static(__dirname + "/public"));
