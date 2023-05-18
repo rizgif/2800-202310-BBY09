@@ -6,6 +6,10 @@
 
 <div class="search-wrapper">
     <form action="/search-results" method="get">
+
+
+
+
         <div class="search-bar row justify-content-center">
             <div class="form-group mx-2 mb-2" style="width:300px;">
                 <input value="<%= courseSearch %>" name="courseSearch" type="text" class="form-control"
@@ -18,6 +22,9 @@
                 </svg>
             </button>
         </div>
+
+
+
 
         <div class="filter-bar row justify-content-center">
           <div class="btn-group">
@@ -35,7 +42,7 @@
               </select>
               <select id="sort" name="sort" class="form-select">
                   <option value="default" selected>Rating</option>
-                  <option value="hightolow">High to Low</option>
+                  <option value="high to low">High to Low</option>
                   <option value="lowtohigh">Low to High</option>
               </select>
            
@@ -43,23 +50,23 @@
           </div>
           <button id="applyFilters" class="btn btn-primary">Apply Filters</button>
       </div>
-      
-
-
+    
     </form>
 
 
-    <p>'<%= searchResultCount %>' result(s) for "<%= courseSearch %>"
-      <% if (provider !== "default") { %>
-        , "<%= provider %>"
+    <p>'<%= searchResultCount %>' result(s) for:
+      <div></div>
+      <span class="filter-tags"><%= courseSearch %></span>
+      <% if (provider && provider !== "default") { %>
+         <span class="filter-tags"><%= provider %></span>
       <% } %>
-      <% if (level !== "default") { %>
-        , "<%= level %>"
+      <% if (level && level !== "default") { %>
+        <span class="filter-tags"><%= level %></span>
       <% } %>
-      <% if (sort !== "default") { %>
-        , "<%= sort %>"
+      <% if (sort && sort !== "default") { %>
+        <span class="filter-tags"><%= sort %></span>
       <% } %>
-    </p>
+      </p>
 
     <% for(let i = 0; i < searchResultCount; i++) { %>
         <%- include('templates/list', { result: searchResult[i], userBookmarks: userBookmarks}) %>
