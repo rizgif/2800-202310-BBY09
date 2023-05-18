@@ -21,3 +21,15 @@
     width: 100px;
     font-size: 12px;
   }
+
+.filter-tags{
+    background-color: rgb(198, 198, 198);
+    color: black;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.display-result{
+    font-weight: 800;
+    font-size: 20px;
+}
