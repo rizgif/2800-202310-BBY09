@@ -27,21 +27,21 @@
         <div class="filter-bar row justify-content-center">
           <div class="btn-group">
               <select id="provider" name="provider" class="form-select">
-                  <option value="default" selected="<%- provider == "default" %>">Provider</option>
-                  <option value="udemy" selected="<%- provider == "udemy" %>">Udemy</option>
-                  <option value="coursera" selected="<%- provider == "coursera" %>">Coursera</option>
+                  <option value="default" <% if (provider == "default") { %> selected <% } %>>Provider</option>
+                  <option value="udemy" <% if (provider == "udemy") { %> selected <% } %>>Udemy</option>
+                  <option value="coursera" <% if (provider == "coursera") { %> selected <% } %>>Coursera</option>
               </select>
               <select id="level" name="level" class="form-select">
-                  <option value="default" selected="<%- level == "default" %>">Level</option>
-                  <option value="all" selected="<%- level == "all" %>">All</option>
-                  <option value="beginner" selected="<%- level == "beginner" %>">Beginner</option>
-                  <option value="intermediate" selected="<%- level == "intermediate" %>">Intermediate</option>
-                  <option value="advanced" selected="<%- level == "advanced" %>">Advanced</option>
+                  <option value="default" <% if (level == "default") { %> selected <% } %>>Level</option>
+                  <option value="all" <% if (level == "all") { %> "selected" <% } %>>All</option>
+                  <option value="beginner" <% if (level == "beginner") { %> selected <% } %>>Beginner</option>
+                  <option value="intermediate" <% if (level == "intermidate") { %> "selected" <% } %>>Intermediate</option>
+                  <option value="advanced" <% if (level == "advanced") { %> selected <% } %>>Advanced</option>
               </select>
               <select id="sort" name="sort" class="form-select">
-                  <option value="default" selected="<%- sort == "default" %>">Rating</option>
-                  <option value="high to low" selected="<%- sort == "high to low" %>">High to Low</option>
-                  <option value="lowtohigh" selected="<%- sort == "lowtohigh" %>">Low to High</option>
+                  <option value="default" <% if (sort == "sort") { %> selected <% } %>>Rating</option>
+                  <option value="high to low"  <% if (sort == "high to low") { %> selected <% } %>>High to Low</option>
+                  <option value="lowtohigh"  <% if (sort == "lowtohigh") { %> selected <% } %>>Low to High</option>
               </select>
           </div>
           <button id="applyFilters" class="btn btn-primary">Apply Filters</button>
@@ -91,20 +91,20 @@
   const queryString = searchParams.toString();
   const url = `/search-results?${queryString}`;
 
-    // fetch(url)
-    //   .then(response => {
-    //     if (response.ok) {
-    //       // Success, handle the response here
-    //       window.location.replace(url);
-    //     } else {
-    //       // Handle the error response here
-    //       console.error("Error:", response.status);
-    //     }
-    //   })
-    //   .catch(error => {
-    //     // Handle any network or other errors here
-    //     console.error("Error:", error);
-    //   });
+    fetch(url)
+      .then(response => {
+        if (response.ok) {
+          // Success, handle the response here
+          window.location.replace(url);
+        } else {
+          // Handle the error response here
+          console.error("Error:", response.status);
+        }
+      })
+      .catch(error => {
+        // Handle any network or other errors here
+        console.error("Error:", error);
+      });
   })
 </script>
 
