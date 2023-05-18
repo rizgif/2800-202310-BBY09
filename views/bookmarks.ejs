@@ -11,7 +11,7 @@
         <%- include('templates/bookmarks-list', {result: bookmarkedCourses[i], userBookmarks: userBookmarks })  %>
     <% } %>
 <% } else { %>
-        <p>You have no bookmarks yet.</p>
+        <div class="message-bookmarks"><p>You have no bookmarks yet.</p></div>
 <% } %>
      
 <%- include("templates/footer") %>
