@@ -133,14 +133,18 @@ app.get('/search-results', async (req, res) => {
 
   try {
     const searchResult = await courseCollection.find(condition).project({
-      _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, CourslaRating: 1,
+      _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, imageNum: 1, CourslaRating: 1,
     }).toArray();
     console.log(searchResult)
     const searchResultCount = searchResult?.length;
 
     const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
 
+ 
+
+
     res.render("search-results", {
+
       searchResult: searchResult,
       searchResultCount: searchResultCount,
       isLoggedIn: isLoggedIn(req),
