@@ -1,6 +1,16 @@
 <!-- Surprise! -->
 <div id="confetti-wrapper" class="easter-egg easter-egg__bg ">
+    <div class="easter-egg__close">
+        <button type="button" id="easter-egg__close__button">
+            <span class="material-symbols-outlined">
+                close
+            </span>
+        </button>
+    </div>
     <div class="easter-egg__content">
+        <div class="easter-egg__outside__text1">
+            <p>Surprise!<br>It's a secret to everybody.</p>
+        </div>
 <!--        <a target="_blank" href="https://youtu.be/dQw4w9WgXcQ" class="easter-egg__content__image">-->
 <!--            <img src="/image/rick-roll-rick-rolled.gif" alt="Surprise!">-->
 <!--        </a>-->
@@ -9,22 +19,18 @@
         </div>
         <div class="easter-egg__text__wrapper">
             <div class="easter-egg__content__text">
-                <p>Surprise!<br>It's a secret to everybody.</p>
-            </div>
-            <div class="easter-egg__content__text">
                 <p>Congratulations! 🥳<br>
                     You have written 5 reviews</p>
             </div>
-            <div class="easter-egg__content__text">
+            <div class="easter-egg__content__text sm">
                 <p>
-                    You've earned
-                    <br>a special crown icon <span class="easter-crown lg"><img src="/image/crown.png" alt="5 reviews user"></span>
+                    You've earned a special crown icon <span class="easter-crown lg"><img src="/image/crown.png" alt="5 reviews user"></span>
                     <br>for writing 5 reviews!
                 </p>
             </div>
         </div>
     </div>
-    <div class="easter-egg__close">
-        <a href="#" class="easter-egg__close__button">Close</a>
-    </div>
 </div>
+
+<script src="/js/confetti-rain.js"></script>
+<script src="/js/easter-egg.js"></script>

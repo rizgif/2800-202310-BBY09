@@ -250,7 +250,8 @@ app.get('/course-details', async (req, res) => {
     overallCategorySums: overallCategorySums,
     Totalvote: totalvote,
     CourslaRating: CourslaRating,
-    userBookmarks
+    userBookmarks,
+    easterEgg: false
   });
 });
 
@@ -841,7 +842,8 @@ app.post('/submitReview/:id', async (req, res) => {
     }
 
     // Easter-egg: If the user has written 5 reviews, give them a badge
-    if (reviewCount + 1 === 5) {
+    if (reviewCount === 5) {
+      console.log('User has written 5 reviews, give them a badge');
       await userCollection.updateOne(
         { _id: uid }, // Specify the query criteria
         {

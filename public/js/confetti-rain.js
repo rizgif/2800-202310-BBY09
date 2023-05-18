@@ -8,7 +8,7 @@
 * Editor: Heesun Lee
 * */
 
-const init = () => {
+window.addEventListener("load", () => {
   for(i=0; i<100; i++) {
     // Random rotation
     var randomRotation = Math.floor(Math.random() * 360);
@@ -38,6 +38,4 @@ const init = () => {
     confetti.style.animationDelay=randomAnimationDelay + 's';
     document.getElementById("confetti-wrapper").appendChild(confetti);
   }
-}
-
-window.addEventListener("load", init);
+});

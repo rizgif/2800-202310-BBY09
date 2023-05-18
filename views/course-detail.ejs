@@ -138,5 +138,8 @@
 
 </div>
 
+<% if(req.query.easterEgg) { %>
+    <%- include("templates/easter-egg") %>
+<% } %>
 
 <%- include("templates/footer") %>
