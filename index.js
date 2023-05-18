@@ -751,10 +751,6 @@ app.post('/submitReview/:id', async (req, res) => {
     studentSupportSliderValue,
     currentDate } = req.body;
 
-  // const reviewId = req.body.id;
-  // console.log("okay", reviewId);
-
-
 
   // if there is a exisiting review, direct user to edit their existing review
   if (Existingreviews) {
