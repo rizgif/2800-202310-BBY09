@@ -1,0 +1,35 @@
+.search-wrapper {
+    padding: 30px 0;
+}
+.search-bar {
+    margin-bottom: 20px;
+}
+
+.filter-bar{
+    margin-bottom: 20px;
+    background-color: #F2E8CF;
+    padding: 30px;
+}
+
+#applyFilters{
+    width: 150px;
+    margin: 10px;
+}
+
+#level, #provider, #sort {
+    margin: 10px; /* Adjust the margin value as per your requirement */
+    width: 100px;
+    font-size: 12px;
+  }
+
+.filter-tags{
+    background-color: rgb(198, 198, 198);
+    color: black;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.display-result{
+    font-weight: 800;
+    font-size: 20px;
+}

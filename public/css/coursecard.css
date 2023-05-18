@@ -12,8 +12,6 @@
    
 }
 
-
-
 .filter-btn {
 	padding-right: 5px;
 	padding-left:5px;
@@ -29,18 +27,23 @@
 
 .Course-Bookmark {
 
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 5px;
-    background-color: #ccc;
-
+    /* position: absolute; */
+    /* top: 10px; */
+    /* right: 10px;
+    padding: 5px; */
+    background-color: transparent;
+    margin-left: 10px;
+    align-self: flex-start;
 }
 
+.Course-Bookmark svg path {
+    stroke: #000;
+    stroke-width: 1px;
+    fill: transparent;
+}
 .Course-Bookmark.bookmarked svg path {
-  fill: #BC4749;
-  
-
+    fill: #BC4749;
+    stroke: #BC4749;
 }
 
 /* .Coursecard-InfoRatingWrapper {
@@ -83,24 +86,42 @@
   }
   
   /* Bookmark button */
-  .bookmark-button {
+  /* .bookmark-button {
     position: absolute;
     top: 10px;
     right: 10px;
     padding: 5px;
     background-color: #ccc;
-  }
+  } */
 
  /* Information side */
- .card-info {
+ /* .card-info {
     flex: 1 1 auto;
     text-align:left;
 
-  }
+  } */
+  .card-info {
+    flex: 1 1 auto;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-info .course-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
 
 
 /* Title */
 .Card-CourseName {
 font-weight: bold;
 margin-bottom: 5px;
+}
+
+.CourseCard-Container{
+  margin-left: 10px;
+  margin-right: 10px;
+  position: relative;
+  z-index: 1;
 }

@@ -1,6 +1,10 @@
-async function toggleBookmark(courseId) {
+async function toggleBookmark(e, courseId) {
+    e.stopPropagation();
+    e.preventDefault();
   
     const bookmarkButton = document.querySelector(`.Course-Bookmark[data-course-id="${courseId}"]`);
+    const scrollPosition = window.pageYOffset; // Store the current scroll position
+
     if (bookmarkButton.classList.contains('bookmarked')) {
       // Remove bookmark
       const response = await fetch('/removeBookmark', {
@@ -10,6 +14,8 @@ async function toggleBookmark(courseId) {
       });
       if (response.ok) {
         bookmarkButton.classList.toggle('bookmarked');
+        // localStorage.setItem('scrollPosition', scrollPosition); // Store the scroll position in local storage
+        location.reload(); // Reload the page after remove
       } else {
         console.error('Failed to remove bookmark');
       }
@@ -28,3 +34,10 @@ async function toggleBookmark(courseId) {
     }
   }
   
+  // window.addEventListener('load', () => {
+  //   const scrollPosition = localStorage.getItem('scrollPosition');
+  //   if (scrollPosition) {
+  //     window.scrollTo(0, parseInt(scrollPosition));
+  //     localStorage.removeItem('scrollPosition'); // Clear the stored scroll position
+  //   }
+  // });

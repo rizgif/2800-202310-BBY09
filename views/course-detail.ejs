@@ -1,35 +1,144 @@
-<%- include('templates/header') %>
+<% if (isLoggedIn) { %>
+    <%- include("templates/header") %>
+<% } else { %>
+    <%- include("templates/header-beforeLogin") %>
+<% } %>
 
+<!--Course Detail-->
+<div class="course-detail">
+    <div class="course-detail-buttons">
+        <a target="_blank" href="<%= courseInfo.Course_URL %>" class="btn share-link">
+            Link to the course
+            <span class="material-symbols-outlined">
+                  exit_to_app
+                </span>
+        </a>
 
-  <% let courseContentSum=0; %>
-    <% let courseStructureSum=0; %>
-      <% let teachingStyleSum=0; %>
-        <% let studentSupportSum=0; %>
-          <% let num=0; %>
-
-            <!-- need to connect the course collection -->
-
-            <div class="number-ratings" style="margin-top: 20%;font-size: 25px; font-weight: bold;">
-              <%= reviewSliderPairs.length %> Student Ratings
+        <% if (isLoggedIn) { %>
+            <% const bookmarkedCourseIds = userBookmarks.map(b => b.courseId); %>
+            <button class="Course-Bookmark <%= bookmarkedCourseIds.includes(courseId) ? 'bookmarked' : '' %>"
+                    type="button" data-course-id="<%= courseId %>" onclick="toggleBookmark(event,'<%= courseId %>')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                     class="bi bi-heart-fill" viewBox="-1 -1 18 18">
+                    <path fill-rule="evenodd"
+                          d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                </svg>
+            </button>
+        <% } else { %>
+            <button class="Course-Bookmark" type="button" data-course-id="<%= courseId %>"
+                    onclick="toggleBookmark(event,'<%= courseId %>')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                     class="bi bi-heart-fill" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                          d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                </svg>
+            </button>
+        <% } %>
+    </div>
+    <h2>
+        <%= courseInfo.Title %>
+    </h2>
+    <div class="course-detail-ratings">
+        <div class="detail-rating-box">
+            <p>
+                  <span class="rating-number">
+                    <%= typeof (courseInfo.Course_Rating) == "number" ? courseInfo.Course_Rating.toFixed(1) : "N/A" %>
+                  </span> /5
+            </p>
+            <strong>Provider Rating</strong>
+        </div>
+        <div class="detail-rating-box">
+            <p>
+                  <span class="rating-number">
+                    <%= parseInt(courseInfo.CourslaRating) > 0 ? parseFloat(courseInfo.CourslaRating).toFixed(1) : "N/A" %>
+                  </span> /5
+            </p>
+            <strong>Coursla Rating</strong>
+        </div>
+    </div>
+    <ul class="course-detail-overview">
+        <li class="provider">
+            <div class="content">
+                <% if (courseInfo.Provider?.toLowerCase() == 'udemy' ) { %>
+                    <img src="/image/logo-udemy.svg" alt="Udemy">
+                <% } %>
+                <% if (courseInfo.Provider?.toLowerCase() == 'coursera' ) { %>
+                    <img src="/image/logo-coursera.svg" alt="Coursera">
+                <% } %>
             </div>
+            <span class="title">Provider</span>
+        </li>
+        <li class="provider">
+            <div class="content">
+                  <span class="level-label">
+                    <%= courseInfo.Course_Difficulty %>
+                  </span>
+            </div>
+            <span class="title">Level</span>
+        </li>
 
-            <!-- add css later -->
-            <a class="write-review-link" href="/reviews/write/:<%= courseId %>">
-              <button>Write a Review</button>
-            </a>
+        <% if (courseInfo.studentNum) { %>
+            <li class="enrollment">
+                <div class="content">
+                    <%= courseInfo.studentNum > 999 ? Math.floor(courseInfo.studentNum / 1000) + 'K' : courseInfo.studentNum %>
+                </div>
+                <span class="title">Enrollment</span>
+            </li>
+        <% } %>
+    </ul>
+    <% if (courseInfo.Provider?.toLowerCase() == 'coursera' ) { %>
+        <div class="course-detail-info">
+            <dl>
+                <dt>Instructor/Organization</dt>
+                <dd>
+                    <%= courseInfo.Organization %>
+                </dd>
+            </dl>
+            <dl>
+                <dt>Description</dt>
+                <dd>
+                    <%- courseInfo.Course_Description?.replaceAll('   ', '<br><br>').replaceAll('ÔøΩ\\t', '<br>- &nbsp;&nbsp;&nbsp;&nbsp;').replaceAll('\\n', '<br>') %>
+                </dd>
+            </dl>
+        </div>
+    <% } %>
+</div>
 
-              <% reviewSliderPairs.forEach(pair=> { %>
-                <%- include("read-review", { review: pair.review, sliderValue: pair.sliderValue, username: username, courseId: courseId })
-                  %>
-                  <% courseContentSum +=parseInt(pair.sliderValue.courseContentSliderValue); %>
-                    <% courseStructureSum +=parseInt(pair.sliderValue.courseStructureSliderValue); %>
-                      <% teachingStyleSum +=parseInt(pair.sliderValue.teachingStyleSliderValue); %>
-                        <% studentSupportSum +=parseInt(pair.sliderValue.studentSupportSliderValue); %>
-                          <% num ++; %>
-                            <% }) %>
-                              <%- include("all-reviews", { courseContentSum: courseContentSum, courseStructureSum:
-                                courseStructureSum, teachingStyleSum: teachingStyleSum, studentSupportSum:
-                                studentSupportSum, num: num }) %>
-                           
+<!--Reviews-->
 
-                                  <%- include("templates/footer") %>
+
+<div class="course-detail-reviews">
+    <%- include("all-reviews", { overallCategorySums: overallCategorySums, num: Totalvote, CourslaRating:
+    CourslaRating}) %>
+
+
+    <!-- read reviews from each user -->
+    <!-- need to connect the course collection -->
+    <div class="number-ratings" style="margin-top: 8%;font-size: 23px; font-weight: bold">
+        <% if (reviewSliderPairs.length > 1) { %>
+            <%= reviewSliderPairs.length %> Student Ratings
+
+        <% } else if (reviewSliderPairs.length == 1){ %>
+            <%= reviewSliderPairs.length %> Student Rating
+        <% } else if (reviewSliderPairs.length == 0) { %>
+            <p>Would you like to be the first person to leave a review for this course? </p>
+        <% } %>
+    </div>
+
+    <!-- add css later -->
+    <a class="write-review-link" href="/reviews/write/:<%= courseId %>">
+        <button class="btn btn-primary">Write a Review</button>
+    </a>
+
+    <% reviewSliderPairs.forEach(pair=> { %>
+        <%- include("read-review", { review: pair.review, sliderValue: pair.sliderValue, username: username,
+        courseId: courseId, avatar: pair.avatar, Badges: pair.Badges }) %>
+    <% }) %>
+
+</div>
+
+<% if(req.query.easterEgg) { %>
+    <%- include("templates/easter-egg") %>
+<% } %>
+
+<%- include("templates/footer") %>

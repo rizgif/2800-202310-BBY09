@@ -3,7 +3,7 @@
 
 .grid-container {
     display: grid;
-    grid-template-columns: 60px 0.9fr 0.5fr 0.9fr;
+    grid-template-columns: 0.5fr 0.9fr 0.5fr 0.9fr;
     grid-gap: 2%;
     margin-top: 8%;
     margin-left: auto;
@@ -11,7 +11,7 @@
     border-radius: 15px;
     background-color: #D7D3C1;
     grid-auto-flow: row;
-    padding: 20px 10px;
+    padding: 20px;
 }
 
 .rating {
@@ -34,7 +34,7 @@
 .rating-label {
     margin-bottom: 5px;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 18px;
 }
 
 .rating-button {
@@ -69,23 +69,23 @@
 
 
 .review-grid {
-    position: relative;
     grid-column: span 3;
     grid-row: span 2;
+    padding: 2%;
 }
 
 .review-grid {
-    /*display: grid;*/
+    display: grid;
     grid-template-rows: 0.5fr 1fr;
-    grid-template-columns: auto 100px;
+    grid-template-columns: 1.5fr 1.5fr 1.5fr;
     background-color: white;
     grid-gap: 10px;
     grid-template-areas:
-        "a1 a3"
-        "a4 a4";
+        "a1 a2 a3"
+        "a4 a4 a4";
     text-align: center;
     margin: 2%;
-    padding: 10px 2%;
+    padding: 2%;
     padding-bottom: 0;
     height: auto;
     /* justify-content: center; */
@@ -116,14 +116,9 @@
   }
 
 .time_stamp {
-    position: absolute;
-    right: 15px;
-    top: 10px;
-    display: flex;
-    align-items: center;
     /* background-color: #D7D3C1; */
-    justify-content: flex-end;
     grid-area: a3;
+    align-items: right;
     text-align: right;
     font-size:10px;
     font-weight: bold;
@@ -135,10 +130,10 @@
     padding-top: 1%;
     padding-bottom: 1%;
     padding-left: 2%;
-    margin-top: 10px;
-    margin-bottom: 20px;
     text-align: left;
     border-radius: 15px;
+    font-size: 12px;
+
 }
 
 

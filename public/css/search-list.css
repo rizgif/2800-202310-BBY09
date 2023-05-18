@@ -1,0 +1,21 @@
+.searchList-resultNum{
+    padding: 10px;
+    margin-left: 7px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+#searchList-scrollUp {
+    position: fixed; /* Change position to fixed */
+    bottom: 20px; /* Adjust the desired position from the bottom */
+    right: 20px; /* Adjust the desired position from the right */
+    display: none; /* Hide the button by default */
+    z-index: 2; /* Add a higher z-index to ensure it appears above other elements */
+    background-color: transparent;
+    padding-right: 5px;
+}
+
+#searchList-scrollUp.show {
+    display: block; /* Show the button when the "show" class is applied */
+}
+  
