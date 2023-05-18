@@ -1,5 +1,5 @@
 <% if (isLoggedIn) { %>
-    <%- include("templates/header") %>
+    <%- include("templates/header", {username: username}) %>
 <% } else { %>
     <%- include("templates/header-index-beforeLogin") %>
 <% } %>
