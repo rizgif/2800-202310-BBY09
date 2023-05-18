@@ -28,7 +28,9 @@
               </div>
               <div class="detail-rating-box">
                 <p>
-                  <span class="rating-number"><%= typeof (parseFloat(courseInfo.CourslaRating) == "number") ? parseFloat(courseInfo.CourslaRating).toFixed(1) : "N/A" %></span> /5
+                  <span class="rating-number">
+                    <%= parseInt(courseInfo.CourslaRating) > 0 ? parseFloat(courseInfo.CourslaRating).toFixed(1) : "N/A" %>
+                  </span> /5
                 </p>
                 <strong>Coursla Rating</strong>
               </div>
@@ -54,12 +56,14 @@
                 <span class="title">Level</span>
               </li>
 
+              <% if (courseInfo.studentNum) { %>
               <li class="enrollment">
                 <div class="content">
-                  Dev
+                  <%= courseInfo.studentNum > 999 ? Math.floor(courseInfo.studentNum/1000) + 'K' : courseInfo.studentNum %>
                 </div>
                 <span class="title">Enrollment</span>
               </li>
+              <% }%>
             </ul>
             <% if (courseInfo.Provider?.toLowerCase()=='coursera' ) { %>
               <div class="course-detail-info">
