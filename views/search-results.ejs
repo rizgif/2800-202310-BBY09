@@ -18,7 +18,8 @@
                 </svg>
             </button>
         </div>
-
+    </form>
+    <form action="/search-results" method="get">
         <div class="filter-bar row justify-content-center">
           <div class="btn-group">
               <select id="provider" name="provider" class="form-select">
@@ -38,19 +39,11 @@
                   <option value="highToLow">High to Low</option>
                   <option value="lowToHigh">Low to High</option>
               </select>
-           
-              
           </div>
           <button id="applyFilters" class="btn btn-primary">Apply Filters</button>
       </div>
-      
-
-
     </form>
-
-
     <p>'<%= searchResultCount %>'Results for "<%= courseSearch %>"</p>
-
     <% for(let i = 0; i < searchResultCount; i++) { %>
         <%- include('templates/list', { result: searchResult[i], userBookmarks: userBookmarks}) %>
     <% } %>
