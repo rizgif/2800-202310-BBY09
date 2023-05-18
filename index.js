@@ -108,7 +108,7 @@ app.get('/', async (req, res) => {
     req.session.uid = result[0]._id;
 
   }
-  res.render("index", { isLoggedIn: isLoggedIn(req) });
+  res.render("index", { isLoggedIn: isLoggedIn(req), username: req.session.username });
 });
 
 
@@ -332,7 +332,7 @@ app.get('/bookmarks', async (req, res) => {
 
     const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
 
-    res.render('bookmarks', { bookmarkedCourses, isLoggedIn: isLoggedIn(req), userBookmarks });
+    res.render('bookmarks', { bookmarkedCourses, isLoggedIn: isLoggedIn(req), userBookmarks, username: req.session.username});
     //res.render('bookmarks', { isLoggedIn: isLoggedIn(req), userBookmarks });
     //console.log('userBookmarks', userBookmarks)
   } catch (error) {
