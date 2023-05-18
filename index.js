@@ -116,7 +116,6 @@ app.get('/search-results', async (req, res) => {
   const userId = req.session.uid;
   const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
 
-
   const courseSearch = req.query.courseSearch;
   const provider = req.query.provider?.toLowerCase(); // 'coursera', 'udemy',
   const level = req.query.level?.toLowerCase(); // 'all', 'beginner', 'intermediate', 'advanced'
@@ -153,13 +152,7 @@ app.get('/search-results', async (req, res) => {
 
     const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
 
-
-
- 
-
-
     res.render("search-results", {
-
       searchResult: searchResult,
       searchResultCount: searchResultCount,
       isLoggedIn: isLoggedIn(req),

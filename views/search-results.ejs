@@ -6,10 +6,6 @@
 
 <div class="search-wrapper">
     <form action="/search-results" method="get">
-
-
-
-
         <div class="search-bar row justify-content-center">
             <div class="form-group mx-2 mb-2" style="width:300px;">
                 <input value="<%= courseSearch %>" name="courseSearch" type="text" class="form-control"
@@ -22,26 +18,23 @@
                 </svg>
             </button>
         </div>
-    </form>
-    <form action="/search-results" method="get">
         <div class="filter-bar row justify-content-center">
           <div class="btn-group">
               <select id="provider" name="provider" class="form-select">
-                  <option value="default" <% if (provider == "default") { %> selected <% } %>>Provider</option>
+                  <option value="" <% if (provider == "" || !provider) { %> selected <% } %>>Provider</option>
                   <option value="udemy" <% if (provider == "udemy") { %> selected <% } %>>Udemy</option>
                   <option value="coursera" <% if (provider == "coursera") { %> selected <% } %>>Coursera</option>
               </select>
               <select id="level" name="level" class="form-select">
-                  <option value="default" <% if (level == "default") { %> selected <% } %>>Level</option>
+                  <option value="" <% if (level == "" || !level) { %> selected <% } %>>Level</option>
                   <option value="all" <% if (level == "all") { %> "selected" <% } %>>All</option>
                   <option value="beginner" <% if (level == "beginner") { %> selected <% } %>>Beginner</option>
                   <option value="intermediate" <% if (level == "intermidate") { %> "selected" <% } %>>Intermediate</option>
                   <option value="advanced" <% if (level == "advanced") { %> selected <% } %>>Advanced</option>
               </select>
               <select id="sort" name="sort" class="form-select">
-                  <option value="default" <% if (sort == "sort") { %> selected <% } %>>Rating</option>
-                  <option value="high to low"  <% if (sort == "high to low") { %> selected <% } %>>High to Low</option>
-                  <option value="low to high"  <% if (sort == "lowtohigh") { %> selected <% } %>>Low to High</option>
+                  <option value="high to low"  <% if (sort == "high to low" || !sort) { %> selected <% } %>>High to Low</option>
+                  <option value="low to high"  <% if (sort == "low to high" || sort == "lowtohigh") { %> selected <% } %>>Low to High</option>
               </select>
           </div>
           <button id="applyFilters" class="btn btn-primary">Apply Filters</button>
@@ -71,41 +64,41 @@
 </div>
 
 <script>
-  let searchParams;
-  $("#applyFilters").on("click", async () => {
-    const provider = $("#provider").val();
-    const level = $("#level").val();
-    const sort = $("#sort").val(); // Get the selected sort option
+  <!--let searchParams;-->
+  <!--$("#applyFilters").on("click", async () => {-->
+  <!--  const provider = $("#provider").val();-->
+  <!--  const level = $("#level").val();-->
+  <!--  const sort = $("#sort").val(); // Get the selected sort option-->
 
 
 
-  searchParams = new URLSearchParams({
-    provider: provider !== "default" ? provider : "",
-    level: level !== "default" ? level : "",
-    courseSearch: "<%= courseSearch %>",
-    sort: sort !== "default" ? sort : "high to low", // Include the selected sort option in the query params
-  });
+  <!--searchParams = new URLSearchParams({-->
+  <!--  provider: provider !== "default" ? provider : "",-->
+  <!--  level: level !== "default" ? level : "",-->
+  <!--  courseSearch: "<%= courseSearch %>",-->
+  <!--  sort: sort !== "default" ? sort : "high to low", // Include the selected sort option in the query params-->
+  <!--});-->
 
-  console.log(searchParams)
+  <!--console.log(searchParams)-->
 
-  const queryString = searchParams.toString();
-  const url = `/search-results?${queryString}`;
+  <!--const queryString = searchParams.toString();-->
+  <!--const url = `/search-results?${queryString}`;-->
 
-    fetch(url)
-      .then(response => {
-        if (response.ok) {
-          // Success, handle the response here
-          window.location.replace(url);
-        } else {
-          // Handle the error response here
-          console.error("Error:", response.status);
-        }
-      })
-      .catch(error => {
-        // Handle any network or other errors here
-        console.error("Error:", error);
-      });
-  })
+  <!--  fetch(url)-->
+  <!--    .then(response => {-->
+  <!--      if (response.ok) {-->
+  <!--        // Success, handle the response here-->
+  <!--        window.location.replace(url);-->
+  <!--      } else {-->
+  <!--        // Handle the error response here-->
+  <!--        console.error("Error:", response.status);-->
+  <!--      }-->
+  <!--    })-->
+  <!--    .catch(error => {-->
+  <!--      // Handle any network or other errors here-->
+  <!--      console.error("Error:", error);-->
+  <!--    });-->
+  <!--})-->
 </script>
 
 <%- include("templates/footer") %>
