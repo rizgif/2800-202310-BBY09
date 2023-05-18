@@ -131,11 +131,16 @@ app.get('/search-results', async (req, res) => {
   if (rating) condition.Course_Rating = { $regex: `${rating}`, $options: 'i' };
 
   const sortOptions = {};
-  if (sort === 'high to low') {
-    sortOptions.Course_Rating = -1; // Sort by Course_Rating in descending order
-  } else if (sort === 'lowtohigh') {
+
+  // Set default sort option to "high to low"
+  sortOptions.Course_Rating = -1; // Sort by Course_Rating in descending order
+
+  if (sort === 'lowtohigh') {
+    // Change sort option to "low to high" when specified
     sortOptions.Course_Rating = 1; // Sort by Course_Rating in ascending order
   }
+
+
 
   console.log('condition', condition)
 
@@ -147,6 +152,8 @@ app.get('/search-results', async (req, res) => {
     const searchResultCount = searchResult?.length;
 
     const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
+
+
 
  
 
