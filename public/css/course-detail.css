@@ -83,6 +83,7 @@
 }
 .course-detail-overview .title {
     font-weight: 400;
+    margin-top: 10px;
 }
 .level-label {
     display: flex;

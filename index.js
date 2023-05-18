@@ -178,11 +178,10 @@ app.get('/course-details', async (req, res) => {
 
   const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
   const email = req.session.email;
-
-  const userInfo = await userCollection.findOne({ _id: new ObjectId(userId) });
+  
   const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
 
-  const reviewSliderPairs = await Promise.all(
+  let reviewSliderPairs = await Promise.all(
     reviews
       .filter(review => review.CourseID === courseId)
       .map(async review => {
@@ -199,7 +198,8 @@ app.get('/course-details', async (req, res) => {
         return {
           review: review,
           sliderValue: sliderValue,
-          avatar: avatar
+          avatar: avatar,
+          Badges: user?.Badges || ""
         };
 
       })
@@ -241,7 +241,13 @@ app.get('/course-details', async (req, res) => {
   // console.log(reviewSliderPairs)
   updateCourse(courseId, overallCategorySums, reviewSliderPairs.length);
 
-  console.log('userInfo',userInfo)
+  // reviewSliderPairs =  await Promise.all(
+  //   reviewSliderPairs.map(async (pair) => {
+  //     const userInfo = await userCollection.findOne({ email: pair.review.email });
+  //     return {...pair, userInfo}
+  //   }
+  // ));
+
   res.render("course-detail", {
     req: req,
     courseId: courseId,
@@ -254,7 +260,6 @@ app.get('/course-details', async (req, res) => {
     CourslaRating: CourslaRating,
     userBookmarks,
     easterEgg: false,
-    userInfo
   });
 });
 
@@ -853,7 +858,7 @@ app.post('/submitReview/:id', async (req, res) => {
         { _id: new ObjectId(uid) },
         {$set: {Badges: "Reviewer"}}
       );
-      console.log('response',response)
+      // console.log('response',response)
 
       res.redirect('/course-details?easterEgg=true&courseId=' + courseId);
       return false;
