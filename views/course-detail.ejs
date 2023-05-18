@@ -14,6 +14,21 @@
                   exit_to_app
                 </span>
               </a>
+
+              <% if (isLoggedIn) { %>
+                <% const bookmarkedCourseIds = userBookmarks.map(b => b.courseId); %>
+                  <button class="Course-Bookmark <%= bookmarkedCourseIds.includes(courseId) ? 'bookmarked' : '' %>" type="button" data-course-id="<%= courseId %>" onclick="toggleBookmark(event,'<%= courseId %>')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                    </svg>
+                  </button>
+                <% } else { %>
+                  <button class="Course-Bookmark" type="button" data-course-id="<%= courseId %>" onclick="toggleBookmark(event,'<%= courseId %>')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                    </svg>
+                  </button>
+                <% } %>
             </div>
             <h2>
               <%= courseInfo.Title %>
@@ -77,7 +92,7 @@
                 <dl>
                   <dt>Description</dt>
                   <dd>
-                    <%= courseInfo.Course_Description %>
+                    <%- courseInfo.Course_Description?.replaceAll('   ', '<br><br>').replaceAll('ÔøΩ\\t', '<br>- &nbsp;&nbsp;&nbsp;&nbsp;').replaceAll('\\n', '<br>') %>
                   </dd>
                 </dl>
               </div>

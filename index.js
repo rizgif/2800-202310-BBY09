@@ -174,6 +174,9 @@ app.get('/course-details', async (req, res) => {
   const courseId = req.query.courseId;
   const reviews = await reviewCollection.find().toArray();
   const username = req.session.username;
+  const userId = req.session.uid;
+
+  const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
   const email = req.session.email;
 
   const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
@@ -247,6 +250,7 @@ app.get('/course-details', async (req, res) => {
     overallCategorySums: overallCategorySums,
     Totalvote: totalvote,
     CourslaRating: CourslaRating,
+    userBookmarks
   });
 });
 
