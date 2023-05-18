@@ -162,6 +162,7 @@ app.get('/search-results', async (req, res) => {
       level,
       rating,
       sort,
+      username: req.session.username,
     });
 
   } catch (error) {

@@ -1,8 +1,9 @@
 <% if (isLoggedIn) { %>
-    <%- include("templates/header") %>
+  <%- include("templates/header", {username: username}) %>
 <% } else { %>
-    <%- include("templates/header-beforeLogin") %>
+  <%- include("templates/header-index-beforeLogin") %>
 <% } %>
+
 
 <div class="search-wrapper">
     <form action="/search-results" method="get">
