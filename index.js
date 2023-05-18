@@ -862,7 +862,13 @@ app.post('/submitReview/:id', async (req, res) => {
 
       res.redirect('/course-details?easterEgg=true&courseId=' + courseId);
       return false;
-    } else if (reviewCount <5 ) {
+    } else if (reviewCount > 5) {
+      // to make sure they have badge
+      await userCollection.updateOne(
+        { _id: new ObjectId(uid) },
+        {$set: {Badges: "Reviewer"}}
+      )
+    } else {
       // to prevent user remove review and get badge
       await userCollection.updateOne(
         { _id: new ObjectId(uid) },
