@@ -13,7 +13,7 @@ const errorMessages = {
 const signupScheme = Joi.object({
   password: Joi.string().min(2).max(20).required(),
   email: Joi.string().email().required(),
-  username: Joi.string().alphanum().min(2).max(20).required(),
+  username: Joi.string().min(2).max(20).required(),
 });
 
 const signupValidation = async (req, res, next) => {
