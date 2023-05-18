@@ -28,7 +28,7 @@
               </div>
               <div class="detail-rating-box">
                 <p>
-                  <span class="rating-number">Dev</span> /5
+                  <span class="rating-number"><%= typeof (parseFloat(courseInfo.CourslaRating) == "number") ? parseFloat(courseInfo.CourslaRating).toFixed(1) : "N/A" %></span> /5
                 </p>
                 <strong>Coursla Rating</strong>
               </div>

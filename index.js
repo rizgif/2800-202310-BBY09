@@ -219,6 +219,7 @@ app.get('/course-details', async (req, res) => {
     );
   }
 
+  console.log(courseInfo)
   updateCourse(courseId, overallCategorySums, reviewSliderPairs.length);
 
   res.render("course-detail", {
