@@ -18,7 +18,7 @@
 }
 
 /* Style the modal */
-.modal {
+.review-modal .modal {
   display: none; /* Hide the modal by default */
   position: fixed;
   z-index: 9999;
@@ -39,22 +39,22 @@
 }
 
 /* Style the buttons */
-.btn-confirm, .btn-cancel {
+.review-modal .btn-confirm, .review-modal .btn-cancel {
   padding: 10px 20px;
   margin: 5px;
   border-radius: 10px;
 }
 
-.btn-confirm {
+.review-modal .btn-confirm {
   background-color: #bc4749;
   color: #fff;
 }
 
-.btn-cancel {
+.review-modal .btn-cancel {
   background-color: #f2e8cf;
 }
 
-.modal-header{
+.review-modal .modal-header{
     font-weight: bold;
     text-align:center;
     justify-content: center;
