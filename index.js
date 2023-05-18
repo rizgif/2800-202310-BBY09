@@ -121,7 +121,7 @@ app.get('/search-results', async (req, res) => {
   const provider = req.query.provider?.toLowerCase(); // 'coursera', 'udemy',
   const level = req.query.level?.toLowerCase(); // 'all', 'beginner', 'intermediate', 'advanced'
   const rating = req.query.rating?.toLowerCase(); // "high", "low"
-  const sort = req.query.sort; // "highToLow", "lowToHigh"
+  const sort = req.query.sort; // "hightolow", "lowtohigh"
 
   console.log(courseSearch, provider, level, rating)
 
@@ -131,9 +131,9 @@ app.get('/search-results', async (req, res) => {
   if (rating) condition.Course_Rating = { $regex: `${rating}`, $options: 'i' };  
 
   const sortOptions = {};
-  if (sort === 'highToLow') {
+  if (sort === 'hightolow') {
     sortOptions.Course_Rating = -1; // Sort by Course_Rating in descending order
-  } else if (sort === 'lowToHigh') {
+  } else if (sort === 'lowtohigh') {
     sortOptions.Course_Rating = 1; // Sort by Course_Rating in ascending order
   }
 

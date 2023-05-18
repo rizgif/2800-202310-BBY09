@@ -35,8 +35,8 @@
               </select>
               <select id="sort" name="sort" class="form-select">
                   <option value="default" selected>Rating</option>
-                  <option value="highToLow">High to Low</option>
-                  <option value="lowToHigh">Low to High</option>
+                  <option value="hightolow">High to Low</option>
+                  <option value="lowtohigh">Low to High</option>
               </select>
            
               
@@ -49,7 +49,17 @@
     </form>
 
 
-    <p>'<%= searchResultCount %>'Results for "<%= courseSearch %>"</p>
+    <p>'<%= searchResultCount %>' result(s) for "<%= courseSearch %>"
+      <% if (provider !== "default") { %>
+        , "<%= provider %>"
+      <% } %>
+      <% if (level !== "default") { %>
+        , "<%= level %>"
+      <% } %>
+      <% if (sort !== "default") { %>
+        , "<%= sort %>"
+      <% } %>
+    </p>
 
     <% for(let i = 0; i < searchResultCount; i++) { %>
         <%- include('templates/list', { result: searchResult[i], userBookmarks: userBookmarks}) %>
