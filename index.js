@@ -121,7 +121,7 @@ app.get('/search-results', async (req, res) => {
   const provider = req.query.provider?.toLowerCase(); // 'coursera', 'udemy',
   const level = req.query.level?.toLowerCase(); // 'all', 'beginner', 'intermediate', 'advanced'
   const rating = req.query.rating?.toLowerCase(); // "high", "low"
-  const sort = req.query.sort; // "high to low", "lowtohigh"
+  const sort = req.query.sort; // "high to low", "low to high"
 
   console.log(courseSearch, provider, level, rating)
 
@@ -131,11 +131,16 @@ app.get('/search-results', async (req, res) => {
   if (rating) condition.Course_Rating = { $regex: `${rating}`, $options: 'i' };
 
   const sortOptions = {};
-  if (sort === 'high to low') {
-    sortOptions.Course_Rating = -1; // Sort by Course_Rating in descending order
-  } else if (sort === 'lowtohigh') {
+
+  // Set default sort option to "high to low"
+  sortOptions.Course_Rating = -1; // Sort by Course_Rating in descending order
+
+  if (sort === 'low to high') {
+    // Change sort option to "low to high" when specified
     sortOptions.Course_Rating = 1; // Sort by Course_Rating in ascending order
   }
+
+
 
   console.log('condition', condition)
 
@@ -147,6 +152,8 @@ app.get('/search-results', async (req, res) => {
     const searchResultCount = searchResult?.length;
 
     const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
+
+
 
  
 
@@ -340,57 +347,6 @@ app.get('/bookmarks', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
-
-
-
-//Filters 
-/* Filter and Sort Course Search Results Section */
-
-// Filter Online Course Providers
-
-app.get('/filter-udemy', (req, res) => {
-  res.render("filter-udemy", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
-});
-
-app.get('/filter-coursera', (req, res) => {
-  res.render("filter-coursera", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
-});
-
-app.get('/filter-allcourses', (req, res) => {
-  res.render("filter-allcourses", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
-});
-
-// Filter Levels
-
-app.get('/filter-beginner', (req, res) => {
-  res.render("filter-beginner", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
-});
-
-app.get('/filter-intermediate', (req, res) => {
-  res.render("filter-intermediate", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
-});
-
-app.get('/filter-advanced', (req, res) => {
-  res.render("filter-advanced", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
-});
-
-app.get('/filter-alllevels', (req, res) => {
-  res.render("filter-alllevels", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
-});
-
-//Sort Course Ratings 
-
-app.get('/sort-high to low', (req, res) => {
-  res.render("sort-high to low", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
-});
-
-
-app.get('/sort-lowtohigh', (req, res) => {
-  res.render("sort-lowtohigh", { searchResult: searchResult, isLoggedIn: isLoggedIn(req) });
-});
-
-/* End of Filter and Sort Course Search Results Section */
-
 
 
 app.get('/login', (req, res) => {
@@ -862,7 +818,13 @@ app.post('/submitReview/:id', async (req, res) => {
 
       res.redirect('/course-details?easterEgg=true&courseId=' + courseId);
       return false;
-    } else if (reviewCount <5 ) {
+    } else if (reviewCount > 5) {
+      // to make sure they have badge
+      await userCollection.updateOne(
+        { _id: new ObjectId(uid) },
+        {$set: {Badges: "Reviewer"}}
+      )
+    } else {
       // to prevent user remove review and get badge
       await userCollection.updateOne(
         { _id: new ObjectId(uid) },
