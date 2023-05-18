@@ -857,31 +857,41 @@ app.get('/profileReview', async (req, res) => {
 });
 
 app.get('/my-reviews', async (req, res) => {
-  const courseId = req.query.courseId;
-  const reviews = await reviewCollection.find({ email: req.session.email }).toArray();
+  // const courseId = req.query.courseId;
+  const email = req.session.email;
+  const reviews = await reviewCollection.find({ email: email }).toArray();
   // const reviews = await reviewCollection.find().toArray();
   const username = req.session.username;
   const userId = req.session.uid;
-  const email = req.session.email;
+  
+  // console.log(req.query.courseId);
   const reviewGroups = {};
 
-  // Group reviews by courseId
+  let courseIdList = [];
+
   reviews.forEach(review => {
     const courseId = review.CourseID;
     if (!reviewGroups[courseId]) {
       reviewGroups[courseId] = [];
     }
     reviewGroups[courseId].push(review);
+  
+    if (!courseIdList.includes(courseId)) {
+      courseIdList.push(courseId);
+    }
   });
-
+  
+  console.log("Course IDs:", courseIdList);
+  
   const reviewSliderPairs = [];
 
-  const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
+  
+  
 
   // Retrieve course information for each group
-  for (const courseId in reviewGroups) {
+  for (const courseId in courseIdList) {
     const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
-
+   
     const groupReviews = reviewGroups[courseId];
 
     const groupSliderPairs = await Promise.all(
@@ -902,7 +912,7 @@ app.get('/my-reviews', async (req, res) => {
           avatar: avatar,
           courseId: courseId, // Pass the courseId to the template
           courseImageNum: courseInfo.imageNum, // Get the imageNum from courseInfo
-          courseTitle: courseInfo.Title // Get the title from courseInfo
+          // courseTitle: courseInfo.Title // Get the title from courseInfo
         };
       })
     );
@@ -953,7 +963,8 @@ app.get('/my-reviews', async (req, res) => {
     username: username,
     isLoggedIn: isLoggedIn(req),
     overallCategorySums: overallCategorySums,
-    Totalvote: totalvote
+    Totalvote: totalvote,
+    myReviewPage: true
   });
 });
 
