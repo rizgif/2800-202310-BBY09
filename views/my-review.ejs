@@ -1,0 +1,14 @@
+<% if (isLoggedIn) { %>
+    <%- include("templates/header") %>
+<% } else { %>
+    <%- include("templates/header-beforeLogin") %>
+<% } %>
+
+<div class="my-reviews-title">My Reviews</div>
+
+<% reviewSliderPairs.forEach(pair=> { %>
+    <%- include("read-my-review", { review: pair.review, sliderValue: pair.sliderValue, username: username,
+      courseId: courseId, avatar: pair.avatar }) %>
+<% }) %>
+
+<%- include("templates/footer") %>

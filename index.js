@@ -143,7 +143,7 @@ app.get('/search-results', async (req, res) => {
     const searchResult = await courseCollection.find(condition).project({
       _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, CourslaRating: 1, imageNum: 1,
     }).sort(sortOptions).toArray();
-    console.log(searchResult)
+    //console.log(searchResult)
     const searchResultCount = searchResult?.length;
 
     const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
@@ -872,8 +872,86 @@ app.get('/profileReview', async (req, res) => {
 
 });
 
-app.get('/my-reviews', (req, res) => {
-  res.render("my-reviews", { isLoggedIn: isLoggedIn(req) });
+app.get('/my-reviews', async (req, res) => {
+  const courseId = req.query.courseId;
+  const reviews = await reviewCollection.find().toArray();
+  const username = req.session.username;
+  const userId = req.session.uid;
+
+  // const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
+  const email = req.session.email;
+  // console.log("email: ", email)
+
+  const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
+
+  const reviewSliderPairs = await Promise.all(
+    reviews
+      .filter(review => review.email === email)
+      .map(async review => {
+        const sliderValue = {
+          courseContentSliderValue: review.CourseContentRating,
+          courseStructureSliderValue: review.CourseStructureRating,
+          teachingStyleSliderValue: review.TeachingStyleRating,
+          studentSupportSliderValue: review.StudentSupportRating
+        };
+
+        const user = await userCollection.findOne({ email: review.email });
+        const avatar = user ? user.avatar : null;
+
+        return {
+          review: review,
+          sliderValue: sliderValue,
+          avatar: avatar
+        };
+
+      })
+  );
+
+  const totalvote = reviewSliderPairs.length;
+  const numCategory = 4;
+
+  const overallCategorySums = {
+    courseContent: 0,
+    courseStructure: 0,
+    teachingStyle: 0,
+    studentSupport: 0
+  };
+
+  reviewSliderPairs.forEach(pair => {
+    overallCategorySums.courseContent += parseInt(pair.sliderValue.courseContentSliderValue);
+    overallCategorySums.courseStructure += parseInt(pair.sliderValue.courseStructureSliderValue);
+    overallCategorySums.teachingStyle += parseInt(pair.sliderValue.teachingStyleSliderValue);
+    overallCategorySums.studentSupport += parseInt(pair.sliderValue.studentSupportSliderValue);
+  });
+
+  const CourslaRating = (Object.values(overallCategorySums).reduce((sum, value) => sum + value, 0) / (numCategory * totalvote)).toFixed(1);
+
+  async function updateCourse(courseId, overallCategorySums, totalvote) {
+    // Update the course document with the specified courseId
+    await courseCollection.updateOne(
+      { _id: new ObjectId(courseId) },
+      {
+        $set: {
+          OverallCategorySums: overallCategorySums,
+          Totalvote: totalvote,
+          CourslaRating: CourslaRating
+        }
+      }
+    );
+  }
+
+  console.log(reviewSliderPairs)
+  updateCourse(courseId, overallCategorySums, reviewSliderPairs.length);
+
+  res.render("my-review", {
+    req: req,
+    courseId: courseId,
+    reviewSliderPairs: reviewSliderPairs,
+    username: username,
+    isLoggedIn: isLoggedIn(req),
+    overallCategorySums: overallCategorySums,
+    Totalvote: totalvote
+  });
 });
 
 app.use(express.static(__dirname + "/public"));
