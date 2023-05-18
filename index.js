@@ -305,9 +305,10 @@ app.get('/bookmarks', async (req, res) => {
               $project: {
                 _id: 1,
                 Title: 1,
-                // Provider: 1,
-                // Course_Rating: 1,
-                Course_Difficulty: 1
+                Provider: 1,
+                Course_Rating: 1,
+                Course_Difficulty: 1,
+                imageNum: 1
               }
             }
           ],
