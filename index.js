@@ -614,7 +614,8 @@ app.get('/reviews/write/:courseid', async (req, res) => {
       specificReview: specificReview,
       hasReview: hasReview,
       reviewId: reviewId,
-      avatar: avatar
+      avatar: avatar,
+      // myReviewPage: myReviewPage
     }
     // console.log(avatar)
     res.render("write-review", renderData);

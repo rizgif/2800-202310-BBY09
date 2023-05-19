@@ -66,11 +66,6 @@ nav #i2 {
   text-decoration: none;
 }
 
-.nav-links ul li a:hover {
-  display: block;
-  transition: 0.2s;
-  cursor: pointer;
-}
 
 .nav-links ul li:hover:after {
   width: 100%;
@@ -98,13 +93,14 @@ nav #i2 {
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
 
     
-    min-height: 100vh;
+    min-height: 30vh;
     width: 200px;
     top: 0;
     right: 0;
     text-align: left;
     z-index: 2;
     color: white;
+    border-radius: 20px;
  
   }
 
@@ -145,3 +141,11 @@ nav #i2 {
   border-radius: 30px;
   
 }
+
+.welcomemessage {
+  font-weight: 900;
+  color: #000000;
+  text-decoration: none;
+  font-size: 20px;
+}
+

@@ -50,18 +50,11 @@
     $(document).on('click', '.edit-review-link', function (e) {
       e.preventDefault();
 
-      var myReviewPage = '<%= myReviewPage %>';
-
       const reviewId = $(this).data('review-id');
       console.log("i am here", reviewId)
 
       // Redirect to the edit review page with the review ID
-      if(myReviewPage){
-      window.location.href = '/reviews/write/updateReview/' + reviewId + '?myReviewPage=' + myReviewPage;
-      }
-      else {
-        window.location.href = '/reviews/write/updateReview/' + reviewId;
-      }
+      window.location.href = '/reviews/write/updateReview/' + reviewId;
     });
   });
 
@@ -80,9 +73,25 @@
 
     //delete button clicked and delete the review from the database
     $('#confirmDeleteBtn').on('click', function () {
-     
-      
-     
+      if (myReviewPage) {
+        // Ajax request for condition 1
+        $.ajax({
+          url: '/reviews/deleteReview/' + courseIdtobedeleted,
+          type: 'POST',
+          success: function (result) {
+          
+            // Handle success response
+            $('.my-review-wrapper').each(function () {
+              var courseId = $(this).find('.course_id').val().toString().trim(); // Assuming course ID is within an input element with class "course_id"
+              console.log("courseid here", courseId);
+              if (courseId === courseIdtobedeleted) {
+                $(this).remove();
+              }
+            });
+          }
+        });
+      } 
+      else if (myReviewPage == false) {
         // Send a delete request to the server
         $.ajax({
           url: '/reviews/deleteReview/' + courseIdtobedeleted,
@@ -107,7 +116,7 @@
             console.error('Failed to delete review for condition 2:', error);
           }
         });
-      
+      }
 
       // Hide the modal
       $('#deleteReviewModal').css('display', 'none');
