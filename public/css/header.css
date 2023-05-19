@@ -93,13 +93,14 @@ nav #i2 {
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
 
     
-    min-height: 100vh;
+    min-height: 30vh;
     width: 200px;
     top: 0;
     right: 0;
     text-align: left;
     z-index: 2;
     color: white;
+    border-radius: 20px;
  
   }
 
