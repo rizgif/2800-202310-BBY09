@@ -13,9 +13,7 @@
 }
 
 
-.CourseCard-StyledCourseCard:active {
-  transform: scale(0.9);
-}
+
 
 
 .filter-btn {
@@ -42,13 +40,21 @@
 }
 
 .Course-Bookmark svg path {
-    stroke: #000;
-    stroke-width: 1px;
-    fill: transparent;
+    stroke: rgb(214, 213, 213);
+ 
+    fill: rgb(214, 213, 213);
 }
 .Course-Bookmark.bookmarked svg path {
     fill: #BC4749;
     stroke: #BC4749;
+}
+
+.Course-Bookmark.bookmarked:active  {
+  transform: scale(1.5);
+}
+
+.Course-Bookmark:active {
+  transform: scale(1.5);
 }
 
 /* .Coursecard-InfoRatingWrapper {
