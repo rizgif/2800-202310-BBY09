@@ -869,7 +869,7 @@ app.get('/my-reviews', async (req, res) => {
   // const userId = req.session.uid;
   // const email = req.session.email;
   const reviewGroups = {};
-  // console.log("reviews: ", reviews.length);
+  
   // Group reviews by courseId
   reviews.forEach(review => {
     courseId = review.CourseID;
@@ -879,7 +879,7 @@ app.get('/my-reviews', async (req, res) => {
     reviewGroups[courseId].push(review);
     // console.log("courseId: ", reviewGroups);
   });
-
+  
   const reviewSliderPairs = [];
 
   //const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
@@ -887,9 +887,8 @@ app.get('/my-reviews', async (req, res) => {
   // Retrieve course information for each group
   for (const courseId in reviewGroups) {
     const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
-
+    
     const groupReviews = reviewGroups[courseId];
-
     const groupSliderPairs = await Promise.all(
       groupReviews.map(async review => {
         const sliderValue = {
@@ -954,7 +953,7 @@ app.get('/my-reviews', async (req, res) => {
 
   res.render("my-review", {
     req: req,
-    courseId: courseId,
+    // courseId: courseId,
     reviewSliderPairs: reviewSliderPairs,
     username: username,
     isLoggedIn: isLoggedIn(req),
