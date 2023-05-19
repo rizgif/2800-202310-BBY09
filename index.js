@@ -179,7 +179,7 @@ app.get('/course-details', async (req, res) => {
 
   const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
   const email = req.session.email;
-  
+
   const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
 
   let reviewSliderPairs = await Promise.all(
@@ -685,21 +685,29 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
 //delete the review from database
 app.post('/reviews/deleteReview/:id', async (req, res) => {
   const courseId = req.params.id;
-
+  console.log("deleted review is for this course: ", courseId);
   // Get the review ID before deleting the review
   const deletedReview = await reviewCollection.findOne({ CourseID: courseId });
-  const deletedReviewId = deletedReview._id.toString();
 
-  // Delete the review from the database based on the review ID
-  await reviewCollection.deleteOne({ CourseID: courseId });
+  console.log(deletedReview);
 
-  // Delete the corresponding review ID from the array in the user document
-  await userCollection.updateOne(
-    { ReviewID: deletedReviewId },
-    { $pull: { ReviewID: deletedReviewId } }
-  );
+  if (deletedReview) {
+    const deletedReviewId = deletedReview._id.toString();
+    await reviewCollection.deleteOne({ CourseID: courseId });
 
-  res.redirect(`/course-details?courseId=${courseId}`);
+    // Delete the corresponding review ID from the array in the user document
+    await userCollection.updateOne(
+      { ReviewID: deletedReviewId },
+      { $pull: { ReviewID: deletedReviewId } }
+    );
+
+
+
+    res.redirect(`/course-details?courseId=${courseId}`);
+  }
+  else {
+    res.status(404).send('Review not found');
+  }
 });
 
 
@@ -718,7 +726,7 @@ app.post('/submitReview/:id', async (req, res) => {
     studentSupportSliderValue,
     currentDate } = req.body;
 
-    // const errorMessage = await reviewValidation(req.body);
+  // const errorMessage = await reviewValidation(req.body);
   console.log(req.errorMessage)
 
   // if (req.errorMessage) {
@@ -800,7 +808,7 @@ app.post('/submitReview/:id', async (req, res) => {
 
       const response = await userCollection.updateOne(
         { _id: new ObjectId(uid) },
-        {$set: {Badges: "Reviewer"}}
+        { $set: { Badges: "Reviewer" } }
       );
       // console.log('response',response)
 
@@ -810,13 +818,13 @@ app.post('/submitReview/:id', async (req, res) => {
       // to make sure they have badge
       await userCollection.updateOne(
         { _id: new ObjectId(uid) },
-        {$set: {Badges: "Reviewer"}}
+        { $set: { Badges: "Reviewer" } }
       )
     } else {
       // to prevent user remove review and get badge
       await userCollection.updateOne(
         { _id: new ObjectId(uid) },
-        {$set: {Badges: " "}}
+        { $set: { Badges: " " } }
       );
     }
 
@@ -854,13 +862,13 @@ app.get('/my-reviews', async (req, res) => {
   // const courseId = req.query.courseId;
   const reviews = await reviewCollection.find({ email: req.session.email }).toArray();
   // const reviews = await reviewCollection.find().toArray();
-  console.log("email:", req.session.email);
+  // console.log("email:", req.session.email);
   const username = req.session.username;
   let courseId;
   // const userId = req.session.uid;
   // const email = req.session.email;
   const reviewGroups = {};
-  console.log("reviews: ", reviews.length);
+  // console.log("reviews: ", reviews.length);
   // Group reviews by courseId
   reviews.forEach(review => {
     courseId = review.CourseID;
@@ -868,7 +876,7 @@ app.get('/my-reviews', async (req, res) => {
       reviewGroups[courseId] = [];
     }
     reviewGroups[courseId].push(review);
-    console.log("courseId: ", reviewGroups);
+    // console.log("courseId: ", reviewGroups);
   });
 
   const reviewSliderPairs = [];
@@ -940,7 +948,7 @@ app.get('/my-reviews', async (req, res) => {
     );
   }
 
-  console.log(reviewSliderPairs)
+  // console.log(reviewSliderPairs)
   updateCourse(courseId, overallCategorySums, reviewSliderPairs.length);
 
   res.render("my-review", {

@@ -5,11 +5,14 @@
 <% } %>
 
 
+<% console.log(myReviewPage) %>
 <div class="my-reviews-title">My Reviews</div>
 
 <% reviewSliderPairs.forEach(pair=> { %>
     <%- include("read-my-review", { review: pair.review, sliderValue: pair.sliderValue, username: username,
-      courseId: pair.review.CourseID, avatar: pair.avatar, imgNum: pair.courseImageNum, title: pair.courseTitle, myReviewPage: myReviewPage }) %>
+      courseId: courseId, avatar: pair.avatar, imgNum: pair.courseImageNum, title: pair.courseTitle, myReviewPage: myReviewPage }) %>
 <% }) %>
+
+
 
 <%- include("templates/footer") %>
