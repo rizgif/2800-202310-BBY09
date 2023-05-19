@@ -80,7 +80,7 @@ nav #i2 {
 }
 
 
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 780px) {
   .nav-links ul li {
     display: block;
     color: unset;

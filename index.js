@@ -692,17 +692,33 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
 app.post('/reviews/deleteReview/:id', async (req, res) => {
   const courseId = req.params.id;
   const username = req.query.username;
+  const email = req.session.email;
+  const uid = req.session.uid;
+
   console.log("deleted review is for this course: ", courseId);
   // Get the review ID before deleting the review
   const deletedReview = await reviewCollection.findOne({ CourseID: courseId, username: username });
 
-  console.log(deletedReview);
+  // console.log(deletedReview);
+
+  const reviewCount = await reviewCollection.countDocuments({
+    email: email
+  });
 
   if (deletedReview) {
     const deletedReviewId = deletedReview._id.toString();
     await reviewCollection.deleteOne({ CourseID: courseId, username: username });
 
     // Delete the corresponding review ID from the array in the user document
+    console.log('reviewCount', reviewCount);
+
+    if (reviewCount <= 5) {
+      await userCollection.updateOne(
+        { _id: new ObjectId(uid) },
+        { $set: { Badges: " " } }
+      );
+    }
+
     await userCollection.updateOne(
       { ReviewID: deletedReviewId },
       { $pull: { ReviewID: deletedReviewId } }
