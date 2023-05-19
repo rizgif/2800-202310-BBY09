@@ -17,7 +17,7 @@
 
     <!-- read from database -->
     <div class="my-review-grid-container">
-
+        <input type="hidden" class="course_id" value="<%= review.CourseID %>">
         <div class="rating">
             <div class="rating-wrapper">
                 <div class="my-review-rating-label">
@@ -39,7 +39,7 @@
 
             <div class="my-review-user_review user_review">
                 <%- review.Review.replaceAll('\n', '<br>' ) %>
-                <%- include("edit-review", {username: username, id: review._id.toString(), courseId:
+                <%- include("edit-my-review", {username: username, id: review._id.toString(), courseId:
                 courseId, myReviewPage: myReviewPage}) %>
             </div>
 

@@ -44,7 +44,7 @@
 
 } 
 
-.Course-Bookmark {
+.CourseCard-Container .Course-Bookmark {
     position: absolute;
     z-index: 2;
     bottom: 10px;

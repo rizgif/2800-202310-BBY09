@@ -10,7 +10,7 @@
         </div>
         <div class="card-info">
             <div class="Card-CourseProvider">Provider: <%= result.courseDetails.Provider %></div>
-            <div class="Card-CourseRating">Course Rating: <%= result.courseDetails.Course_Rating %></div>
+            <div class="Card-CourseRating">Course Rating: <%= parseInt(result.courseDetails.Course_Rating) > 0 ? parseFloat(result.courseDetails.Course_Rating).toFixed(1) : "N/A" %></div>
             <div class="Card-CourseRating">Coursla
                 Rating: <%= parseInt(result.courseDetails.CourslaRating) > 0 ? parseFloat(result.courseDetails.CourslaRating).toFixed(1) : "N/A" %></div>
             <div class="Card-CourseDifficulty">Level: <%= result.courseDetails.Course_Difficulty %></div>
