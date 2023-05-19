@@ -16,7 +16,7 @@
 
         <% if (isLoggedIn) { %>
             <% const bookmarkedCourseIds = userBookmarks.map(b => b.courseId); %>
-            <button class="Course-Bookmark <%= bookmarkedCourseIds.includes(courseId) ? 'bookmarked' : '' %>"
+            <button class="btn Course-Bookmark <%= bookmarkedCourseIds.includes(courseId) ? 'bookmarked' : '' %>"
                     type="button" data-course-id="<%= courseId %>" onclick="toggleBookmark(event,'<%= courseId %>')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
                      class="bi bi-heart-fill" viewBox="-1 -1 18 18">
@@ -25,7 +25,7 @@
                 </svg>
             </button>
         <% } else { %>
-            <button class="Course-Bookmark" type="button" data-course-id="<%= courseId %>"
+            <button class="btn Course-Bookmark" type="button" data-course-id="<%= courseId %>"
                     onclick="toggleBookmark(event,'<%= courseId %>')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
                      class="bi bi-heart-fill" viewBox="0 0 16 16">
