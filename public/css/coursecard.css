@@ -12,12 +12,17 @@
    
 }
 
+
+.CourseCard-StyledCourseCard:active {
+  transform: scale(0.9);
+}
+
+
 .filter-btn {
 	padding-right: 5px;
 	padding-left:5px;
 }
 
-/* TODO: plz avoid using general tag except common.css. if not it will affect other pages */
 .course-results {
 	text-align: center;
     margin-top: 20px;
