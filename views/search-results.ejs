@@ -1,17 +1,18 @@
 <% if (isLoggedIn) { %>
-    <%- include("templates/header") %>
+  <%- include("templates/header", {username: username}) %>
 <% } else { %>
-    <%- include("templates/header-beforeLogin") %>
+  <%- include("templates/header-beforeLogin") %>
 <% } %>
+
 
 <div class="search-wrapper">
     <form action="/search-results" method="get">
-        <div class="search-bar row justify-content-center">
-            <div class="form-group mx-2 mb-2" style="width:300px;">
+        <div class="search-bar justify-content-center">
+            <div class="form-group">
                 <input value="<%= courseSearch %>" name="courseSearch" type="text" class="form-control"
                        id="courseSearch" placeholder="Search courses">
             </div>
-            <button type="submit" class="btn btn-main-search mb-2" style="width:50px;">
+            <button type="submit" class="btn btn-main-search mb-2" style="width:50px;" id="searchicon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search"
                      viewBox="0 0 16 16">
                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
@@ -42,18 +43,23 @@
     
     </form>
 
+    <button id="searchList-scrollUp" onclick="scrollToTop()" title="Scroll Up">
+      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#6A994E" class="bi bi-arrow-up-circle-fill" viewBox="0 0 16 16">
+        <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
+      </svg>
+    </button>
 
     <p class = "display-result">'<%= searchResultCount %>' result(s) for:
       <div></div>
-      <span class="filter-tags"><%= courseSearch %></span>
+      <span class="filter-tags">#<%= courseSearch %></span>
       <% if (provider && provider !== "default") { %>
-         <span class="filter-tags"><%= provider %></span>
+         <span class="filter-tags">#<%= provider %></span>
       <% } %>
       <% if (level && level !== "default") { %>
-        <span class="filter-tags"><%= level %></span>
+        <span class="filter-tags">#<%= level %></span>
       <% } %>
       <% if (sort && sort !== "default") { %>
-        <span class="filter-tags"><%= sort %></span>
+        <span class="filter-tags">#<%= sort %></span>
       <% } %>
       </p>
 
@@ -64,42 +70,15 @@
 </div>
 
 <script>
-  <!--let searchParams;-->
-  <!--$("#applyFilters").on("click", async () => {-->
-  <!--  const provider = $("#provider").val();-->
-  <!--  const level = $("#level").val();-->
-  <!--  const sort = $("#sort").val(); // Get the selected sort option-->
+  const courseCard = document.querySelector('.CourseCard-StyledCourseCard');
 
+courseCard.addEventListener('click', () => {
+  courseCard.classList.toggle('clicked');
+});
 
-
-  <!--searchParams = new URLSearchParams({-->
-  <!--  provider: provider !== "default" ? provider : "",-->
-  <!--  level: level !== "default" ? level : "",-->
-  <!--  courseSearch: "<%= courseSearch %>",-->
-  <!--  sort: sort !== "default" ? sort : "high to low", // Include the selected sort option in the query params-->
-  <!--});-->
-
-  <!--console.log(searchParams)-->
-
-  <!--const queryString = searchParams.toString();-->
-  <!--const url = `/search-results?${queryString}`;-->
-
-  <!--  fetch(url)-->
-  <!--    .then(response => {-->
-  <!--      if (response.ok) {-->
-  <!--        // Success, handle the response here-->
-  <!--        window.location.replace(url);-->
-  <!--      } else {-->
-  <!--        // Handle the error response here-->
-  <!--        console.error("Error:", response.status);-->
-  <!--      }-->
-  <!--    })-->
-  <!--    .catch(error => {-->
-  <!--      // Handle any network or other errors here-->
-  <!--      console.error("Error:", error);-->
-  <!--    });-->
-  <!--})-->
 </script>
+
+
 
 <%- include("templates/footer") %>
 

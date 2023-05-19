@@ -3,12 +3,13 @@
 <% } else { %>
     <%- include("templates/header-beforeLogin") %>
 <% } %>
+<link rel="stylesheet" href="/css/read-my-review-card.css">
 
 <div class="my-reviews-title">My Reviews</div>
 
 <% reviewSliderPairs.forEach(pair=> { %>
     <%- include("read-my-review", { review: pair.review, sliderValue: pair.sliderValue, username: username,
-      courseId: courseId, avatar: pair.avatar, imgNum: pair.courseImageNum, title: pair.courseTitle }) %>
+      courseId: pair.review.CourseID, avatar: pair.avatar, imgNum: pair.courseImageNum, title: pair.courseTitle, myReviewPage: myReviewPage }) %>
 <% }) %>
 
 <%- include("templates/footer") %>

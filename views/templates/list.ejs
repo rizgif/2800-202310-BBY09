@@ -1,32 +1,36 @@
 <a class="CourseCard-Container" href="/course-details?courseId=<%= result._id.toString() %>">
     <div class="CourseCard-StyledCourseCard">
+        <div class="Card-CourseName"><b><u><%= result.Title %></u></b></div>
+        <div class="card-thumbnail">
+            <img src="/image/randomimage/<%= result.imageNum %>.jpeg" alt="Image <%= result.imageNum %>">
+        </div>
+        <div class="card-info">
+            <div class="Card-CourseProvider">Provider: <%= result.Provider %></div>
+            <div class="Card-CourseRating">Provider Rating: <%= result.Course_Rating %></div>
+            <div class="Card-CourseRating">Coursla
+                Rating: <%= parseInt(result.CourslaRating) > 0 ? parseFloat(result.CourslaRating).toFixed(1) : "N/A" %></div>
+            <div class="Card-CourseDifficulty">Level: <%= result.Course_Difficulty %></div>
 
-    <div class="card-thumbnail">
-        
-        <img src="/image/randomimage/<%= result.imageNum %>.jpeg" alt="Image <%= result.imageNum %>">
+        </div>
 
-    </div>
-    <div class="card-info">
-        <div class="Card-CourseName"><%= result.Title %></div>
-        <div class="Card-CourseRating">Course Rating: <%= result.Course_Rating %></div>
-        <div class="Card-CourseProvider">Provider: <%= result.Provider %></div>
-        <div class="Card-CourseDifficulty">Level: <%= result.Course_Difficulty %></div>
-     
-    </div>
-
-    
-       
         <% if (isLoggedIn) { %>
             <% const bookmarkedCourseIds = userBookmarks.map(b => b.courseId); %>
-            <button class="Course-Bookmark <%= bookmarkedCourseIds.includes(result._id.toString()) ? 'bookmarked' : '' %>" type="button" data-course-id="<%= result._id %>" onclick="toggleBookmark(event,'<%= result._id %>'); return false;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-heart-fill" viewBox="-1 -1 18 18">
-                    <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+            <button class="Course-Bookmark <%= bookmarkedCourseIds.includes(result._id.toString()) ? 'bookmarked' : '' %>"
+                    type="button" data-course-id="<%= result._id %>"
+                    onclick="toggleBookmark(event,'<%= result._id %>'); return false;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                     class="bi bi-heart-fill" viewBox="-1 -1 18 18">
+                    <path fill-rule="evenodd"
+                          d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
                 </svg>
             </button>
         <% } else { %>
-            <button class="Course-Bookmark" type="button" data-course-id="<%= result._id %>" onclick="toggleBookmark(event, '<%= result._id %>' ); return false;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+            <button class="Course-Bookmark" type="button" data-course-id="<%= result._id %>"
+                    onclick="toggleBookmark(event, '<%= result._id %>' ); return false;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                     class="bi bi-heart-fill" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                          d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
                 </svg>
             </button>
         <% } %>

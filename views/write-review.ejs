@@ -2,13 +2,12 @@
 
     <link rel="stylesheet" href="/css/write-review-card.css">
 
-  
 
         <% if (hasReview) { %>
             <!-- Chelsea note: update later (not the 80% task) -->
-            <p>You have already submitted a review. You cannot submit another review.</p>
+            <p>You have already submitted a review. Do you want to edit your review for this course?</p>
             <a class="btn btn-primary" type="submit" id="submitBtn"
-                href="/reviews/write/updateReview/<%= reviewId %>">Edit your review</a>
+                href="/reviews/write/updateReview/<%= reviewId %>">Edit my review</a>
             <a class="btn btn-secondary" type="submit" id="submitBtn"
                 href="/course-details?courseId=<%= courseId %>">Cancel</a>
             <% } else {%>
@@ -18,7 +17,7 @@
                     <% } %>
 
                         <!-- writing a review -->
-                        <form action="/submitReview/<%= courseId %>" method="post">
+                        <form action="/submitReview/<%= courseId %>" method="POST">
 
                             <div class="write-review-grid">
                                 <div class="user-profile">

@@ -1,17 +1,20 @@
 <% if (isLoggedIn) { %>
-    <%- include("templates/header") %>
+    <%- include("templates/header", {username: username}) %>
 <% } else { %>
     <%- include("templates/header-beforeLogin") %>
 <% } %>
 
+
 <div class="bookmarks-title">My Bookmarks</div>
 
-<% if (bookmarkedCourses.length > 0) { %>
-    <% for(let i=0; i < bookmarkedCourses.length; i++) { %>
-        <%- include('templates/bookmarks-list', {result: bookmarkedCourses[i], userBookmarks: userBookmarks })  %>
+<div class="bookmarks-container">
+    <% if (bookmarkedCourses.length > 0) { %>
+        <% for(let i=0; i < bookmarkedCourses.length; i++) { %>
+            <%- include('templates/bookmarks-list', {result: bookmarkedCourses[i], userBookmarks: userBookmarks })  %>
+        <% } %>
+    <% } else { %>
+            <div class="message-bookmarks"><p>You have no bookmarks yet.</p></div>
     <% } %>
-<% } else { %>
-        <div class="message-bookmarks"><p>You have no bookmarks yet.</p></div>
-<% } %>
+</div>
      
 <%- include("templates/footer") %>

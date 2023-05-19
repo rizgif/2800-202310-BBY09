@@ -1,9 +1,10 @@
 
 .CourseCard-StyledCourseCard {
-    
+    position: relative;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    padding: 10px;
+    padding: 20px;
     border: 1px solid #ccc;
     margin-bottom: 10px;
     max-width: 600px;
@@ -12,12 +13,30 @@
    
 }
 
+.CourseCard-StyledCourseCard {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  max-width: 600px;
+  border-radius: 20px;
+  box-shadow: 0 0px 5px rgba(0, 0, 0, 0.3);
+  transition: border-color 0.3s ease;
+}
+
+.CourseCard-StyledCourseCard:hover {
+  border-color: green;
+}
+
+
+
+
 .filter-btn {
 	padding-right: 5px;
 	padding-left:5px;
 }
 
-/* TODO: plz avoid using general tag except common.css. if not it will affect other pages */
 .course-results {
 	text-align: center;
     margin-top: 20px;
@@ -26,24 +45,35 @@
 } 
 
 .Course-Bookmark {
-
-    /* position: absolute; */
-    /* top: 10px; */
-    /* right: 10px;
-    padding: 5px; */
+    position: absolute;
+    z-index: 2;
+    bottom: 10px;
+    right: 10px;
+    padding: 5px;
     background-color: transparent;
     margin-left: 10px;
     align-self: flex-start;
 }
 
 .Course-Bookmark svg path {
-    stroke: #000;
-    stroke-width: 1px;
-    fill: transparent;
+
+    fill:  rgb(198, 198, 198);
 }
 .Course-Bookmark.bookmarked svg path {
     fill: #BC4749;
-    stroke: #BC4749;
+    stroke-width: 0%;
+}
+.Course-Bookmark {
+    transition: transform 0.3s ease;
+}
+
+.Course-Bookmark.bookmarked:active,
+.Course-Bookmark:hover{
+  transform: scale(1.2);
+}
+
+.Course-Bookmark:active {
+  transform: scale(1.2);
 }
 
 /* .Coursecard-InfoRatingWrapper {
@@ -74,14 +104,15 @@
 
 /* Thumbnail */
 .card-thumbnail {
-    flex: 0 0 calc(33.33% - 10px);
-    margin-right: 10px;
+    width: 50%;
+    padding-right: 10px;
   }
   
   /* Thumbnail image */
   .card-thumbnail img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
     border-radius: 10px; 
   }
   
@@ -101,7 +132,7 @@
 
   } */
   .card-info {
-    flex: 1 1 auto;
+      width: 50%;
     text-align: left;
     display: flex;
     flex-direction: column;
@@ -112,16 +143,23 @@
     margin-bottom: 5px;
 }
 
-
-/* Title */
-.Card-CourseName {
-font-weight: bold;
-margin-bottom: 5px;
+.card-info > div {
+    font-size: 12px;
+    margin: 1px 0;
 }
 
-.CourseCard-Container{
+
+
+
+.CourseCard-Container {
   margin-left: 10px;
   margin-right: 10px;
   position: relative;
   z-index: 1;
+}
+
+.Card-CourseName{
+    width: 100%;
+    font-size: 16px !important;
+  margin-bottom: 16px !important;
 }
