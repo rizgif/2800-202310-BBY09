@@ -7,7 +7,10 @@
 }
 
 .my-review-wrapper {
+    padding-top: 20px;
     margin-bottom: 30px;
+    border-radius: 15px;
+    background-color: #D7D3C1;
 }
 
 .my-review-grid-container {
@@ -161,7 +164,6 @@
     display: flex;
     justify-content: space-around;
     /* align-items: center; */
-    margin-bottom: 10px;
     border: 2px solid #D7D3C1;
     border-radius: 12px;
     background-color: #D7D3C1;
@@ -192,7 +194,7 @@
   .my-review-provider-title p {
     font-size: 16px; /* Adjust the font size as needed */
     font-weight: bold;
-    text-align: center;
+      padding-left: 10px;
     margin-bottom: unset;
     margin-left: 8px;
   }
