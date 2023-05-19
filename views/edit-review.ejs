@@ -13,7 +13,7 @@
       <% console.log("my reviews", review) %>
         <% if(myReviewPage) { %>
           <a class="dropdown-item delete-review-link" href="#" data-course-id="<%= review.CourseID %>">Delete
-            this review from my review page </a>
+            this review </a>
           <% console.log("ids", review.CourseID) %>
             <% } else { %>
               <a class="dropdown-item delete-review-link" href="#" data-course-id="<%= review.CourseID %>">Delete this
@@ -61,7 +61,7 @@
 
   $(document).ready(function () {
   var myReviewPage = '<%= myReviewPage %>';
-  // console.log('in js', myReviewPage);
+
   // Handle delete review link click
   $(document).on('click', '.delete-review-link', function (e) {
     e.preventDefault();
@@ -79,16 +79,11 @@
           url: '/reviews/deleteReview/' + courseIdtobedeleted,
           type: 'POST',
           success: function (result) {
+          
             // Handle success response
-            // console.log('Review deleted successfully');
-
-            $('.grid-container').each(function () {
+            $('.my-review-wrapper').each(function () {
               var courseId = $(this).find('.course_id').val().toString().trim(); // Assuming course ID is within an input element with class "course_id"
               console.log("courseid here", courseId);
-              // const desiredCourseId = $('#desiredCourse').data('courseid');
-
-              // console.log("desirecourseid here", desiredCourseId);
-              console.log("done")
               if (courseId === courseIdtobedeleted) {
                 $(this).remove();
               }

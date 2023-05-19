@@ -907,7 +907,7 @@ app.get('/my-reviews', async (req, res) => {
           avatar: avatar,
           courseId: courseId, // Pass the courseId to the template
           courseImageNum: courseInfo.imageNum, // Get the imageNum from courseInfo
-          // courseTitle: courseInfo.Title // Get the title from courseInfo
+          courseTitle: courseInfo.Title // Get the title from courseInfo
         };
       })
     );
