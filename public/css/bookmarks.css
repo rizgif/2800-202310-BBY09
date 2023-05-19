@@ -7,9 +7,25 @@
     font-size: 25px;
     border-radius: var(--radius-box);
     background-color: var(--color-parchment);
+    margin-bottom: 15px;
+    margin-top: 15px;
 }
 
 .message-bookmarks {
     margin-left: 20px;
     font-size: 20px;
+}
+
+.bookmarks-CourseCard-StyledCourseCard {
+    
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+    max-width: 600px;
+    border-radius: 20px;
+    box-shadow: 0 0px 5px rgba(0, 0, 0, 0.3);
+    margin-left: 10px;
+    margin-right: 10px;
 }
