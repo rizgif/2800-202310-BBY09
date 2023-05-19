@@ -50,11 +50,18 @@
     $(document).on('click', '.edit-review-link', function (e) {
       e.preventDefault();
 
+      var myReviewPage = '<%= myReviewPage %>';
+
       const reviewId = $(this).data('review-id');
       console.log("i am here", reviewId)
 
       // Redirect to the edit review page with the review ID
-      window.location.href = '/reviews/write/updateReview/' + reviewId;
+      if(myReviewPage){
+      window.location.href = '/reviews/write/updateReview/' + reviewId + '?myReviewPage=' + myReviewPage;
+      }
+      else {
+        window.location.href = '/reviews/write/updateReview/' + reviewId;
+      }
     });
   });
 
