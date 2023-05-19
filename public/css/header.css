@@ -68,6 +68,7 @@ nav #i2 {
 .nav-links ul li:hover:after {
   width: 100%;
   background: var(--color-primary-green);
+
 }
 
 .nav-links ul li a {
@@ -78,7 +79,7 @@ nav #i2 {
 }
 
 
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 800px) {
   .nav-links ul li {
     display: block;
     color: unset;
@@ -99,6 +100,7 @@ nav #i2 {
     color: white;
     
   }
+
 
 
 
@@ -152,5 +154,5 @@ nav #i2 {
   color: #000000;
   text-decoration: none;
   font-size: 20px;
+  margin: 0px 0px 0px;
 }
-
