@@ -25,6 +25,7 @@ header {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 
 } */
+
 nav #i1,
 nav #i2 {
   width: 40px;
@@ -34,6 +35,9 @@ nav #i2 {
   cursor: pointer;
 }
 .nav-links ul {
+  margin-bottom: 0;
+}
+.nav-links ul p{
   margin-bottom: 0;
 }
 .nav-links {
