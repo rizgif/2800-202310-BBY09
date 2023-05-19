@@ -691,15 +691,16 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
 //delete the review from database
 app.post('/reviews/deleteReview/:id', async (req, res) => {
   const courseId = req.params.id;
+  const username = req.query.username;
   console.log("deleted review is for this course: ", courseId);
   // Get the review ID before deleting the review
-  const deletedReview = await reviewCollection.findOne({ CourseID: courseId });
+  const deletedReview = await reviewCollection.findOne({ CourseID: courseId, username: username });
 
   console.log(deletedReview);
 
   if (deletedReview) {
     const deletedReviewId = deletedReview._id.toString();
-    await reviewCollection.deleteOne({ CourseID: courseId });
+    await reviewCollection.deleteOne({ CourseID: courseId, username: username });
 
     // Delete the corresponding review ID from the array in the user document
     await userCollection.updateOne(
