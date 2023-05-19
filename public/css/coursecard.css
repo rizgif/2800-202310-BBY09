@@ -3,7 +3,7 @@
     
     display: flex;
     align-items: center;
-    padding: 10px;
+    padding: 20px;
     border: 1px solid #ccc;
     margin-bottom: 10px;
     max-width: 600px;
@@ -40,9 +40,9 @@
 }
 
 .Course-Bookmark svg path {
-    stroke: rgb(214, 213, 213);
+    stroke:  rgb(198, 198, 198);
  
-    fill: rgb(214, 213, 213);
+    fill:  rgb(198, 198, 198);
 }
 .Course-Bookmark.bookmarked svg path {
     fill: #BC4749;
@@ -124,15 +124,14 @@
 }
 
 
-/* Title */
-.Card-CourseName {
-font-weight: bold;
-margin-bottom: 5px;
-}
 
 .CourseCard-Container{
   margin-left: 10px;
   margin-right: 10px;
   position: relative;
   z-index: 1;
+}
+
+.Card-CourseName{
+  margin-bottom: 5px;
 }
