@@ -6,7 +6,7 @@
         </div>
         <div class="card-info">
             <div class="Card-CourseProvider">Provider: <%= result.Provider %></div>
-            <div class="Card-CourseRating">Provider Rating: <%= result.Course_Rating %></div>
+            <div class="Card-CourseRating">Provider Rating: <%= parseInt(result.Course_Rating) > 0 ? parseFloat(result.Course_Rating).toFixed(1) : "N/A" %></div>
             <div class="Card-CourseRating">Coursla
                 Rating: <%= parseInt(result.CourslaRating) > 0 ? parseFloat(result.CourslaRating).toFixed(1) : "N/A" %></div>
             <div class="Card-CourseDifficulty">Level: <%= result.Course_Difficulty %></div>
