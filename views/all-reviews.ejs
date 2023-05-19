@@ -14,11 +14,7 @@
                 <div class="all-rating">
                     <div class="all-rating-score">
                         <span class="mean">
-                            <% if(CourslaRating) { %>
-                                <%= CourslaRating %>
-                                    <% } else {%>
-                                        0.0
-                                        <% } %>
+                            <%= parseInt(CourslaRating) > 0 ? parseFloat(CourslaRating).toFixed(1) : "N/A" %>
                         </span><span class="divider">/5</span>
                     </div>
                     <div class="label">Overall Rating</div>
