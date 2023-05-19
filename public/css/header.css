@@ -62,11 +62,6 @@ nav #i2 {
   text-decoration: none;
 }
 
-.nav-links ul li a:hover {
-  display: block;
-  transition: 0.2s;
-  cursor: pointer;
-}
 
 .nav-links ul li:hover:after {
   width: 100%;
@@ -141,3 +136,5 @@ nav #i2 {
   border-radius: 30px;
   
 }
+
+
