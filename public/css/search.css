@@ -2,13 +2,24 @@
     padding: 30px 20px;
 }
 .search-bar {
+    display: flex;
     margin-bottom: 20px;
+}
+.search-bar > .form-group {
+    flex: 1;
+    margin-right: 10px;
 }
 
 .filter-bar{
     margin-bottom: 20px;
     background-color: #F2E8CF;
-    padding: 30px;
+    padding: 30px 20px;
+}
+.filter-bar .btn-group {
+    padding: 0;
+}
+.filter-bar .btn-group select {
+    font-size: 12px;
 }
 
 #applyFilters{
