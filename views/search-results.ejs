@@ -64,6 +64,15 @@
 
 </div>
 
+<script>
+  const courseCard = document.querySelector('.CourseCard-StyledCourseCard');
+
+courseCard.addEventListener('click', () => {
+  courseCard.classList.toggle('clicked');
+});
+
+</script>
+
 
 
 <%- include("templates/footer") %>
