@@ -44,7 +44,7 @@
 
 } 
 
-.Course-Bookmark {
+.CourseCard-Container .Course-Bookmark {
     position: absolute;
     z-index: 2;
     bottom: 10px;
@@ -144,7 +144,7 @@
 }
 
 .card-info > div {
-    font-size: 12px;
+    font-size: 14px;
     margin: 1px 0;
 }
 
