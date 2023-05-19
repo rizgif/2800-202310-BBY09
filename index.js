@@ -866,13 +866,12 @@ app.get('/my-reviews', async (req, res) => {
   // const courseId = req.query.courseId;
   const reviews = await reviewCollection.find({ email: req.session.email }).toArray();
   // const reviews = await reviewCollection.find().toArray();
-  console.log("email:", req.session.email);
   const username = req.session.username;
   let courseId;
   // const userId = req.session.uid;
   // const email = req.session.email;
   const reviewGroups = {};
-  console.log("reviews: ", reviews.length);
+  
   // Group reviews by courseId
   reviews.forEach(review => {
     courseId = review.CourseID;

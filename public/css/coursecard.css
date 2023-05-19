@@ -44,6 +44,7 @@
 .Course-Bookmark.bookmarked svg path {
     fill: #BC4749;
     stroke: #BC4749;
+    stroke-width: 0px;
 }
 
 /* .Coursecard-InfoRatingWrapper {
