@@ -46,15 +46,15 @@
 
     <p class = "display-result">'<%= searchResultCount %>' result(s) for:
       <div></div>
-      <span class="filter-tags"><%= courseSearch %></span>
+      <span class="filter-tags">#<%= courseSearch %></span>
       <% if (provider && provider !== "default") { %>
-         <span class="filter-tags"><%= provider %></span>
+         <span class="filter-tags">#<%= provider %></span>
       <% } %>
       <% if (level && level !== "default") { %>
-        <span class="filter-tags"><%= level %></span>
+        <span class="filter-tags">#<%= level %></span>
       <% } %>
       <% if (sort && sort !== "default") { %>
-        <span class="filter-tags"><%= sort %></span>
+        <span class="filter-tags">#<%= sort %></span>
       <% } %>
       </p>
 
