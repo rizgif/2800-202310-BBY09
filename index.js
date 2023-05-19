@@ -645,6 +645,9 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
   const avatar = req.session.avatar;
   const reviewId = req.params.id; // Get the review ID from the URL parameter
   const reviews = await reviewCollection.find().toArray();
+  const myReviewPage = req.query.myReviewPage;
+
+  // console.log("hello?", myReviewPage)
 
   // console.log(username);
   const reviewSliderPairs = reviews.map(review => ({
@@ -675,7 +678,8 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
     reviewId: reviewId,
     courseId: courseID,
     hasReview: false,
-    avatar: avatar
+    avatar: avatar,
+    myReviewPage: myReviewPage
   };
 
   res.render("write-review", renderData);
@@ -702,8 +706,6 @@ app.post('/reviews/deleteReview/:id', async (req, res) => {
       { $pull: { ReviewID: deletedReviewId } }
     );
 
-
-
     res.redirect(`/course-details?courseId=${courseId}`);
   }
   else {
@@ -720,6 +722,10 @@ app.post('/submitReview/:id', async (req, res) => {
   const courseId = req.params.id;
   const Existingreviews = await reviewCollection.findOne({ CourseID: courseId, email: email });
 
+  const myReviewPage = req.query.myReviewPage;
+
+  console.log('submit', myReviewPage)
+
   const { review,
     courseContentSliderValue,
     courseStructureSliderValue,
@@ -728,12 +734,7 @@ app.post('/submitReview/:id', async (req, res) => {
     currentDate } = req.body;
 
   // const errorMessage = await reviewValidation(req.body);
-  console.log(req.errorMessage)
-
-  // if (req.errorMessage) {
-  //   // Render the write-review page with the error message as a variable
-  //   return res.render('write-review', { errorMessage: req.errorMessage });
-  // }
+  console.log(req.errorMessage);
 
   // if there is a exisiting review, direct user to edit their existing review
   if (Existingreviews) {
@@ -831,7 +832,12 @@ app.post('/submitReview/:id', async (req, res) => {
 
   }
 
-  res.redirect('/course-details?courseId=' + courseId);
+  if (myReviewPage) {
+    res.redirect('/my-reviews');
+  }
+  else {
+    res.redirect('/course-details?courseId=' + courseId);
+  }
 });
 
 app.get('/profileReview', async (req, res) => {

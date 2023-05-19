@@ -2,6 +2,7 @@
 
     <link rel="stylesheet" href="/css/write-review-card.css">
 
+    <% console.log("hello", myReviewPage) %>
 
         <% if (hasReview) { %>
             <!-- Chelsea note: update later (not the 80% task) -->
@@ -17,7 +18,7 @@
                     <% } %>
 
                         <!-- writing a review -->
-                        <form action="/submitReview/<%= courseId %>" method="post">
+                        <form action="/submitReview/<%= courseId %>?myReviewPage=<%= myReviewPage %>" method="POST">
 
                             <div class="write-review-grid">
                                 <div class="user-profile">
