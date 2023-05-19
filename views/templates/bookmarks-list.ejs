@@ -1,5 +1,5 @@
-<a class="CourseCard-Container" href="/course-details?courseId=<%= result._id.toString() %>">
-    <div class="CourseCard-StyledCourseCard">
+<a class="CourseCard-Container" href="/course-details?courseId=<%= result.courseDetails._id.toString() %>">
+    <div class="bookmarks-CourseCard-StyledCourseCard">
 
     <div class="card-thumbnail">
         
@@ -14,7 +14,7 @@
      
     </div>
 
-     <div class="Card-CourseDifficulty"><%= result.courseDetails.Course_Difficulty %></div>
+     <!-- <div class="Card-CourseDifficulty"><%= result.courseDetails.Course_Difficulty %></div> -->
        
         <% if (isLoggedIn) { %>
             <% const bookmarkedCourseIds = userBookmarks.map(b => b.courseId); %>
