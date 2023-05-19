@@ -5,7 +5,7 @@ header {
   padding: 10px 20px;
   height: 60px;
   background-color: #fff;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.45);
 }
 
 .logo {
@@ -44,7 +44,6 @@ nav #i2 {
   list-style: none;
   margin: 0;
   padding: 0;
-
 }
 
 .nav-links a {
@@ -63,12 +62,15 @@ nav #i2 {
   text-decoration: none;
 }
 
-
+.nav-links ul li a:hover {
+  display: block;
+  transition: 0.2s;
+  cursor: pointer;
+}
 
 .nav-links ul li:hover:after {
   width: 100%;
   background: var(--color-primary-green);
-
 }
 
 .nav-links ul li a {
@@ -79,7 +81,7 @@ nav #i2 {
 }
 
 
-@media only screen and (max-width: 800px) {
+@media only screen and (max-width: 700px) {
   .nav-links ul li {
     display: block;
     color: unset;
@@ -90,19 +92,17 @@ nav #i2 {
     display: none;
     background: rgb(255, 255, 255);
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
-    border-radius: 20px;
-    min-height: 30vh;
+
+    
+    min-height: 100vh;
     width: 200px;
     top: 0;
     right: 0;
     text-align: left;
     z-index: 2;
     color: white;
-    
+ 
   }
-
-
-
 
   nav #i2 {
     display:block;
@@ -135,24 +135,9 @@ nav #i2 {
     transition: 0.2s;
   }
 
-  .welcomemessage {
-    font-weight: 400;
-    color: #000000;
-    text-decoration: none;
-    font-size: 20px;
-  }
-
 }
 
 #signbutton_index {
-  border-radius: 30px; 
-}
-
-
-.welcomemessage {
-  font-weight: 900;
-  color: #000000;
-  text-decoration: none;
-  font-size: 20px;
-  margin: 0px 0px 0px;
+  border-radius: 30px;
+  
 }
