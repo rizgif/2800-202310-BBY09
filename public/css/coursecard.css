@@ -55,22 +55,24 @@
 }
 
 .Course-Bookmark svg path {
-    stroke:  rgb(198, 198, 198);
- 
+
     fill:  rgb(198, 198, 198);
 }
 .Course-Bookmark.bookmarked svg path {
     fill: #BC4749;
-    stroke: #BC4749;
     stroke-width: 0%;
 }
+.Course-Bookmark {
+    transition: transform 0.3s ease;
+}
 
-.Course-Bookmark.bookmarked:active  {
-  transform: scale(1.5);
+.Course-Bookmark.bookmarked:active,
+.Course-Bookmark:hover{
+  transform: scale(1.2);
 }
 
 .Course-Bookmark:active {
-  transform: scale(1.5);
+  transform: scale(1.2);
 }
 
 /* .Coursecard-InfoRatingWrapper {
@@ -108,7 +110,8 @@
   /* Thumbnail image */
   .card-thumbnail img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
     border-radius: 10px; 
   }
   
@@ -139,6 +142,10 @@
     margin-bottom: 5px;
 }
 
+.card-info > div {
+    font-size: 12px;
+    margin: 1px 0;
+}
 
 
 
@@ -151,5 +158,6 @@
 }
 
 .Card-CourseName{
-  margin-bottom: 5px;
+    font-size: 16px !important;
+  margin-bottom: 5px !important;
 }
