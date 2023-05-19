@@ -17,9 +17,6 @@
 }
 
 #level, #provider, #sort {
-    margin: 2px; /* Adjust the margin value as per your requirement */
-    width: 110px;
-    font-size: 10px;
   }
 
 .filter-tags{
@@ -56,4 +53,3 @@
 #searchicon:active {
     transform: scale(1.3);
 }
-  
