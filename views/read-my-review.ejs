@@ -36,7 +36,8 @@
             <div class="my-review-time_stamp">
                 <%= review.Time %>
             </div>
-            <div class="my-review-user_review">
+
+            <div class="my-review-user_review user_review">
                 <%- review.Review.replaceAll('\n', '<br>' ) %>
                 <%- include("edit-review", {username: username, id: review._id.toString(), courseId:
                 courseId, myReviewPage: myReviewPage}) %>
