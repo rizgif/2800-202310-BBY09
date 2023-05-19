@@ -37,11 +37,9 @@
                 <%= review.Time %>
             </div>
             <div class="my-review-user_review">
-                <%- review.Review.replaceAll('\n', '<br>') %>
-                <% if (review.username===username) { %>
-                    <%- include("edit-review", {username: username, id: review._id.toString(), courseId: courseId})
-                    %>
-                <% } %>
+                <%- review.Review.replaceAll('\n', '<br>' ) %>
+                <%- include("edit-review", {username: username, id: review._id.toString(), courseId:
+                courseId, myReviewPage: myReviewPage}) %>
             </div>
 
         </div>
