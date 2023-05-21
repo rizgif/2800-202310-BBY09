@@ -145,13 +145,28 @@ app.get('/search-results', async (req, res) => {
   console.log('condition', condition)
 
   try {
-    const searchResult = await courseCollection.find(condition).project({
+    let searchResult = await courseCollection.find(condition).project({
       _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, CourslaRating: 1, imageNum: 1,
     }).sort(sortOptions).toArray();
-    //console.log(searchResult)
+    // console.log(searchResult)
     const searchResultCount = searchResult?.length;
-
     const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
+
+    let CalibratedValues = [];
+    let nonCalibratedValues = [];
+
+    searchResult.forEach((course) => {
+
+      if (course.Course_Rating !== "Not Calibrated") {
+        nonCalibratedValues.push(course);
+      } else {
+        CalibratedValues.push(course);
+      }
+    });
+  
+    searchResult = nonCalibratedValues.concat(nonCalibratedValues);
+    console.log(nonCalibratedValues);
+
 
     res.render("search-results", {
       searchResult: searchResult,
