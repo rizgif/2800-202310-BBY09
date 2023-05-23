@@ -319,48 +319,53 @@ app.post('/removeBookmark', async (req, res) => {
 });
 
 app.get('/bookmarks', async (req, res) => {
-  try {
-    const userId = req.session.uid;
-
-    const bookmarkedCourses = await database.db(mongodb_database).collection('bookmarks').aggregate([
-      {
-        $match: { userId: userId } // Match the bookmarks for the current user
-      },
-      {
-        $lookup: {
-          from: 'courses',
-          let: { courseId: { $toObjectId: '$courseId' } },
-          pipeline: [
-            { $match: { $expr: { $eq: ['$_id', '$$courseId'] } } },
-            {
-              $project: {
-                _id: 1,
-                Title: 1,
-                Provider: 1,
-                Course_Rating: 1,
-                Course_Difficulty: 1,
-                imageNum: 1
+  if (!req.session.authenticated) {
+    res.redirect('/');
+  } else {
+    try {
+      const userId = req.session.uid;
+  
+      const bookmarkedCourses = await database.db(mongodb_database).collection('bookmarks').aggregate([
+        {
+          $match: { userId: userId } // Match the bookmarks for the current user
+        },
+        {
+          $lookup: {
+            from: 'courses',
+            let: { courseId: { $toObjectId: '$courseId' } },
+            pipeline: [
+              { $match: { $expr: { $eq: ['$_id', '$$courseId'] } } },
+              {
+                $project: {
+                  _id: 1,
+                  Title: 1,
+                  Provider: 1,
+                  Course_Rating: 1,
+                  Course_Difficulty: 1,
+                  imageNum: 1
+                }
               }
-            }
-          ],
-          as: 'courseDetails'
+            ],
+            as: 'courseDetails'
+          }
+        },
+        {
+          $unwind: '$courseDetails'
         }
-      },
-      {
-        $unwind: '$courseDetails'
-      }
-    ]).toArray();
-    console.log('bookmarked courses: ', bookmarkedCourses); // log the array to the console
-
-    const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
-
-    res.render('bookmarks', { bookmarkedCourses, isLoggedIn: isLoggedIn(req), userBookmarks, username: req.session.username});
-    //res.render('bookmarks', { isLoggedIn: isLoggedIn(req), userBookmarks });
-    //console.log('userBookmarks', userBookmarks)
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
+      ]).toArray();
+      console.log('bookmarked courses: ', bookmarkedCourses); // log the array to the console
+  
+      const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
+  
+      res.render('bookmarks', { bookmarkedCourses, isLoggedIn: isLoggedIn(req), userBookmarks, username: req.session.username});
+      //res.render('bookmarks', { isLoggedIn: isLoggedIn(req), userBookmarks });
+      //console.log('userBookmarks', userBookmarks)
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+    }
   }
+  
 });
 
 
