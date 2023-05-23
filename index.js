@@ -126,7 +126,10 @@ app.get('/search-results', async (req, res) => {
 
   console.log(courseSearch, provider, level, rating)
 
-  const condition = { Title: { $regex: `${courseSearch}`, $options: 'i' } }
+  const condition = {};
+  if (courseSearch) {
+    condition.Title = { $regex: `${courseSearch}`, $options: 'i' };
+  }
   if (provider) condition.Provider = { $regex: `${provider}`, $options: 'i' };
   if (level) condition.Course_Difficulty = { $regex: `${level}`, $options: 'i' };
   if (rating) condition.Course_Rating = { $regex: `${rating}`, $options: 'i' };
