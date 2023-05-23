@@ -5,44 +5,38 @@ require("../utils.js");
 const {isLoggedIn} = require("./login");
 
 const errorMessages = {
-  emptyPassword: 'Please provide a password',
-  emptyEmail: 'Please provide an email address',
   emptyUserName: 'Please provide a name',
 }
 
 const signupScheme = Joi.object({
-  password: Joi.string().min(4).max(20).required(),
-  email: Joi.string().email().min(5).required(),
   username: Joi.string().min(3).max(20).required(),
 });
 
-const signupValidation = async (req, res, next) => {
-  let email = req.body.email;
-  let password = req.body.password;
+const editProfileValidation = async (req, res, next) => {
   let username = req.body.username;
 
-  const validationResult = signupScheme.validate({username, email, password});
+  const validationResult = signupScheme.validate({username});
 
   let errorMessage = '';
 
   // if there is an empty input or error
   if (validationResult.error != null) {
-    if (password.length < 1) {
-      errorMessage = errorMessages.emptyPassword;
-    } else if (email.length < 1) {
-      errorMessage = errorMessages.emptyEmail;
-    } else if (username.length < 1) {
+    if (username.length < 1) {
       errorMessage = errorMessages.emptyUserName;
     } else {
       errorMessage = validationResult.error.message;
     }
+
     res.render('signup-submit', { signupFail: true, errorMessage, isLoggedIn: isLoggedIn(req) });
+    // res.redirect(`/error?error=${errorMessage}`);
+    // res.render('error', { signupFail: true, message: errorMessage, isLoggedIn: isLoggedIn(req) });
+    console.log('error')
     return;
   }
-
   next();
+  console.log('success')
 }
 
 module.exports = {
-  signupValidation
+  editProfileValidation
 }

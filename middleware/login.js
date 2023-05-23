@@ -12,7 +12,6 @@ const loginScheme = Joi.object({
 });
 
 const errorMessages = {
-  emptyUserName: 'Please provide a user name',
   emptyUserEmail: 'Please provide an email',
   emptyPassword: 'Please provide a password',
 }

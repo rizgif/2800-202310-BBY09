@@ -10,26 +10,29 @@
 
             <div class="form-floating">
                 <input name="email" type="email" class="form-control" id="email" placeholder="name@example.com" required>
-                <label for="email">Email address</label>
+                <label for="email">Email address <span>*</span></label>
                 <div class="invalid-feedback">
                     Please enter an email address.
                 </div>
             </div>
 
+            <div class="form-indication">
+                <p>Password must be between 4 and 20 characters long.</p>
+            </div>
             <div class="form-floating">
-                <input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password" required>
-                <label for="password">Pasword</label>
+                <input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password" required min="2" max="20">
+                <label for="password">Pasword <span>*</span></label>
                 <div class="invalid-feedback">
-                Please choose a password.
+                    Please choose a password.
                 </div>
             </div>
 
-<!--            <p class="form-indication">-->
-<!--                Please enter a name.-->
-<!--                <br/>You can always change this username later on your profile page.</p>-->
+            <div class="form-indication">
+                <p>Name must be between 3 and 20 characters long.</p>
+            </div>
             <div class="form-floating">
-                <input name="username" type="text" class="form-control" id="username" placeholder="Username" required>
-                <label for="username">Name</label>
+                <input name="username" type="text" class="form-control" id="username" placeholder="Username" required min="3" max="20">
+                <label for="username">Name <span>*</span></label>
                 <div class="invalid-feedback">
                     Please enter a name.
                 </div>
