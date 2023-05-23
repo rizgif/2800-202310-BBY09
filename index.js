@@ -534,7 +534,7 @@ app.get('/profile', sessionValidation, (req, res) => {
 app.get('/change-password', sessionValidation, async (req, res) => {
   const message = req.query.message || '';
   const avatar = req.session.avatar;
-  res.render('change-password', { message, avatar, isLoggedIn: isLoggedIn(req) });
+  res.render('change-password', { message, avatar, isLoggedIn: isLoggedIn(req), username: req.session.username });
 });
 
 app.post('/change-password-submit', sessionValidation, async (req, res) => {
