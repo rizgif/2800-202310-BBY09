@@ -3,7 +3,8 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  height: 60px;
+  min-height: 60px;
+  flex-wrap: wrap;
   background-color: #fff;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
 }
@@ -25,7 +26,9 @@ header {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 
 } */
-
+nav {
+  flex:1;
+}
 nav #i1,
 nav #i2 {
   width: 40px;
@@ -33,6 +36,11 @@ nav #i2 {
   padding: 5px;
   display: none;
   cursor: pointer;
+}
+.nav-links {
+  display: flex;
+  justify-content: flex-end;
+  white-space: nowrap;
 }
 .nav-links ul {
   margin-bottom: 0;
@@ -61,7 +69,7 @@ nav #i2 {
 .nav-links ul li {
   list-style: none;
   display: inline-block;
-  padding: 8px 10px;
+  padding: 8px 6px;
   position: relative;
   text-decoration: none;
 }
@@ -80,7 +88,7 @@ nav #i2 {
 }
 
 
-@media only screen and (max-width: 780px) {
+@media only screen and (max-width: 830px) {
   .nav-links ul li {
     display: block;
     color: unset;
@@ -146,6 +154,9 @@ nav #i2 {
   font-weight: 900;
   color: #000000;
   text-decoration: none;
-  font-size: 20px;
+  font-size: 16px;
+  max-width: 260px;
+  white-space: pre-wrap;
+  word-break: break-all;
 }
 

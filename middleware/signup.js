@@ -17,9 +17,9 @@ const signupScheme = Joi.object({
 });
 
 const signupValidation = async (req, res, next) => {
-  let email = req.body.email;
+  let email = req.body.email?.trim();
   let password = req.body.password;
-  let username = req.body.username;
+  let username = req.body.username.trim();
 
   const validationResult = signupScheme.validate({username, email, password});
 

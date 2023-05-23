@@ -396,10 +396,9 @@ app.get('/signup', (req, res) => {
 });
 
 app.post('/signup-submit', signupValidation, async (req, res) => {
-  console.log('signupFail', req.body.signupFail)
   let password = req.body.password;
-  let username = req.body.username;
-  let email = req.body.email;
+  let username = req.body.username?.trim();
+  let email = req.body.email?.trim();
 
   if(isLoggedIn(req)){
     res.redirect('/');
@@ -580,7 +579,7 @@ app.get('/edit-profile', sessionValidation, async (req, res) => {
 });
 
 app.post('/edit-profile-submit', editProfileValidation, async (req, res) => {
-  let username = req.body.username;
+  let username = req.body.username?.trim();
   let avatar = req.body.avatar;
   let uid = req.session.uid;
 

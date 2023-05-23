@@ -143,7 +143,7 @@ $(form).submit(async function(e) {
 
   e.preventDefault(); // Prevent the default form submission
 
-  if (!form.checkValidity() || username.value?.length < 3 || username.value?.length > 20) {
+  if (!form.checkValidity() || username.value?.trim().length < 3 || username.value?.trim().length > 20) {
     form.classList.add('was-validated');
     username.classList.remove( "is-valid" );
     username.classList.add( "is-invalid" );
@@ -162,7 +162,7 @@ $(form).submit(async function(e) {
     } else {
       post({
         avatar: output.src.includes('image/avatar.png') ? output.src : null,
-        username: usernameInput.value
+        username: usernameInput.value?.trim()
       })
     }
   }
