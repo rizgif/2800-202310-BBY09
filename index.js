@@ -290,7 +290,6 @@ app.post('/addBookmark', async (req, res) => {
   const userId = req.session.uid; // user's _id
   const courseId = req.body.courseId; // course's _id
 
-  console.log('Received courseId:', courseId);
   await bookmarkCollection.insertOne({
     userId: userId,
     courseId: courseId
@@ -314,7 +313,6 @@ app.post('/removeBookmark', async (req, res) => {
   } else {
     res.sendStatus(404); // bookmark not found
   }
-  console.log('Deleted bookmark from DB');
 
 });
 
@@ -353,13 +351,10 @@ app.get('/bookmarks', async (req, res) => {
           $unwind: '$courseDetails'
         }
       ]).toArray();
-      console.log('bookmarked courses: ', bookmarkedCourses); // log the array to the console
   
       const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
   
       res.render('bookmarks', { bookmarkedCourses, isLoggedIn: isLoggedIn(req), userBookmarks, username: req.session.username});
-      //res.render('bookmarks', { isLoggedIn: isLoggedIn(req), userBookmarks });
-      //console.log('userBookmarks', userBookmarks)
     } catch (error) {
       console.error(error);
       res.status(500).send('Internal Server Error');
@@ -895,40 +890,10 @@ app.post('/submitReview/:id', async (req, res) => {
   }
 });
 
-app.get('/profileReview', async (req, res) => {
-  const reviews = await reviewCollection.find().toArray();
-
-  const reviewSliderPairs = reviews.map(review => {
-    const sliderValue = {
-      courseContentSliderValue: review.CourseContentRating,
-      courseStructureSliderValue: review.CourseStructureRating,
-      teachingStyleSliderValue: review.TeachingStyleRating,
-      studentSupportSliderValue: review.StudentSupportRating
-    };
-
-
-    return {
-      review: review,
-      sliderValue: sliderValue
-    };
-  });
-
-  res.render("profile-review", {
-    req: req,
-    reviewSliderPairs: reviewSliderPairs
-  });
-
-});
-
 app.get('/my-reviews', async (req, res) => {
-  // const courseId = req.query.courseId;
   const reviews = await reviewCollection.find({ email: req.session.email }).toArray();
-  // const reviews = await reviewCollection.find().toArray();
-  // console.log("email:", req.session.email);
   const username = req.session.username;
   let courseId;
-  // const userId = req.session.uid;
-  // const email = req.session.email;
   const reviewGroups = {};
   
   // Group reviews by courseId
@@ -938,13 +903,9 @@ app.get('/my-reviews', async (req, res) => {
       reviewGroups[courseId] = [];
     }
     reviewGroups[courseId].push(review);
-    // console.log("courseId: ", reviewGroups);
   });
   
   const reviewSliderPairs = [];
-
-  //const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
-
   // Retrieve course information for each group
   for (const courseId in reviewGroups) {
     const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
@@ -1009,12 +970,10 @@ app.get('/my-reviews', async (req, res) => {
     );
   }
 
-  // console.log(reviewSliderPairs)
   updateCourse(courseId, overallCategorySums, reviewSliderPairs.length);
 
   res.render("my-review", {
     req: req,
-    // courseId: courseId,
     reviewSliderPairs: reviewSliderPairs,
     username: username,
     isLoggedIn: isLoggedIn(req),
