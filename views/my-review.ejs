@@ -6,10 +6,15 @@
 <link rel="stylesheet" href="/css/read-my-review-card.css">
 
 <div class="my-reviews-title">My Reviews</div>
+<% if (reviewSliderPairs.length > 0) { %>
+    <% reviewSliderPairs.forEach(pair=> { %>
+        <%- include("read-my-review", { review: pair.review, sliderValue: pair.sliderValue, username: username,
+          courseId: pair.review.CourseID, avatar: pair.avatar, imgNum: pair.courseImageNum, title: pair.courseTitle, myReviewPage: myReviewPage }) %>
+    <% }) %>
+<% } else { %>
+        <div class="message-my-review"><p>You have no reviews yet.</p></div>
+<% } %>
 
-<% reviewSliderPairs.forEach(pair=> { %>
-    <%- include("read-my-review", { review: pair.review, sliderValue: pair.sliderValue, username: username,
-      courseId: pair.review.CourseID, avatar: pair.avatar, imgNum: pair.courseImageNum, title: pair.courseTitle, myReviewPage: myReviewPage }) %>
-<% }) %>
+
 
 <%- include("templates/footer") %>
