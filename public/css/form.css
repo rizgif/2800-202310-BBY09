@@ -70,6 +70,10 @@
     color: var(--color-primary-green);
     font-size: 0.8em;
 }
+.form-indication p {
+    margin-bottom: 0.5em;
+}
+
 
 .avatar-container {
     display: flex;
