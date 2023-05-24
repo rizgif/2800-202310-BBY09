@@ -1,8 +1,16 @@
 <a class="CourseCard-Container" href="/course-details?courseId=<%= result._id.toString() %>">
     <div class="CourseCard-StyledCourseCard">
-        <div class="Card-CourseName"><b><u><%= result.Title %></u></b></div>
+        <div class="Card-CourseName"><%= result.Title %></div>
         <div class="card-thumbnail">
             <img src="/image/randomimage/<%= result.imageNum %>.jpeg" alt="Image <%= result.imageNum %>">
+            <div class="logo-provider">
+                <% if (result.Provider?.toLowerCase() == 'udemy' ) { %>
+                    <img src="/image/logo-round-udemy.webp" alt="Udemy">
+                <% } %>
+                <% if (result.Provider?.toLowerCase() == 'coursera' ) { %>
+                    <img src="/image/logo-round-coursera.png" alt="Coursera">
+                <% } %>
+            </div>
         </div>
         <div class="card-info">
             <div class="Card-CourseProvider">Provider: <%= result.Provider %></div>
