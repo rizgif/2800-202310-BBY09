@@ -5,6 +5,9 @@
 .form-floating {
     margin-bottom: 20px;
 }
+.form-floating span {
+    color: red;
+}
 .form-wrapper h1,
 .form-wrapper h2{
     margin-bottom: 30px;
@@ -67,6 +70,10 @@
     color: var(--color-primary-green);
     font-size: 0.8em;
 }
+.form-indication p {
+    margin-bottom: 0.5em;
+}
+
 
 .avatar-container {
     display: flex;

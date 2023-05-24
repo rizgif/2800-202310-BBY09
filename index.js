@@ -19,6 +19,7 @@ const {
   isLoggedIn,
   reviewValidation
 } = require('./middleware');
+const {editProfileValidation} = require("./middleware/edit-profile");
 
 const saltRounds = 12;
 
@@ -125,7 +126,10 @@ app.get('/search-results', async (req, res) => {
 
   console.log(courseSearch, provider, level, rating)
 
-  const condition = { Title: { $regex: `${courseSearch}`, $options: 'i' } }
+  const condition = {};
+  if (courseSearch) {
+    condition.Title = { $regex: `${courseSearch}`, $options: 'i' };
+  }
   if (provider) condition.Provider = { $regex: `${provider}`, $options: 'i' };
   if (level) condition.Course_Difficulty = { $regex: `${level}`, $options: 'i' };
   if (rating) condition.Course_Rating = { $regex: `${rating}`, $options: 'i' };
@@ -286,7 +290,6 @@ app.post('/addBookmark', async (req, res) => {
   const userId = req.session.uid; // user's _id
   const courseId = req.body.courseId; // course's _id
 
-  console.log('Received courseId:', courseId);
   await bookmarkCollection.insertOne({
     userId: userId,
     courseId: courseId
@@ -310,58 +313,62 @@ app.post('/removeBookmark', async (req, res) => {
   } else {
     res.sendStatus(404); // bookmark not found
   }
-  console.log('Deleted bookmark from DB');
 
 });
 
 app.get('/bookmarks', async (req, res) => {
-  try {
-    const userId = req.session.uid;
-
-    const bookmarkedCourses = await database.db(mongodb_database).collection('bookmarks').aggregate([
-      {
-        $match: { userId: userId } // Match the bookmarks for the current user
-      },
-      {
-        $lookup: {
-          from: 'courses',
-          let: { courseId: { $toObjectId: '$courseId' } },
-          pipeline: [
-            { $match: { $expr: { $eq: ['$_id', '$$courseId'] } } },
-            {
-              $project: {
-                _id: 1,
-                Title: 1,
-                Provider: 1,
-                Course_Rating: 1,
-                Course_Difficulty: 1,
-                imageNum: 1
+  if (!req.session.authenticated) {
+    res.redirect('/');
+  } else {
+    try {
+      const userId = req.session.uid;
+  
+      const bookmarkedCourses = await database.db(mongodb_database).collection('bookmarks').aggregate([
+        {
+          $match: { userId: userId } // Match the bookmarks for the current user
+        },
+        {
+          $lookup: {
+            from: 'courses',
+            let: { courseId: { $toObjectId: '$courseId' } },
+            pipeline: [
+              { $match: { $expr: { $eq: ['$_id', '$$courseId'] } } },
+              {
+                $project: {
+                  _id: 1,
+                  Title: 1,
+                  Provider: 1,
+                  Course_Rating: 1,
+                  Course_Difficulty: 1,
+                  imageNum: 1
+                }
               }
-            }
-          ],
-          as: 'courseDetails'
+            ],
+            as: 'courseDetails'
+          }
+        },
+        {
+          $unwind: '$courseDetails'
         }
-      },
-      {
-        $unwind: '$courseDetails'
-      }
-    ]).toArray();
-    console.log('bookmarked courses: ', bookmarkedCourses); // log the array to the console
-
-    const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
-
-    res.render('bookmarks', { bookmarkedCourses, isLoggedIn: isLoggedIn(req), userBookmarks, username: req.session.username});
-    //res.render('bookmarks', { isLoggedIn: isLoggedIn(req), userBookmarks });
-    //console.log('userBookmarks', userBookmarks)
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
+      ]).toArray();
+  
+      const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
+  
+      res.render('bookmarks', { bookmarkedCourses, isLoggedIn: isLoggedIn(req), userBookmarks, username: req.session.username});
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+    }
   }
+  
 });
 
 
 app.get('/login', (req, res) => {
   res.render("login", { isLoggedIn: isLoggedIn(req) });
+});
+app.get('/error', (req, res) => {
+  res.render("login", { isLoggedIn: isLoggedIn(req), message: req.query.message || req.body.message, username: req.session.username });
 });
 
 app.get('/sample', (req, res) => {
@@ -393,8 +400,13 @@ app.get('/signup', (req, res) => {
 
 app.post('/signup-submit', signupValidation, async (req, res) => {
   let password = req.body.password;
-  let username = req.body.username;
-  let email = req.body.email;
+  let username = req.body.username?.trim();
+  let email = req.body.email?.trim();
+
+  if(isLoggedIn(req)){
+    res.redirect('/');
+    return;
+  }
 
   // check if the id already exists
   const emailCheck = await userCollection.find({ email: email }).project({ _id: 1 }).toArray();
@@ -452,7 +464,7 @@ app.post('/find-password', async (req, res) => {
       const mailOptions = {
         from: email_host,
         to: email,
-        subject: 'Password Reset',
+        subject: '[Coursla] Password Reset',
         text: `Hi ${user.username},\n\nYou requested a password reset for your account.
         \n\nPlease click on the following link within the next hour to reset your password:
         \n\nhttps://coursla.cyclic.app/reset-password/${token}
@@ -465,7 +477,7 @@ app.post('/find-password', async (req, res) => {
       await transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
           console.log(error);
-          res.render('find-password', { message: 'Failed to send email. Please try again later.' });
+          res.render('find-password', { message: 'Failed to send email. Please try again later.', username: user.username });
         } else {
           console.log(info);
           res.redirect("/login?successMessage=Please check your email");
@@ -473,11 +485,11 @@ app.post('/find-password', async (req, res) => {
         }
       });
     } else {
-      res.render('find-password', { message: 'No user found with that email address.' });
+      res.render('find-password', { message: 'No user found with that email address.', username: user.username });
     }
   } catch (error) {
     console.log(error);
-    res.render('find-password', { message: 'Failed to find user. Please try again later.' });
+    res.render('find-password', { message: 'Failed to find user. Please try again later.', username: user.username });
   }
 });
 
@@ -491,11 +503,11 @@ app.get('/reset-password/:token', async (req, res) => {
       console.log(user)
       res.render('reset-password', { token: token, username: user.username, avatar: user.avatar });
     } else {
-      res.render('error', { message: 'Invalid or expired token' });
+      res.render('error', { message: 'Invalid or expired token', username: req.session.username });
     }
   } catch (error) {
     console.error(error);
-    res.render('error', { message: 'An error occurred' });
+    res.render('error', { message: 'An error occurred', username: req.session.username });
   }
 });
 
@@ -521,7 +533,7 @@ app.post('/reset-password-submit', async (req, res) => {
 
   } catch (error) {
     console.error(error);
-    res.render('error', { message: 'An error occurred' });
+    res.render('error', { message: 'An error occurred', username: req.session.username, isLoggedIn: isLoggedIn(req) });
   }
 
 });
@@ -569,10 +581,15 @@ app.get('/edit-profile', sessionValidation, async (req, res) => {
   res.render("edit-profile", { email, username, avatar, firebaseConfig, uid: new ObjectId(uid).toString(), isLoggedIn: isLoggedIn(req) });
 });
 
-app.post('/edit-profile-submit', sessionValidation, async (req, res) => {
-  let username = req.body.username;
+app.post('/edit-profile-submit', editProfileValidation, async (req, res) => {
+  let username = req.body.username?.trim();
   let avatar = req.body.avatar;
   let uid = req.session.uid;
+
+  if(!isLoggedIn(req)) {
+    res.redirect("/login");
+    return;
+  }
 
   await userCollection.updateOne({ _id: new ObjectId(uid) }, { $set: { username, avatar } });
   req.session.username = username;
@@ -873,40 +890,10 @@ app.post('/submitReview/:id', async (req, res) => {
   }
 });
 
-app.get('/profileReview', async (req, res) => {
-  const reviews = await reviewCollection.find().toArray();
-
-  const reviewSliderPairs = reviews.map(review => {
-    const sliderValue = {
-      courseContentSliderValue: review.CourseContentRating,
-      courseStructureSliderValue: review.CourseStructureRating,
-      teachingStyleSliderValue: review.TeachingStyleRating,
-      studentSupportSliderValue: review.StudentSupportRating
-    };
-
-
-    return {
-      review: review,
-      sliderValue: sliderValue
-    };
-  });
-
-  res.render("profile-review", {
-    req: req,
-    reviewSliderPairs: reviewSliderPairs
-  });
-
-});
-
 app.get('/my-reviews', async (req, res) => {
-  // const courseId = req.query.courseId;
   const reviews = await reviewCollection.find({ email: req.session.email }).toArray();
-  // const reviews = await reviewCollection.find().toArray();
-  // console.log("email:", req.session.email);
   const username = req.session.username;
   let courseId;
-  // const userId = req.session.uid;
-  // const email = req.session.email;
   const reviewGroups = {};
   
   // Group reviews by courseId
@@ -916,13 +903,9 @@ app.get('/my-reviews', async (req, res) => {
       reviewGroups[courseId] = [];
     }
     reviewGroups[courseId].push(review);
-    // console.log("courseId: ", reviewGroups);
   });
   
   const reviewSliderPairs = [];
-
-  //const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
-
   // Retrieve course information for each group
   for (const courseId in reviewGroups) {
     const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
@@ -987,12 +970,10 @@ app.get('/my-reviews', async (req, res) => {
     );
   }
 
-  // console.log(reviewSliderPairs)
   updateCourse(courseId, overallCategorySums, reviewSliderPairs.length);
 
   res.render("my-review", {
     req: req,
-    // courseId: courseId,
     reviewSliderPairs: reviewSliderPairs,
     username: username,
     isLoggedIn: isLoggedIn(req),
@@ -1006,7 +987,7 @@ app.use(express.static(__dirname + "/public"));
 
 app.get("*", (req, res) => {
   res.status(404);
-  res.render("404", { isLoggedIn: isLoggedIn(req) });
+  res.render("404", { isLoggedIn: isLoggedIn(req), username: req.session.username });
 })
 
 app.listen(port, () => {

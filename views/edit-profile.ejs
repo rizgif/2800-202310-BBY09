@@ -33,11 +33,14 @@
             <label for="email">email</label>
         </div>
 
+        <div class="form-indication">
+            <p>Name must be between 3 and 20 characters long.</p>
+        </div>
         <div class="form-floating">
-            <input name="username" type="text" class="form-control" id="username" placeholder="Username" value="<%= username %>" required>
-            <label for="username">Name</label>
+            <input name="username" type="text" class="form-control" id="username" placeholder="Username" value="<%= username %>" required minlength="3" maxlength="20">
+            <label for="username">Name <span>*</span></label>
             <div class="invalid-feedback">
-                Please enter your name.
+                Please enter your name as 3 ~ 20 characters long.
             </div>
         </div>
 
@@ -136,17 +139,32 @@ const post = async (data) => {
 // Form submission
 const form = document.getElementById("form-profile")
 $(form).submit(async function(e) {
+  const username = document.getElementById( "username" );
+
   e.preventDefault(); // Prevent the default form submission
 
-  let imgFile = input.files?.[0];
+  if (!form.checkValidity() || username.value?.trim().length < 3 || username.value?.trim().length > 20) {
+    form.classList.add('was-validated');
+    username.classList.remove( "is-valid" );
+    username.classList.add( "is-invalid" );
+    username.setAttribute("invalid", true)
 
-  if (imgFile) {
-    uploadImage(imgFile); 
+    return;
   } else {
-    post({
+    form.classList.remove('was-validated');
+    username.classList.add( "is-valid" );
+    username.classList.remove( "is-invalid" );
+
+    let imgFile = input.files?.[0];
+
+    if (imgFile) {
+      uploadImage(imgFile);
+    } else {
+      post({
         avatar: output.src.includes('image/avatar.png') ? output.src : null,
-        username: usernameInput.value
-    })
+        username: usernameInput.value?.trim()
+      })
+    }
   }
 });
 </script>

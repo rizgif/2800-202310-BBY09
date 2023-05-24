@@ -7,19 +7,19 @@ const {isLoggedIn} = require("./login");
 const errorMessages = {
   emptyPassword: 'Please provide a password',
   emptyEmail: 'Please provide an email address',
-  emptyUserName: 'Please provide a user name',
+  emptyUserName: 'Please provide a name',
 }
 
 const signupScheme = Joi.object({
-  password: Joi.string().min(2).max(20).required(),
-  email: Joi.string().email().required(),
-  username: Joi.string().min(2).max(20).required(),
+  password: Joi.string().min(4).max(20).required(),
+  email: Joi.string().email().min(5).required(),
+  username: Joi.string().min(3).max(20).required(),
 });
 
 const signupValidation = async (req, res, next) => {
-  let email = req.body.email;
+  let email = req.body.email?.trim();
   let password = req.body.password;
-  let username = req.body.username;
+  let username = req.body.username.trim();
 
   const validationResult = signupScheme.validate({username, email, password});
 

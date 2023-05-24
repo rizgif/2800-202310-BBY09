@@ -10,7 +10,6 @@
     max-width: 600px;
     border-radius: 20px;
     box-shadow: 0 0px 5px rgba(0, 0, 0, 0.3);
-   
 }
 
 .CourseCard-StyledCourseCard {
@@ -28,9 +27,6 @@
 .CourseCard-StyledCourseCard:hover {
   border-color: green;
 }
-
-
-
 
 .filter-btn {
 	padding-right: 5px;
@@ -76,32 +72,6 @@
   transform: scale(1.2);
 }
 
-/* .Coursecard-InfoRatingWrapper {
-	text-align: center;
-    box-sizing: border-box;
-    margin: 0px;
-    padding: 0px;
-    border: 0px;
-    font: inherit;
-    vertical-align: baseline;
-    color: rgb(21, 21, 21);
-    font-family: HelveticaNeue, arial;
-    font-size: 14px;
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-
-} */
-
-/* .CardNumRating-CardNumRatingNumber {
-	position: relative;
-	nav-index: 1;
-	width: 200px;;
-	display: block;
-	margin: 0 auto;
-} */
-
-
 /* Thumbnail */
 .card-thumbnail {
     width: 50%;
@@ -116,21 +86,6 @@
     border-radius: 10px; 
   }
   
-  /* Bookmark button */
-  /* .bookmark-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 5px;
-    background-color: #ccc;
-  } */
-
- /* Information side */
- /* .card-info {
-    flex: 1 1 auto;
-    text-align:left;
-
-  } */
   .card-info {
       width: 50%;
     text-align: left;
@@ -147,9 +102,6 @@
     font-size: 14px;
     margin: 1px 0;
 }
-
-
-
 
 .CourseCard-Container {
   margin-left: 10px;
