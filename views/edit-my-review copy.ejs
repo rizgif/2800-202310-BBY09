@@ -13,6 +13,9 @@
 
       <a class="dropdown-item delete-review-link" href="#" data-course-id="<%= review.CourseID %>">Delete
         this review </a>
+      <% console.log("ids", review.CourseID) %>
+
+
 
 
     </div>
@@ -42,7 +45,6 @@
 
 <script>
   $(document).ready(function () {
-  
     $(document).on('click', '.edit-review-link', function (e) {
       e.preventDefault();
 
@@ -55,19 +57,15 @@
 
 
   $(document).ready(function () {
-    var deletedCourseIds = [];
     // Handle delete review link click
     $(document).on('click', '.delete-review-link', function (e) {
       e.preventDefault();
       let deletionPerformed = false;
       const courseIdtobedeleted = $(this).data('course-id');
-
-      if (deletedCourseIds.includes(courseIdtobedeleted)) {
-      return; // Skip further processing
-    }
-
+      console.log("courses", courseIdtobedeleted)
       const desiredUserEmail = $('#desireUserEmail').data('useremail');
       
+
       // Show the custom modal
       $('#deleteReviewModal').css('display', 'block');
 
@@ -81,11 +79,11 @@
             // Handle success response
             $('.my-review-wrapper').each(function () {
               var courseId = $(this).find('.course_id').val().toString();
+              console.log("id here",courseId)
               if (courseIdtobedeleted  ===  courseId && !deletionPerformed) {
                 $(this).remove();
                 deletionPerformed = true;
               }
-              deletedCourseIds.push(courseIdtobedeleted);
             });
           },
         });

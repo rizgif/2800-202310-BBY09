@@ -1,9 +1,6 @@
 <% const sum = parseInt(sliderValue.courseContentSliderValue) + parseInt(sliderValue.studentSupportSliderValue) +
         parseInt(sliderValue.courseStructureSliderValue) + parseInt(sliderValue.teachingStyleSliderValue); %>
  
-
- <% console.log("email", email) %>
- <% console.log("user name", username) %>
 <div class="my-review-wrapper">
     <a href="/course-details?courseId=<%= courseId %>">
         <div class="my-review-provider">
@@ -43,7 +40,7 @@
             <div class="my-review-user_review user_review">
                 <%- review.Review.replaceAll('\n', '<br>' ) %>
                 <%- include("edit-my-review", {username: username, id: review._id.toString(), courseId:
-                courseId, myReviewPage: myReviewPage}) %>
+                courseId, myReviewPage: myReviewPage, email: email}) %>
             </div>
 
         </div>

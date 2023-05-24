@@ -731,13 +731,10 @@ app.post('/reviews/deleteReview/:id', async (req, res) => {
   const email = req.query.useremail;
   const uid = req.session.uid;
 
-  console.log("deleted review is for this course: ", courseId);
-  console.log("deleted review is for this email: ", email);
-
   // Get the review ID before deleting the review
   const deletedReview = await reviewCollection.findOne({ CourseID: courseId, email: email });
 
-  // console.log(deletedReview);
+  console.log("deleted", deletedReview);
 
   const reviewCount = await reviewCollection.countDocuments({
     email: email
@@ -936,12 +933,10 @@ app.get('/my-reviews', async (req, res) => {
       reviewGroups[courseId] = [];
     }
     reviewGroups[courseId].push(review);
-    // console.log("courseId: ", reviewGroups);
   });
 
   const reviewSliderPairs = [];
 
-  //const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
 
   // Retrieve course information for each group
   for (const courseId in reviewGroups) {
