@@ -787,7 +787,8 @@ app.post('/submitReview/:id', async (req, res) => {
     currentDate } = req.body;
 
   // const errorMessage = await reviewValidation(req.body);
-  console.log(req.errorMessage);
+
+  console.log("review", req.body.review);
 
   // if there is a exisiting review, direct user to edit their existing review
   if (Existingreviews) {

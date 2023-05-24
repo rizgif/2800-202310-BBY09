@@ -39,12 +39,7 @@
                                             placeholder="Write your review..."></textarea>
                                         <div class="character-count">0/800</div>
                                     </div>
-
-
-
                                     <% } %>
-
-
 
                                         <div class="ratings">
                                             <div class="review-section-1">
@@ -119,7 +114,7 @@
                     <% } %>
 
 
-
+                        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
                         <script>
                             const sliders = document.querySelectorAll('.slider');
 
@@ -195,6 +190,21 @@
                                 });
                             });
 
+                            $(document).ready(function () {
+                                $('form').on('submit', function (e) {
+                                    e.preventDefault();
+                                    var review = $('textarea[name="review"]').val().trim();
+                                    if (!review) {
+                                        Swal.fire({
+                                            title: 'Error',
+                                            text: 'Please provide a review',                                         
+                                        });
+                                    } else {
+                                        // Submit the form
+                                        this.submit();
+                                    }
+                                });
+                            });
 
                         </script>
 

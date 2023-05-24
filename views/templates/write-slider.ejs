@@ -26,3 +26,18 @@
         </div>
 
         <% } %>
+
+            <script>
+                $(document).ready(function () {
+                    $('.slider').each(function () {
+                        var sliderValueInput = $(this).find('input[type="hidden"]');
+                        var defaultValue = 3;
+
+                        // Check if the slider value is empty
+                        if (sliderValueInput.val() === '') {
+                            sliderValueInput.val(defaultValue);
+                        }
+                    });
+                });
+
+            </script>

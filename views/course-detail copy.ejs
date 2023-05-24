@@ -15,10 +15,6 @@
                 </span>
         </a>
 
-        <!-- create a go back button -->
-        <a class="btn btn-secondary" type="submit" id="submitBtn"
-        href="http://localhost:8000/search-results?courseSearch=">Back</a>
-
         <% if (isLoggedIn) { %>
             <% const bookmarkedCourseIds = userBookmarks.map(b => b.courseId); %>
             <button class="btn Course-Bookmark <%= bookmarkedCourseIds.includes(courseId) ? 'bookmarked' : '' %>"
