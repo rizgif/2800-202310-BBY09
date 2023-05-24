@@ -199,6 +199,8 @@ app.get('/course-details', async (req, res) => {
 
   const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
   const email = req.session.email;
+  const selecteduser = await userCollection.find({ email: email }).toArray();
+
 
   const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
 
@@ -219,12 +221,15 @@ app.get('/course-details', async (req, res) => {
         return {
           review: review,
           sliderValue: sliderValue,
+          user: user,
           avatar: avatar,
           Badges: user?.Badges || ""
         };
 
       })
   );
+
+  
 
   const totalvote = reviewSliderPairs.length;
   const numCategory = 4;
@@ -262,13 +267,6 @@ app.get('/course-details', async (req, res) => {
   // console.log(reviewSliderPairs)
   updateCourse(courseId, overallCategorySums, reviewSliderPairs.length);
 
-  // reviewSliderPairs =  await Promise.all(
-  //   reviewSliderPairs.map(async (pair) => {
-  //     const userInfo = await userCollection.findOne({ email: pair.review.email });
-  //     return {...pair, userInfo}
-  //   }
-  // ));
-
   res.render("course-detail", {
     req: req,
     courseId: courseId,
@@ -281,7 +279,9 @@ app.get('/course-details', async (req, res) => {
     CourslaRating: CourslaRating,
     userBookmarks,
     easterEgg: false,
-    myReviewPage: false
+    myReviewPage: false,
+    email:email,
+    selecteduser: selecteduser
   });
 });
 

@@ -4,6 +4,7 @@
     <%- include("templates/header-beforeLogin") %>
 <% } %>
 
+
 <!--Course Detail-->
 <div class="course-detail">
     <div class="course-detail-buttons">
@@ -131,9 +132,10 @@
     </a>
 
     <% reviewSliderPairs.forEach(pair=> { %>
-        <%- include("read-review", { review: pair.review, sliderValue: pair.sliderValue, username: username,
-        courseId: courseId, avatar: pair.avatar, Badges: pair.Badges, myReviewPage: myReviewPage }) %>
+        <%- include("read-review", { review: pair.review, sliderValue: pair.sliderValue, username: pair.user.username,
+        courseId: courseId, avatar: pair.avatar, Badges: pair.Badges, myReviewPage: myReviewPage, selecteduser: selecteduser}) %>
     <% }) %>
+    
 
 </div>
 
