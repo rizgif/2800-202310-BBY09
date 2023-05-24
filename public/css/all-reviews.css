@@ -28,7 +28,9 @@
     height: auto;
     /* width: 90vw; */
     border-radius: 15px;
-    background-color: #D7D3C1;
+    border: 1px solid #ccc;
+    box-shadow: 0 0px 5px rgba(0, 0, 0, 0.3);
+    background-color: #eee;
     overflow: hidden;
     grid-auto-flow: row;
     grid-template-areas:

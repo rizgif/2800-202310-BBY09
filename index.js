@@ -124,6 +124,9 @@ app.get('/search-results', async (req, res) => {
   const rating = req.query.rating?.toLowerCase(); // "high", "low"
   const sort = req.query.sort; // "high to low", "low to high"
 
+  
+
+
   console.log(courseSearch, provider, level, rating)
 
   const condition = {};
@@ -170,6 +173,7 @@ app.get('/search-results', async (req, res) => {
 
     searchResult = nonCalibratedValues.concat(nonCalibratedValues);
     console.log(nonCalibratedValues);
+
 
 
     res.render("search-results", {
