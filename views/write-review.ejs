@@ -29,11 +29,14 @@
 
                             <div class="time-stamp"></div>
                             <% if (editReview) { %>
-                                <textarea name="review" class="write-review"><%= specificReview.Review %></textarea>
-                                <div class="character-count">0/800</div>
+                                <div class="review-container">
+                                    <textarea name="review" class="write-review"><%= specificReview.Review %></textarea>
+                                    <div class="character-count">/800</div>
+                                </div>
                                 <% } else {%>
                                     <div class="review-container">
-                                        <textarea name="review" class="write-review" placeholder="Write your review..."></textarea>
+                                        <textarea name="review" class="write-review"
+                                            placeholder="Write your review..."></textarea>
                                         <div class="character-count">0/800</div>
                                     </div>
 
@@ -155,12 +158,41 @@
                             });
 
 
-                            const textarea = document.querySelector('.write-review');
-                            const characterCount = document.querySelector('.character-count');
+                            // const textarea = document.querySelector('.write-review');
+                            // const characterCount = document.querySelector('.character-count');
 
-                            textarea.addEventListener('input', function () {
-                                const count = this.value.length;
-                                characterCount.textContent = count + '/800';
+                            // textarea.addEventListener('input', function () {
+                            //     const count = this.value.length;
+                            //     characterCount.textContent = count + '/800';
+                            // });
+
+                            $(document).ready(function () {
+                                // Get the textarea element
+                                var textarea = $('.write-review');
+
+                                // Get the character count element
+                                var characterCount = $('.character-count');
+
+                                // Calculate the initial character count
+                                var reviewContent = textarea.val();
+                                var initialCount = reviewContent.length;
+
+                                // Set the initial character count
+                                characterCount.text(initialCount + '/800');
+
+                                // Update the character count on input
+                                textarea.on('input', function () {
+                                    var text = textarea.val();
+                                    var count = text.length;
+
+                                    // Update the character count text based on condition
+                                    if (count <= 800) {
+                                        characterCount.text(count + '/800');
+                                    } else {
+                                        // Handle the case when the character limit is exceeded
+                                        characterCount.text('Limit Exceeded');
+                                    }
+                                });
                             });
 
 
