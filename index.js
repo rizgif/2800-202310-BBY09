@@ -19,7 +19,7 @@ const {
   isLoggedIn,
   reviewValidation
 } = require('./middleware');
-const {editProfileValidation} = require("./middleware/edit-profile");
+const { editProfileValidation } = require("./middleware/edit-profile");
 
 const saltRounds = 12;
 
@@ -167,7 +167,7 @@ app.get('/search-results', async (req, res) => {
         CalibratedValues.push(course);
       }
     });
-  
+
     searchResult = nonCalibratedValues.concat(nonCalibratedValues);
     console.log(nonCalibratedValues);
 
@@ -199,6 +199,8 @@ app.get('/course-details', async (req, res) => {
 
   const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
   const email = req.session.email;
+  const selecteduser = await userCollection.find({ email: email }).toArray();
+
 
   const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
 
@@ -219,12 +221,15 @@ app.get('/course-details', async (req, res) => {
         return {
           review: review,
           sliderValue: sliderValue,
+          user: user,
           avatar: avatar,
           Badges: user?.Badges || ""
         };
 
       })
   );
+
+
 
   const totalvote = reviewSliderPairs.length;
   const numCategory = 4;
@@ -262,13 +267,6 @@ app.get('/course-details', async (req, res) => {
   // console.log(reviewSliderPairs)
   updateCourse(courseId, overallCategorySums, reviewSliderPairs.length);
 
-  // reviewSliderPairs =  await Promise.all(
-  //   reviewSliderPairs.map(async (pair) => {
-  //     const userInfo = await userCollection.findOne({ email: pair.review.email });
-  //     return {...pair, userInfo}
-  //   }
-  // ));
-
   res.render("course-detail", {
     req: req,
     courseId: courseId,
@@ -281,7 +279,9 @@ app.get('/course-details', async (req, res) => {
     CourslaRating: CourslaRating,
     userBookmarks,
     easterEgg: false,
-    myReviewPage: false
+    myReviewPage: false,
+    email: email,
+    selecteduser: selecteduser
   });
 });
 
@@ -403,7 +403,7 @@ app.post('/signup-submit', signupValidation, async (req, res) => {
   let username = req.body.username?.trim();
   let email = req.body.email?.trim();
 
-  if(isLoggedIn(req)){
+  if (isLoggedIn(req)) {
     res.redirect('/');
     return;
   }
@@ -586,7 +586,7 @@ app.post('/edit-profile-submit', editProfileValidation, async (req, res) => {
   let avatar = req.body.avatar;
   let uid = req.session.uid;
 
-  if(!isLoggedIn(req)) {
+  if (!isLoggedIn(req)) {
     res.redirect("/login");
     return;
   }
@@ -603,6 +603,8 @@ app.get('/reviews/write/:courseid', async (req, res) => {
   const username = req.session.username;
   const avatar = req.session.avatar;
   const courseId = req.params.courseid.replace(':', '');
+  const email = req.session.email;
+
 
   if (username == null) {
 
@@ -614,6 +616,7 @@ app.get('/reviews/write/:courseid', async (req, res) => {
 
   const reviewSliderPairs = reviews.map(review => ({
     username: review.username,
+    email: review.email,
     sliderValue: {
       courseContentSliderValue: review.CourseContentRating,
       courseStructureSliderValue: review.CourseStructureRating,
@@ -630,7 +633,7 @@ app.get('/reviews/write/:courseid', async (req, res) => {
   }));
 
   // Find the specific review for the current user
-  const specificReview = reviews.find(review => review.username === username && review.CourseID === courseId);
+  const specificReview = reviews.find(review => review.email === email && review.CourseID === courseId);
   const hasReview = Boolean(specificReview);
 
   if (specificReview) {
@@ -647,6 +650,7 @@ app.get('/reviews/write/:courseid', async (req, res) => {
       hasReview: hasReview,
       reviewId: reviewId,
       avatar: avatar,
+      email: email
       // myReviewPage: myReviewPage
     }
     // console.log(avatar)
@@ -664,7 +668,7 @@ app.get('/reviews/write/:courseid', async (req, res) => {
       editReview: false,
       // specificReview: specificReview,
       hasReview: hasReview,
-
+      email: email
     };
     res.render("write-review", renderData);
   }
@@ -723,13 +727,12 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
 //delete the review from database
 app.post('/reviews/deleteReview/:id', async (req, res) => {
   const courseId = req.params.id;
-  const username = req.query.username;
-  const email = req.session.email;
+  
+  const email = req.query.useremail;
   const uid = req.session.uid;
 
-  console.log("deleted review is for this course: ", courseId);
   // Get the review ID before deleting the review
-  const deletedReview = await reviewCollection.findOne({ CourseID: courseId, username: username });
+  const deletedReview = await reviewCollection.findOne({ CourseID: courseId, email: email });
 
   if (deletedReview.length < 1) {
     return false;
@@ -743,7 +746,7 @@ app.post('/reviews/deleteReview/:id', async (req, res) => {
 
   if (deletedReview) {
     const deletedReviewId = deletedReview._id.toString();
-    await reviewCollection.deleteOne({ CourseID: courseId, username: username });
+    await reviewCollection.deleteOne({ CourseID: courseId, email: email });
 
     // Delete the corresponding review ID from the array in the user document
     console.log('reviewCount', reviewCount);
@@ -788,7 +791,8 @@ app.post('/submitReview/:id', async (req, res) => {
     currentDate } = req.body;
 
   // const errorMessage = await reviewValidation(req.body);
-  console.log(req.errorMessage);
+
+  console.log("review", req.body.review);
 
   // if there is a exisiting review, direct user to edit their existing review
   if (Existingreviews) {
@@ -895,11 +899,13 @@ app.post('/submitReview/:id', async (req, res) => {
 });
 
 app.get('/my-reviews', async (req, res) => {
-  const reviews = await reviewCollection.find({ email: req.session.email }).toArray();
+  const email = req.session.email;
+  const reviews = await reviewCollection.find({ email: email }).toArray();
   const username = req.session.username;
+  console.log("name", username);
   let courseId;
   const reviewGroups = {};
-  
+
   // Group reviews by courseId
   reviews.forEach(review => {
     courseId = review.CourseID;
@@ -908,12 +914,14 @@ app.get('/my-reviews', async (req, res) => {
     }
     reviewGroups[courseId].push(review);
   });
-  
+
   const reviewSliderPairs = [];
+
+
   // Retrieve course information for each group
   for (const courseId in reviewGroups) {
     const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
-    
+
     const groupReviews = reviewGroups[courseId];
     const groupSliderPairs = await Promise.all(
       groupReviews.map(async review => {
@@ -931,6 +939,7 @@ app.get('/my-reviews', async (req, res) => {
           review: review,
           sliderValue: sliderValue,
           avatar: avatar,
+          user: user,
           courseId: courseId, // Pass the courseId to the template
           courseImageNum: courseInfo.imageNum, // Get the imageNum from courseInfo
           courseTitle: courseInfo.Title // Get the title from courseInfo
@@ -983,7 +992,8 @@ app.get('/my-reviews', async (req, res) => {
     isLoggedIn: isLoggedIn(req),
     overallCategorySums: overallCategorySums,
     Totalvote: totalvote,
-    myReviewPage: true
+    myReviewPage: true,
+    email: email
   });
 });
 

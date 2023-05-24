@@ -1,139 +1,109 @@
 <link rel="stylesheet" href="/css/edit-review.css">
 
-<% console.log("happy") %>
-  <div class="setting review-setting">
-    <div class="dropdown">
-      <button class="btn edit-button" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
-        aria-expanded="false">
-        <img src="/image/setting.png" alt="Setting" />
-      </button>
+<div class="setting review-setting">
+  <div class="dropdown">
+    <button class="btn edit-button" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+      aria-expanded="false">
+      <img src="/image/setting.png" alt="Setting" />
+    </button>
 
-      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item edit-review-link" href="#" data-review-id="<%= review._id.toString() %>">Edit this
-          review</a>
-        <% console.log("my reviews", review) %>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <a class="dropdown-item edit-review-link" href="#" data-review-id="<%= review._id.toString() %>">Edit this
+        review</a>
 
-          <a class="dropdown-item delete-review-link" href="#" data-course-id="<%= review.CourseID %>">Delete
-            this review </a>
-          <% console.log("ids", review.CourseID) %>
+      <a class="dropdown-item delete-review-link" href="#" data-course-id="<%= review.CourseID %>">Delete
+        this review </a>
 
 
-
-
-      </div>
     </div>
   </div>
+</div>
 
-  <!-- Add a modal container -->
-  <div id="deleteReviewModal" class="modal review-modal">
-    <div class="modal-content">
-      <h2 class="modal-header">Confirm Delete</h2>
-      <p>Are you sure you want to delete this review?</p>
+<!-- Add a modal container -->
+<div id="deleteReviewModal" class="modal review-modal">
+  <div class="modal-content">
+    <h2 class="modal-header">Confirm Delete</h2>
+    <p>Are you sure you want to delete this review?</p>
 
-      <input type="hidden" id="desiredCourse" data-courseid="<%= courseId%>">
+    <input type="hidden" id="desiredCourse" data-courseid="<%= review.CourseID %>">
+    <input type="hidden" id="desiredReview" data-reviewid="<%= review._id.toString() %>">
+    <input type="hidden" id="desireUserEmail" data-useremail="<%= email %>">
 
-      <input type="hidden" id="desiredUsername" data-username="<%= username%>">
 
-      <div class="modal-buttons">
-        <button id="confirmDeleteBtn" class="btn-confirm">Delete</button>
-        <button id="cancelDeleteBtn" class="btn-cancel">Cancel</button>
-      </div>
+
+    <div class="modal-buttons">
+      <button id="confirmDeleteBtn" class="btn-confirm">Delete</button>
+      <button id="cancelDeleteBtn" class="btn-cancel">Cancel</button>
     </div>
   </div>
+</div>
 
 
 
-  <script>
-    $(document).ready(function () {
-      $(document).on('click', '.edit-review-link', function (e) {
-        e.preventDefault();
+<script>
+  $(document).ready(function () {
+  
+    $(document).on('click', '.edit-review-link', function (e) {
+      e.preventDefault();
 
-        const reviewId = $(this).data('review-id');
-        console.log("i am here", reviewId)
+      const reviewId = $(this).data('review-id');
 
-        // Redirect to the edit review page with the review ID
-        window.location.href = '/reviews/write/updateReview/' + reviewId;
-      });
+      // Redirect to the edit review page with the review ID
+      window.location.href = '/reviews/write/updateReview/' + reviewId;
     });
+  });
 
 
-    $(document).ready(function () {
-      var myReviewPage = '<%= myReviewPage %>';
+  $(document).ready(function () {
+    var deletedCourseIds = [];
+    // Handle delete review link click
+    $(document).on('click', '.delete-review-link', function (e) {
+      e.preventDefault();
+      let deletionPerformed = false;
+      const courseIdtobedeleted = $(this).data('course-id');
 
-      // Handle delete review link click
-      $(document).on('click', '.delete-review-link', function (e) {
-        e.preventDefault();
+      if (deletedCourseIds.includes(courseIdtobedeleted)) {
+      return; // Skip further processing
+    }
 
-        const courseIdtobedeleted = $(this).data('course-id');
-        console.log("idtobedeleted", courseIdtobedeleted);
+      const desiredUserEmail = $('#desireUserEmail').data('useremail');
+      
+      // Show the custom modal
+      $('#deleteReviewModal').css('display', 'block');
 
-        const desiredUsername = $('#desiredUsername').data('username');
-
-        console.log("name", desiredUsername)
-
-        // Show the custom modal
-        $('#deleteReviewModal').css('display', 'block');
-
-        //delete button clicked and delete the review from the database
-        $('#confirmDeleteBtn').on('click', function () {
-          if (myReviewPage) {
-            // Ajax request for condition 1
-            $.ajax({
-              url: '/reviews/deleteReview/' + courseIdtobedeleted + '?username=' + desiredUsername,
-              type: 'POST',
-              success: function (result) {
-
-                // Handle success response
-                $('.my-review-wrapper').each(function () {
-                  var courseId = $(this).find('.course_id').val().toString();
-
-                  console.log("courseid here", courseId);
-                  if (courseId === courseIdtobedeleted) {
-                    $(this).remove();
-                  }
-                });
+      // Delete button clicked and delete the review from the database
+      $('#confirmDeleteBtn').on('click', function () {
+        // Ajax request to delete the review
+        $.ajax({
+          url: '/reviews/deleteReview/' + courseIdtobedeleted + '?useremail=' + desiredUserEmail,
+          type: 'POST',
+          success: function (result) {
+            // Handle success response
+            $('.my-review-wrapper').each(function () {
+              var courseId = $(this).find('.course_id').val().toString();
+              if (courseIdtobedeleted  ===  courseId && !deletionPerformed) {
+                $(this).remove();
+                deletionPerformed = true;
               }
+              deletedCourseIds.push(courseIdtobedeleted);
             });
-          }
-          else if (myReviewPage == false) {
-            // Send a delete request to the server
-            $.ajax({
-              url: '/reviews/deleteReview/' + courseIdtobedeleted,
-              type: 'POST',
-              success: function (result) {
-                // Handle success response
-                console.log('Review deleted successfully');
-
-                $('.grid-container').each(function () {
-                  var username = $(this).find('.user_info').text().toString().trim(); // Assuming username is within an element with class "user_info"
-                  console.log(username);
-                  const desiredUsername = $('#desiredUsername').data('username').toString().trim();
-
-                  console.log(desiredUsername);
-                  if (username === desiredUsername) {
-                    $(this).remove();
-                  }
-                });
-              },
-              error: function (error) {
-                // Handle error response for condition 2
-                console.error('Failed to delete review for condition 2:', error);
-              }
-            });
-          }
-
-          // Hide the modal
-          $('#deleteReviewModal').css('display', 'none');
+          },
         });
-      });
 
-      // Cancel button clicked and hide the modal
-      $('#cancelDeleteBtn').on('click', function () {
+        // Hide the modal
         $('#deleteReviewModal').css('display', 'none');
       });
     });
 
+    // Cancel button clicked and hide the modal
+    $('#cancelDeleteBtn').on('click', function () {
+      $('#deleteReviewModal').css('display', 'none');
+    });
+  });
 
 
 
-  </script>
+
+
+
+</script>
