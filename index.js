@@ -116,7 +116,14 @@ app.get('/', async (req, res) => {
 
 app.get('/search-results', async (req, res) => {
   const userId = req.session.uid;
-  const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
+  let userBookmarks = [];
+
+  if (userId) {
+    userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
+  }
+
+  
+  
 
   const courseSearch = req.query.courseSearch;
   const provider = req.query.provider?.toLowerCase(); // 'coursera', 'udemy',
