@@ -7,7 +7,6 @@
 
 <!--Course Detail-->
 <div class="course-detail-thumbnail" style="background-image:url('/image/randomimage/<%= courseInfo.imageNum %>.jpeg')">
-<!--    <img src="/image/randomimage/<%= courseInfo.imageNum %>.jpeg" alt="Image <%= courseInfo.imageNum %>">-->
 </div>
 <div class="course-detail">
     <div class="course-detail-buttons">
@@ -102,8 +101,6 @@
 </div>
 
 <!--Reviews-->
-
-
 <div class="course-detail-reviews">
     <%- include("all-reviews", { overallCategorySums: overallCategorySums, num: Totalvote, CourslaRating:
     CourslaRating}) %>
@@ -127,9 +124,12 @@
         <button class="btn btn-primary">Write a Review</button>
     </a>
 
+    <% console.log("pair review", reviewSliderPairs) %>
+
     <% reviewSliderPairs.forEach(pair=> { %>
         <%- include("read-review", { review: pair.review, sliderValue: pair.sliderValue, username: pair.user.username,
         courseId: courseId, avatar: pair.avatar, Badges: pair.Badges, myReviewPage: myReviewPage, selecteduser: selecteduser}) %>
+ 
     <% }) %>
     
 

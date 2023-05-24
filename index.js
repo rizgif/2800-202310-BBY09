@@ -119,14 +119,13 @@ app.get('/search-results', async (req, res) => {
   const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
 
   const courseSearch = req.query.courseSearch;
-  const provider = req.query.provider?.toLowerCase(); // 'coursera', 'udemy',
-  const level = req.query.level?.toLowerCase(); // 'all', 'beginner', 'intermediate', 'advanced'
-  const rating = req.query.rating?.toLowerCase(); // "high", "low"
-  const sort = req.query.sort; // "high to low", "low to high"
-
-  console.log(courseSearch, provider, level, rating)
+  const provider = req.query.provider?.toLowerCase();
+  const level = req.query.level?.toLowerCase();
+  const rating = req.query.rating?.toLowerCase();
+  const sort = req.query.sort;
 
   const condition = {};
+
   if (courseSearch) {
     condition.Title = { $regex: `${courseSearch}`, $options: 'i' };
   }
@@ -136,41 +135,24 @@ app.get('/search-results', async (req, res) => {
 
   const sortOptions = {};
 
-  // Set default sort option to "high to low"
-  sortOptions.Course_Rating = -1; // Sort by Course_Rating in descending order
+  sortOptions.Course_Rating = -1; // Default sort by Course_Rating in descending order
 
   if (sort === 'low to high') {
-    // Change sort option to "low to high" when specified
     sortOptions.Course_Rating = 1; // Sort by Course_Rating in ascending order
   }
 
-
-
-  console.log('condition', condition)
-
   try {
-    let searchResult = await courseCollection.find(condition).project({
-      _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, CourslaRating: 1, imageNum: 1,
-    }).sort(sortOptions).toArray();
-    // console.log(searchResult)
-    const searchResultCount = searchResult?.length;
-    const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
+    let searchResult;
 
-    let CalibratedValues = [];
-    let nonCalibratedValues = [];
+    if (Object.keys(condition).length === 0) {
+      // No query parameters provided, fetch all objects
+      searchResult = await courseCollection.find().toArray();
+    } else {
+      // Query parameters provided, filter the search
+      searchResult = await courseCollection.find(condition).sort(sortOptions).toArray();
+    }
 
-    searchResult.forEach((course) => {
-
-      if (course.Course_Rating !== "Not Calibrated") {
-        nonCalibratedValues.push(course);
-      } else {
-        CalibratedValues.push(course);
-      }
-    });
-  
-    searchResult = nonCalibratedValues.concat(nonCalibratedValues);
-    console.log(nonCalibratedValues);
-
+    const searchResultCount = searchResult.length;
 
     res.render("search-results", {
       searchResult: searchResult,
@@ -182,9 +164,8 @@ app.get('/search-results', async (req, res) => {
       level,
       rating,
       sort,
-      username: req.session.username,
+      username: req.session.username
     });
-
   } catch (error) {
     console.error(error);
     res.status(500).send('An error occurred while searching');
@@ -199,9 +180,11 @@ app.get('/course-details', async (req, res) => {
 
   const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
   const email = req.session.email;
+  const selecteduser = await userCollection.find({ email: email }).toArray();
 
   const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
 
+  console.log(selecteduser)
   let reviewSliderPairs = await Promise.all(
     reviews
       .filter(review => review.CourseID === courseId)
@@ -219,6 +202,7 @@ app.get('/course-details', async (req, res) => {
         return {
           review: review,
           sliderValue: sliderValue,
+          user: user,
           avatar: avatar,
           Badges: user?.Badges || ""
         };
@@ -281,7 +265,9 @@ app.get('/course-details', async (req, res) => {
     CourslaRating: CourslaRating,
     userBookmarks,
     easterEgg: false,
-    myReviewPage: false
+    myReviewPage: false,
+    email: email,
+    selecteduser: selecteduser
   });
 });
 
@@ -603,6 +589,7 @@ app.get('/reviews/write/:courseid', async (req, res) => {
   const username = req.session.username;
   const avatar = req.session.avatar;
   const courseId = req.params.courseid.replace(':', '');
+  const email = req.session.email;
 
   if (username == null) {
 
@@ -614,6 +601,7 @@ app.get('/reviews/write/:courseid', async (req, res) => {
 
   const reviewSliderPairs = reviews.map(review => ({
     username: review.username,
+    email: review.email,
     sliderValue: {
       courseContentSliderValue: review.CourseContentRating,
       courseStructureSliderValue: review.CourseStructureRating,
@@ -630,7 +618,7 @@ app.get('/reviews/write/:courseid', async (req, res) => {
   }));
 
   // Find the specific review for the current user
-  const specificReview = reviews.find(review => review.username === username && review.CourseID === courseId);
+  const specificReview = reviews.find(review => review.email === email && review.CourseID === courseId);
   const hasReview = Boolean(specificReview);
 
   if (specificReview) {
@@ -647,6 +635,7 @@ app.get('/reviews/write/:courseid', async (req, res) => {
       hasReview: hasReview,
       reviewId: reviewId,
       avatar: avatar,
+      email: email
       // myReviewPage: myReviewPage
     }
     // console.log(avatar)
@@ -664,6 +653,7 @@ app.get('/reviews/write/:courseid', async (req, res) => {
       editReview: false,
       // specificReview: specificReview,
       hasReview: hasReview,
+      email: email
 
     };
     res.render("write-review", renderData);
@@ -723,13 +713,16 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
 //delete the review from database
 app.post('/reviews/deleteReview/:id', async (req, res) => {
   const courseId = req.params.id;
-  const username = req.query.username;
-  const email = req.session.email;
+  const email = req.query.useremail || req.session.email;
   const uid = req.session.uid;
 
   console.log("deleted review is for this course: ", courseId);
   // Get the review ID before deleting the review
-  const deletedReview = await reviewCollection.findOne({ CourseID: courseId, username: username });
+  const deletedReview = await reviewCollection.findOne({ CourseID: courseId, email: email });
+
+  if (!deletedReview || deletedReview?.length < 1) {
+    return false;
+  }
 
   // console.log(deletedReview);
 
@@ -739,7 +732,7 @@ app.post('/reviews/deleteReview/:id', async (req, res) => {
 
   if (deletedReview) {
     const deletedReviewId = deletedReview._id.toString();
-    await reviewCollection.deleteOne({ CourseID: courseId, username: username });
+    await reviewCollection.deleteOne({ CourseID: courseId, email: email });
 
     // Delete the corresponding review ID from the array in the user document
     console.log('reviewCount', reviewCount);
@@ -891,7 +884,8 @@ app.post('/submitReview/:id', async (req, res) => {
 });
 
 app.get('/my-reviews', async (req, res) => {
-  const reviews = await reviewCollection.find({ email: req.session.email }).toArray();
+  const email = req.session.email;
+  const reviews = await reviewCollection.find({ email: email }).toArray();
   const username = req.session.username;
   let courseId;
   const reviewGroups = {};
@@ -927,6 +921,7 @@ app.get('/my-reviews', async (req, res) => {
           review: review,
           sliderValue: sliderValue,
           avatar: avatar,
+          user: user,
           courseId: courseId, // Pass the courseId to the template
           courseImageNum: courseInfo.imageNum, // Get the imageNum from courseInfo
           courseTitle: courseInfo.Title // Get the title from courseInfo
@@ -979,7 +974,8 @@ app.get('/my-reviews', async (req, res) => {
     isLoggedIn: isLoggedIn(req),
     overallCategorySums: overallCategorySums,
     Totalvote: totalvote,
-    myReviewPage: true
+    myReviewPage: true,
+    email: email
   });
 });
 

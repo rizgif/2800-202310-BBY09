@@ -32,7 +32,7 @@
         </div>
         <div class="user_review">
             <%- review.Review.replaceAll('\n', '<br>' ) %>
-                <% if (selecteduser[0].username === username) { %>
+                <% if (selecteduser?.[0]?.username === username) { %>
                     <%- include("edit-review", {username: username, id: review._id.toString(), courseId: courseId,
                         myReviewPage: myReviewPage, selecteduser: selecteduser}) %>
                         <% } %>
