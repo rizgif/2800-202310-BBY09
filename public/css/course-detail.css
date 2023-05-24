@@ -1,5 +1,5 @@
 .course-detail {
-    margin-top: 20px;
+    margin-top: 10px;
     padding: 0 20px;
 }
 .course-detail > h2 {
@@ -109,6 +109,32 @@
     font-weight: 600;
     font-size: 1.2em;
 }
+.course-detail-thumbnail {
+    position: relative;
+    margin: 0 -20px;
+    width: calc(100% + 40px);
+    overflow: hidden;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: top;
+}
+.course-detail-thumbnail:before {
+    content: '';
+    display: block;
+    padding-top: 50%;
+}
+.course-detail-thumbnail:after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-image:linear-gradient(0deg, rgba(0,0,0,0.5),rgba(0,0,0,0.3), rgba(0,0,0,0.2))
+
+}
+
 
 
 /* review cards */
