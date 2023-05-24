@@ -199,6 +199,7 @@ app.get('/course-details', async (req, res) => {
 
   const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
   const email = req.session.email;
+  const selecteduser = await userCollection.find({ email: email }).toArray();
 
   const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
 
@@ -219,6 +220,7 @@ app.get('/course-details', async (req, res) => {
         return {
           review: review,
           sliderValue: sliderValue,
+          user: user,
           avatar: avatar,
           Badges: user?.Badges || ""
         };
@@ -281,7 +283,8 @@ app.get('/course-details', async (req, res) => {
     CourslaRating: CourslaRating,
     userBookmarks,
     easterEgg: false,
-    myReviewPage: false
+    myReviewPage: false,
+    selecteduser: selecteduser
   });
 });
 
