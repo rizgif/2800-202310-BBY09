@@ -124,6 +124,11 @@ app.get('/search-results', async (req, res) => {
   const rating = req.query.rating?.toLowerCase(); // "high", "low"
   const sort = req.query.sort; // "high to low", "low to high"
 
+   // Check if there are any search parameters provided
+   if (!courseSearch && !provider && !level && !rating) {
+    return res.redirect('/'); // or handle it in your desired way
+  }
+
   console.log(courseSearch, provider, level, rating)
 
   const condition = {};
@@ -734,7 +739,11 @@ app.post('/reviews/deleteReview/:id', async (req, res) => {
   // Get the review ID before deleting the review
   const deletedReview = await reviewCollection.findOne({ CourseID: courseId, email: email });
 
-  console.log("deleted", deletedReview);
+  if (deletedReview.length < 1) {
+    return false;
+  }
+
+  // console.log(deletedReview);
 
   const reviewCount = await reviewCollection.countDocuments({
     email: email
