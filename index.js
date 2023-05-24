@@ -734,7 +734,11 @@ app.post('/reviews/deleteReview/:id', async (req, res) => {
   // Get the review ID before deleting the review
   const deletedReview = await reviewCollection.findOne({ CourseID: courseId, email: email });
 
-  console.log("deleted", deletedReview);
+  if (deletedReview.length < 1) {
+    return false;
+  }
+
+  // console.log(deletedReview);
 
   const reviewCount = await reviewCollection.countDocuments({
     email: email
