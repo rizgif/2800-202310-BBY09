@@ -154,6 +154,22 @@ app.get('/search-results', async (req, res) => {
 
     const searchResultCount = searchResult.length;
 
+    let CalibratedValues = [];
+    let nonCalibratedValues = [];
+
+    searchResult.forEach((course) => {
+
+      if (course.Course_Rating !== "Not Calibrated") {
+        nonCalibratedValues.push(course);
+      } else {
+        CalibratedValues.push(course);
+      }
+    });
+
+    searchResult = nonCalibratedValues.concat(nonCalibratedValues);
+    console.log(nonCalibratedValues);
+
+
     res.render("search-results", {
       searchResult: searchResult,
       searchResultCount: searchResultCount,
