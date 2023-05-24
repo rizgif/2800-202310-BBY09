@@ -922,14 +922,11 @@ app.get('/profileReview', async (req, res) => {
 });
 
 app.get('/my-reviews', async (req, res) => {
-  // const courseId = req.query.courseId;
-  const reviews = await reviewCollection.find({ email: req.session.email }).toArray();
-  // const reviews = await reviewCollection.find().toArray();
-  // console.log("email:", req.session.email);
+  const email = req.session.email;
+  const reviews = await reviewCollection.find({ email: email }).toArray();
   const username = req.session.username;
+  console.log("name", username);
   let courseId;
-  // const userId = req.session.uid;
-  // const email = req.session.email;
   const reviewGroups = {};
 
   // Group reviews by courseId
@@ -967,6 +964,7 @@ app.get('/my-reviews', async (req, res) => {
           review: review,
           sliderValue: sliderValue,
           avatar: avatar,
+          user: user,
           courseId: courseId, // Pass the courseId to the template
           courseImageNum: courseInfo.imageNum, // Get the imageNum from courseInfo
           courseTitle: courseInfo.Title // Get the title from courseInfo
@@ -1021,7 +1019,8 @@ app.get('/my-reviews', async (req, res) => {
     isLoggedIn: isLoggedIn(req),
     overallCategorySums: overallCategorySums,
     Totalvote: totalvote,
-    myReviewPage: true
+    myReviewPage: true,
+    email: email
   });
 });
 
