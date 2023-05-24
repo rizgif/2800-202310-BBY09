@@ -113,10 +113,10 @@
     position: relative;
     margin: 0 -20px;
     width: calc(100% + 40px);
+    height: 100%;
     overflow: hidden;
     background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: top;
+    background-size: cover;
 }
 .course-detail-thumbnail:before {
     content: '';
