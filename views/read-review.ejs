@@ -1,6 +1,5 @@
 <link rel="stylesheet" href="/css/read-review-card.css">
 
-<%  console.log("selected", selecteduser[0].username); %>
 <% const sum=parseInt(sliderValue.courseContentSliderValue) + parseInt(sliderValue.studentSupportSliderValue) +
     parseInt(sliderValue.courseStructureSliderValue) + parseInt(sliderValue.teachingStyleSliderValue); %>
 
@@ -9,7 +8,8 @@
 
     <!-- Other review content -->
     <input type="hidden" class="course_id" value="<%= review.CourseID %>">
-
+    <input type="hidden" class="selected_email" value="<%= review.email %>">
+    <% console.log("emails", review.email) %>
 
     <div class="rating">
         <div class="rating-wrapper">
@@ -35,7 +35,7 @@
             <%- review.Review.replaceAll('\n', '<br>' ) %>
                 <% if (selecteduser[0].username === username) { %>
                     <%- include("edit-review", {username: username, id: review._id.toString(), courseId: courseId,
-                        myReviewPage: myReviewPage}) %>
+                        myReviewPage: myReviewPage, selecteduser: selecteduser}) %>
                         <% } %>
         </div>
 
