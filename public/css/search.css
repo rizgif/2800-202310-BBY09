@@ -16,9 +16,11 @@
     padding: 30px 20px;
     border-radius: 20px;
 }
+
 .filter-bar .btn-group {
     padding: 0;
 }
+
 .filter-bar .btn-group select {
     font-size: 12px;
 }
@@ -27,8 +29,6 @@
     width: 150px;
     margin: 10px;
 }
-
-
 
 .filter-tags{
     display: inline-block;
@@ -49,15 +49,15 @@
     transition: transform 0.3s ease;
   }
   
-  /* Add hover effect to the button */
-  #applyFilters:hover {
+/* Add hover effect to the button */
+#applyFilters:hover {
     transform: scale(1.1);
-  }
+}
   
-  /* Add active effect to the button when clicked */
-  #applyFilters:active {
+/* Add active effect to the button when clicked */
+#applyFilters:active {
     transform: scale(1.3);
-  }
+}
 
 #searchicon:hover {
     transform: scale(1.1);

@@ -1,28 +1,15 @@
-
-
 <nav class="nav">
-       
-        <div class="nav-links" id="navlinks">
-            <img
-              alt="closemenu"
-              id="i1"
-              src="/image/closemenu.png"
-              onclick="hideMenu()"
-            />
-            <ul>
-              <li><a href="/">Home</a></li>
-              <li><a href="/login">Login</a></li>
-              <li><a href="/signup">Sign Up</a></li>
-             
-            </ul>
-        </div>
-          <img alt="menu" id="i2" src="/image/openmenu.png" onclick="showMenu()" />
-    
-
-
+  <div class="nav-links" id="navlinks">
+      <img alt="closemenu" id="i1" src="/image/closemenu.png" onclick="hideMenu()"/>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/login">Login</a></li>
+        <li><a href="/signup">Sign Up</a></li> 
+      </ul>
+  </div>
+    <img alt="menu" id="i2" src="/image/openmenu.png" onclick="showMenu()" />
 </nav>
 </header>
-
 <script>
  function showMenu() {
       console.log("hello");
@@ -30,33 +17,27 @@
     navLinks.style.display = "inline-block";
     }
 
-    function hideMenu() {
-    var navLinks = document.getElementById("navlinks");
-    navLinks.style.display = "none";
+  function hideMenu() {
+  var navLinks = document.getElementById("navlinks");
+  navLinks.style.display = "none";
+  }
+  // Function to handle the window resize event
+  function handleResize() {
+    var windowWidth = window.innerWidth || document.documentElement.clientWidth;
+    // Check if the window width is above 768px
+    if (windowWidth > 768) {
+      // Show the navigation links
+      showMenu();
+    } else {
+      // Hide the navigation links
+      hideMenu();
     }
-
-        // Function to handle the window resize event
-    function handleResize() {
-      
-      var windowWidth = window.innerWidth || document.documentElement.clientWidth;
-
-      // Check if the window width is above 768px
-      if (windowWidth > 768) {
-     
-        // Show the navigation links
-        showMenu();
-      } else {
-        // Hide the navigation links
-        hideMenu();
-      }
-    }
-
-    // Event listener for the window resize event
-    window.addEventListener("resize", handleResize);
-
-    // Initial check when the page loads
-    handleResize();
-    console.log('hello');
+  }
+  // Event listener for the window resize event
+  window.addEventListener("resize", handleResize);
+  // Initial check when the page loads
+  handleResize();
+  console.log('hello');
 
 </script>
 

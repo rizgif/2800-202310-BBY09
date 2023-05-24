@@ -17,18 +17,11 @@ header {
   width: 120px;
 
 }
-/* 
-#navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;  background-color: #f9f9f9;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 
-} */
 nav {
   flex:1;
 }
+
 nav #i1,
 nav #i2 {
   width: 40px;
@@ -37,17 +30,21 @@ nav #i2 {
   display: none;
   cursor: pointer;
 }
+
 .nav-links {
   display: flex;
   justify-content: flex-end;
   white-space: nowrap;
 }
+
 .nav-links ul {
   margin-bottom: 0;
 }
+
 .nav-links ul p{
   margin-bottom: 0;
 }
+
 .nav-links {
   flex: 1;
   text-align: right;
@@ -63,7 +60,6 @@ nav #i2 {
   text-decoration: none;
   font-weight: bold;
   padding: 10px;
-  /* transition: all 0.3s ease-in-out; */
 }
 
 .nav-links ul li {
@@ -73,7 +69,6 @@ nav #i2 {
   position: relative;
   text-decoration: none;
 }
-
 
 .nav-links ul li:hover:after {
   width: 100%;
@@ -87,7 +82,6 @@ nav #i2 {
   font-size: 18px;
 }
 
-
 @media only screen and (max-width: 830px) {
   .nav-links ul li {
     display: block;
@@ -99,8 +93,6 @@ nav #i2 {
     display: none;
     background: rgb(255, 255, 255);
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
-
-    
     min-height: 30vh;
     width: 200px;
     top: 0;
@@ -109,7 +101,6 @@ nav #i2 {
     z-index: 2;
     color: white;
     border-radius: 20px;
- 
   }
 
   nav #i2 {
@@ -119,7 +110,6 @@ nav #i2 {
     position: absolute;
     top: 10px;
     right: 10px;
-   
   }
 
   nav #i1 {
@@ -132,8 +122,6 @@ nav #i2 {
     padding: 30px;
   }
 
-
-
   .nav-links ul li::after {
     content: "";
     width: 0%;
@@ -142,7 +130,6 @@ nav #i2 {
     margin: auto;
     transition: 0.2s;
   }
-
 }
 
 #signbutton_index {
