@@ -175,3 +175,10 @@
     padding: 2%;
     color: #212529;
 }
+
+.asterisk{
+    color: red;
+    position: relative;
+    bottom: 150px;
+    left: 330px;
+}
