@@ -2,8 +2,10 @@
 
     <link rel="stylesheet" href="/css/write-review-card.css">
 
+   
 
         <% if (hasReview) { %>
+            <% console.log("session email", email) %>
             <!-- Chelsea note: update later (not the 80% task) -->
             <p>You have already submitted a review. Do you want to edit your review for this course?</p>
             <a class="btn btn-primary" type="submit" id="submitBtn"

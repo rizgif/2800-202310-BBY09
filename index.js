@@ -19,7 +19,7 @@ const {
   isLoggedIn,
   reviewValidation
 } = require('./middleware');
-const {editProfileValidation} = require("./middleware/edit-profile");
+const { editProfileValidation } = require("./middleware/edit-profile");
 
 const saltRounds = 12;
 
@@ -167,7 +167,7 @@ app.get('/search-results', async (req, res) => {
         CalibratedValues.push(course);
       }
     });
-  
+
     searchResult = nonCalibratedValues.concat(nonCalibratedValues);
     console.log(nonCalibratedValues);
 
@@ -229,7 +229,7 @@ app.get('/course-details', async (req, res) => {
       })
   );
 
-  
+
 
   const totalvote = reviewSliderPairs.length;
   const numCategory = 4;
@@ -280,7 +280,7 @@ app.get('/course-details', async (req, res) => {
     userBookmarks,
     easterEgg: false,
     myReviewPage: false,
-    email:email,
+    email: email,
     selecteduser: selecteduser
   });
 });
@@ -354,7 +354,7 @@ app.get('/bookmarks', async (req, res) => {
 
     const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
 
-    res.render('bookmarks', { bookmarkedCourses, isLoggedIn: isLoggedIn(req), userBookmarks, username: req.session.username});
+    res.render('bookmarks', { bookmarkedCourses, isLoggedIn: isLoggedIn(req), userBookmarks, username: req.session.username });
     //res.render('bookmarks', { isLoggedIn: isLoggedIn(req), userBookmarks });
     //console.log('userBookmarks', userBookmarks)
   } catch (error) {
@@ -403,7 +403,7 @@ app.post('/signup-submit', signupValidation, async (req, res) => {
   let username = req.body.username?.trim();
   let email = req.body.email?.trim();
 
-  if(isLoggedIn(req)){
+  if (isLoggedIn(req)) {
     res.redirect('/');
     return;
   }
@@ -586,7 +586,7 @@ app.post('/edit-profile-submit', editProfileValidation, async (req, res) => {
   let avatar = req.body.avatar;
   let uid = req.session.uid;
 
-  if(!isLoggedIn(req)) {
+  if (!isLoggedIn(req)) {
     res.redirect("/login");
     return;
   }
@@ -603,6 +603,8 @@ app.get('/reviews/write/:courseid', async (req, res) => {
   const username = req.session.username;
   const avatar = req.session.avatar;
   const courseId = req.params.courseid.replace(':', '');
+  const email = req.session.email;
+
 
   if (username == null) {
 
@@ -614,6 +616,7 @@ app.get('/reviews/write/:courseid', async (req, res) => {
 
   const reviewSliderPairs = reviews.map(review => ({
     username: review.username,
+    email: review.email,
     sliderValue: {
       courseContentSliderValue: review.CourseContentRating,
       courseStructureSliderValue: review.CourseStructureRating,
@@ -630,7 +633,7 @@ app.get('/reviews/write/:courseid', async (req, res) => {
   }));
 
   // Find the specific review for the current user
-  const specificReview = reviews.find(review => review.username === username && review.CourseID === courseId);
+  const specificReview = reviews.find(review => review.email === email && review.CourseID === courseId);
   const hasReview = Boolean(specificReview);
 
   if (specificReview) {
@@ -647,6 +650,7 @@ app.get('/reviews/write/:courseid', async (req, res) => {
       hasReview: hasReview,
       reviewId: reviewId,
       avatar: avatar,
+      email: email
       // myReviewPage: myReviewPage
     }
     // console.log(avatar)
@@ -664,7 +668,7 @@ app.get('/reviews/write/:courseid', async (req, res) => {
       editReview: false,
       // specificReview: specificReview,
       hasReview: hasReview,
-
+      email: email
     };
     res.render("write-review", renderData);
   }
@@ -925,7 +929,7 @@ app.get('/my-reviews', async (req, res) => {
   // const userId = req.session.uid;
   // const email = req.session.email;
   const reviewGroups = {};
-  
+
   // Group reviews by courseId
   reviews.forEach(review => {
     courseId = review.CourseID;
@@ -935,7 +939,7 @@ app.get('/my-reviews', async (req, res) => {
     reviewGroups[courseId].push(review);
     // console.log("courseId: ", reviewGroups);
   });
-  
+
   const reviewSliderPairs = [];
 
   //const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
@@ -943,7 +947,7 @@ app.get('/my-reviews', async (req, res) => {
   // Retrieve course information for each group
   for (const courseId in reviewGroups) {
     const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
-    
+
     const groupReviews = reviewGroups[courseId];
     const groupSliderPairs = await Promise.all(
       groupReviews.map(async review => {
