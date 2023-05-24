@@ -10,49 +10,48 @@
 }
 
 .slider-box {
-  height: 30px;
+  height: 29px;
   float: left;
-  border-radius: 3px;
+  border-radius: 2px;
 }
 
 .slider-box-1 {
-  width: 18%;
-  background-color: #f2f0e7;
-  border: 1px solid grey;
+  width: 19%;
+  background-color: #f3f2ef;
+  border: 1px solid #c0bebe;
 }
 
 .slider-box-2 {
-  width: 18%;
-  background-color: #f2f0e7;
-  border-top: 1px solid grey;
-  border-right: 1px solid grey;
-  border-bottom: 1px solid grey;
+  width: 19%;
+  background-color: #f3f2ef;
+  border-top: 1px solid #c0bebe;
+  border-right: 1px solid #c0bebe;
+  border-bottom: 1px solid #c0bebe;
 
 }
 
 .slider-box-3 {
-  width: 18%;
-  background-color: #f2f0e7;
-  border-top: 1px solid grey;
-  border-right: 1px solid grey;
-  border-bottom: 1px solid grey;
+  width: 19%;
+  background-color: #f3f2ef;
+  border-top: 1px solid #c0bebe;
+  border-right: 1px solid #c0bebe;
+  border-bottom: 1px solid #c0bebe;
 }
 
 .slider-box-4 {
-  width: 18%;
-  background-color: #f2f0e7;
-  border-top: 1px solid grey;
-  border-right: 1px solid grey;
-  border-bottom: 1px solid grey;
+  width: 19%;
+  background-color: #f3f2ef;
+  border-top: 1px solid #c0bebe;
+  border-right: 1px solid #c0bebe;
+  border-bottom: 1px solid #c0bebe;
 }
 
 .slider-box-5 {
-  width: 18%;
-
-  border-top: 1px solid grey;
-  border-right: 1px solid grey;
-  border-bottom: 1px solid grey;
-  background-color: #f2f0e7;
+  width: 19%;
+  background-color: #f3f2ef;
+  border-top: 1px solid #c0bebe;
+  border-right: 1px solid #c0bebe;
+  border-bottom: 1px solid #c0bebe;
 }
 
 

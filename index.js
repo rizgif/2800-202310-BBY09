@@ -220,6 +220,7 @@ app.get('/course-details', async (req, res) => {
         return {
           review: review,
           sliderValue: sliderValue,
+          user: user,
           avatar: avatar,
           user: user,
           Badges: user?.Badges || ""
