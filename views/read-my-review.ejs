@@ -29,7 +29,7 @@
         <div class="my-review-review-grid">
 
             <div class="my-review-user_info">
-                <img class="my-review-img-avatar" src="<%= avatar?.includes('/image/avatar.png') ? '/image/avatar.png' : avatar %>" alt="">
+                <img class="my-review-img-avatar" src="<%= avatar?.includes('/image/avatar.png') ? '/image/avatar.png' : (avatar || '/image/avatar.png') %>" alt="">
                 <%= username %>
 
             </div>

@@ -24,7 +24,7 @@
             <%= review.Time %>
         </div>
         <div class="user_info">
-            <img class="img-avatar" src="<%= avatar?.includes('/image/avatar.png') ? '/image/avatar.png' : avatar %>" alt="">
+            <img class="img-avatar" src="<%= avatar?.includes('/image/avatar.png') ? '/image/avatar.png' : (avatar || '/image/avatar.png') %>" alt="">
             <%= username %>
                 <% if(Badges==='Reviewer' ) { %>
                     <span class="easter-crown lg"><img src="/image/crown.png" alt="5 reviews user"></span>

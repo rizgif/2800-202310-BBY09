@@ -23,7 +23,7 @@
 
                         <div class="write-review-grid">
                             <div class="user-profile">
-                                <img class="img-avatar" src="<%= avatar?.includes('/image/avatar.png') ? '/image/avatar.png' : avatar %>" alt="User Avatar">
+                                <img class="img-avatar" src="<%= avatar?.includes('/image/avatar.png') ? '/image/avatar.png' : (avatar || '/image/avatar.png') %>" alt="User Avatar">
                                 <%= username %>
                             </div>
 
