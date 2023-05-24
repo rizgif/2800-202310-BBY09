@@ -17,8 +17,6 @@
 
         </div>
 
-        <!-- <div class="Card-CourseDifficulty"><%= result.courseDetails.Course_Difficulty %></div> -->
-
         <% if (isLoggedIn) { %>
             <% const bookmarkedCourseIds = userBookmarks.map(b => b.courseId); %>
         <button class="Course-Bookmark <%= bookmarkedCourseIds.includes(result.courseDetails._id.toString()) ? 'bookmarked' : '' %>"
@@ -36,51 +34,3 @@
             </button>
     </div>
 </a>
-
-<!-- <script>
-    function handleClick(courseid) {
-      console.log('Clicked on', courseid);
-  
-      // Send a POST request to the server route
-      $.get('/courseDetails', function(response) {
-        console.log('Redirecting to new page');
-        window.location.href = '/courseDetails?courseid=' + courseid;
-      });
-    }
-</script>
-<div class="CourseCard-Container">
-    <div class="CourseCard-StyledCourseCard">
-    
-        <div class="card-thumbnail" onclick="handleClick('<%= result._id.toString() %>')">
-            <% const randomNumber = Math.floor(Math.random() * 9) + 1; %>
-            <img src="/image/randomimage/<%= randomNumber %>.jpeg" alt="Image Description">
-        </div>
-        <div class="card-info" onclick="handleClick('<%= result._id.toString() %>')">
-            <div class="Card-CourseName"><%= result.courseDetails.Title %></div>
-    
-            <div class="card-rating">
-                <span class="star">&#9733;</span>
-                <span class="star">&#9733;</span>
-                <span class="star">&#9733;</span>
-                <span class="star">&#9733;</span>
-                <span class="star">&#9733;</span>
-            </div>
-            
-            <div class="Card-CourseDifficulty"><%= result.courseDetails.Course_Difficulty %></div>
-        </div>
-        <% if (isLoggedIn) { %>
-            <% const bookmarkedCourseIds = userBookmarks.map(b => b.courseId); %>
-            <button class="Course-Bookmark <%= bookmarkedCourseIds.includes(result.courseDetails._id.toString()) ? 'bookmarked' : '' %>" type="button" data-course-id="<%= result.courseDetails._id %>" onclick="toggleBookmark(event,'<%= result.courseDetails._id %>')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-heart-fill" viewBox="-1 -1 18 18">
-                    <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
-                </svg>
-            </button>
-        <% } else { %>
-            <button class="Course-Bookmark" type="button" data-course-id="<%= result.courseDetails._id %>" onclick="toggleBookmark(event,'<%= result.courseDetails._id %>')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
-                </svg>
-            </button>
-        <% } %>
-    </div>
-</div> -->
