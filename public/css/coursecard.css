@@ -1,21 +1,11 @@
 
-.CourseCard-StyledCourseCard {
-    position: relative;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    padding: 20px;
-    border: 1px solid #ccc;
-    margin-bottom: 10px;
-    max-width: 600px;
-    border-radius: 20px;
-    box-shadow: 0 0px 5px rgba(0, 0, 0, 0.3);
-}
 
 .CourseCard-StyledCourseCard {
+    position: relative;
+    flex-wrap: wrap;
   display: flex;
   align-items: center;
-  padding: 20px;
+  padding: 16px;
   border: 1px solid #ccc;
   margin-bottom: 10px;
   max-width: 600px;
@@ -52,7 +42,6 @@
 }
 
 .Course-Bookmark svg path {
-
     fill:  rgb(198, 198, 198);
 }
 .Course-Bookmark.bookmarked svg path {
@@ -73,24 +62,53 @@
 }
 
 /* Thumbnail */
-.card-thumbnail {
+.card-info {
     width: 50%;
-    padding-right: 10px;
-  }
-  
-  /* Thumbnail image */
-  .card-thumbnail img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 10px; 
-  }
-  
-  .card-info {
-      width: 50%;
+    padding-left: 10px;
     text-align: left;
     display: flex;
     flex-direction: column;
+}
+.card-thumbnail {
+    width: 50%;
+    position: relative;
+    overflow: hidden;
+    border-radius: 6px;
+}
+.card-thumbnail img {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.card-thumbnail:before{
+    content:'';
+    display: block;
+    z-index: 2;
+    padding-bottom: 60%;
+}
+.card-thumbnail .logo-provider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    z-index: 3;
+    left: 10px;
+    top: 10px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: -1px -1px 1px rgba(0,0,0,0.4);
+}
+.card-thumbnail .logo-provider img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .card-info .course-title {
@@ -111,7 +129,11 @@
 }
 
 .Card-CourseName{
+    font-weight: bold;
     width: 100%;
-    font-size: 16px !important;
+    font-size: 18px !important;
   margin-bottom: 16px !important;
+}
+.CourseCard-Container:hover .Card-CourseName{
+    text-decoration: underline;
 }
