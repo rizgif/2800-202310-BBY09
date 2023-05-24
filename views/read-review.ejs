@@ -1,6 +1,5 @@
 <link rel="stylesheet" href="/css/read-review-card.css">
 
-<% console.log("my review page: ", myReviewPage) %>
 <% const sum=parseInt(sliderValue.courseContentSliderValue) + parseInt(sliderValue.studentSupportSliderValue) +
     parseInt(sliderValue.courseStructureSliderValue) + parseInt(sliderValue.teachingStyleSliderValue); %>
 
@@ -9,7 +8,7 @@
 
     <!-- Other review content -->
     <input type="hidden" class="course_id" value="<%= review.CourseID %>">
-
+    <input type="hidden" class="selected_email" value="<%= review.email %>">
 
     <div class="rating">
         <div class="rating-wrapper">
@@ -25,17 +24,17 @@
             <%= review.Time %>
         </div>
         <div class="user_info">
-            <img class="img-avatar" src="<%= avatar || " /image/avatar.png" %>" alt="">
-            <%= review.username %>
+            <img class="img-avatar" src="<%= avatar?.includes('/image/avatar.png') ? '/image/avatar.png' : (avatar || '/image/avatar.png') %>" alt="">
+            <%= username %>
                 <% if(Badges==='Reviewer' ) { %>
                     <span class="easter-crown lg"><img src="/image/crown.png" alt="5 reviews user"></span>
                     <% } %>
         </div>
         <div class="user_review">
             <%- review.Review.replaceAll('\n', '<br>' ) %>
-                <% if (review.username===username) { %>
+                <% if (selecteduser[0].username === username) { %>
                     <%- include("edit-review", {username: username, id: review._id.toString(), courseId: courseId,
-                        myReviewPage: myReviewPage}) %>
+                        myReviewPage: myReviewPage, selecteduser: selecteduser}) %>
                         <% } %>
         </div>
 

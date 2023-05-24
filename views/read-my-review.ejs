@@ -29,8 +29,8 @@
         <div class="my-review-review-grid">
 
             <div class="my-review-user_info">
-                <img class="my-review-img-avatar" src="<%= avatar || "/image/avatar.png" %>" alt="">
-                <%= review.username %>
+                <img class="my-review-img-avatar" src="<%= avatar?.includes('/image/avatar.png') ? '/image/avatar.png' : (avatar || '/image/avatar.png') %>" alt="">
+                <%= username %>
 
             </div>
             <div class="my-review-time_stamp">
@@ -40,7 +40,7 @@
             <div class="my-review-user_review user_review">
                 <%- review.Review.replaceAll('\n', '<br>' ) %>
                 <%- include("edit-my-review", {username: username, id: review._id.toString(), courseId:
-                courseId, myReviewPage: myReviewPage}) %>
+                courseId, myReviewPage: myReviewPage, email: email}) %>
             </div>
 
         </div>
