@@ -1,9 +1,8 @@
 .my-reviews-title {
     padding-top: 10px;
-    margin-left: 10px;
     display: inline-block;
     padding: 5px 20px;
-    margin: 10px;
+    margin: 20px 10px;
     font-size: 25px;
     border-radius: var(--radius-box);
     background-color: var(--color-parchment);
