@@ -9,20 +9,22 @@
   </div>
     <img alt="menu" id="i2" src="/image/openmenu.png" onclick="showMenu()" />
 </nav>
-</header>
+
 <script>
- function showMenu() {
+  function showMenu() {
       // console.log("hello");
     var navLinks = document.getElementById("navlinks");
     navLinks.style.display = "inline-block";
     }
 
-  function hideMenu() {
-  var navLinks = document.getElementById("navlinks");
-  navLinks.style.display = "none";
-  }
-  // Function to handle the window resize event
-  function handleResize() {
+    function hideMenu() {
+    var navLinks = document.getElementById("navlinks");
+    navLinks.style.display = "none";
+    }
+
+        // Function to handle the window resize event
+    function handleResize() {
+      
     var windowWidth = window.innerWidth || document.documentElement.clientWidth;
     // Check if the window width is above 768px
     if (windowWidth > 768) {
@@ -32,29 +34,12 @@
       // Hide the navigation links
       hideMenu();
     }
-
-        // Function to handle the window resize event
-    function handleResize() {
-      
-      var windowWidth = window.innerWidth || document.documentElement.clientWidth;
-
-      // Check if the window width is above 768px
-      if (windowWidth > 768) {
-     
-        // Show the navigation links
-        showMenu();
-      } else {
-        // Hide the navigation links
-        hideMenu();
-      }
     }
-
     // Event listener for the window resize event
     window.addEventListener("resize", handleResize);
-
     // Initial check when the page loads
     handleResize();
-    // console.log('hello');
+
 
 </script>
 
