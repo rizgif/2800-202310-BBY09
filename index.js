@@ -203,6 +203,7 @@ app.get('/course-details', async (req, res) => {
 
   const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
 
+  console.log(selecteduser)
   let reviewSliderPairs = await Promise.all(
     reviews
       .filter(review => review.CourseID === courseId)
@@ -222,7 +223,6 @@ app.get('/course-details', async (req, res) => {
           sliderValue: sliderValue,
           user: user,
           avatar: avatar,
-          user: user,
           Badges: user?.Badges || ""
         };
 
