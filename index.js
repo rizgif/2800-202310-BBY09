@@ -124,6 +124,11 @@ app.get('/search-results', async (req, res) => {
   const rating = req.query.rating?.toLowerCase(); // "high", "low"
   const sort = req.query.sort; // "high to low", "low to high"
 
+   // Check if there are any search parameters provided
+   if (!courseSearch && !provider && !level && !rating) {
+    return res.redirect('/'); // or handle it in your desired way
+  }
+
   console.log(courseSearch, provider, level, rating)
 
   const condition = {};
