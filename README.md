@@ -239,9 +239,8 @@ During our development process, we used many technologies that include the follo
   
   <h4>4. Bookmark Courses for Later Viewing:</h4>
   <ul>
-    <li>Look for a bookmark or save feature associated with each course.</li>
-    <li>Click on the bookmark icon or use the provided option to save courses of interest.</li>
-    <li>Access your bookmarked courses later in your account or profile section.</li>
+    <li>Click on the bookmark icon to save courses of interest.</li>
+    <li>Access your bookmarked courses later in my Bookmarks</li>
   </ul>
         
 <h2>AI and Coursla</h2>
@@ -250,5 +249,7 @@ During our development process, we used many technologies that include the follo
 <p>For our project, we used two MOOC dataset that were publicly available on Kaggle. Iniitally, we attempted to use ChatGPT to help us sort all of the courses into ten categories. However, our team noticed that there were too many values (7000+ data points) and we learned that ChatGPT could only process the datasets in small batches.</p>
 <p>Coursla used AI for the development of the application but it was not incorporated within the application itself.</p>
 <p></p>
+        
+ <
 
 
