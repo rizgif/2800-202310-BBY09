@@ -142,7 +142,7 @@ app.get('/search-results', async (req, res) => {
   }
 
   try {
-    let searchResult;
+   
   
     if (Object.keys(condition).length === 0) {
       // No query parameters provided, fetch all objects
