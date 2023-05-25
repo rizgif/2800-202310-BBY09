@@ -100,7 +100,7 @@ app.get('/', async (req, res) => {
   res.render("index", {isLoggedIn: isLoggedIn(req), username: req.session.username});
 });
 
-
+//
 app.get('/search-results', async (req, res) => {
   const userId = req.session.uid;
   const userBookmarks = await bookmarkCollection.find({userId: userId}).toArray();
