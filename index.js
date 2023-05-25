@@ -143,7 +143,7 @@ app.get('/search-results', async (req, res) => {
 
   try {
     let searchResult;
-
+    
     if (Object.keys(condition).length === 0) {
       // No query parameters provided, fetch all objects
       searchResult = await courseCollection.find().toArray();
@@ -151,23 +151,25 @@ app.get('/search-results', async (req, res) => {
       // Query parameters provided, filter the search
       searchResult = await courseCollection.find(condition).sort(sortOptions).toArray();
     }
-
+  
     const searchResultCount = searchResult.length;
-
-    let CalibratedValues = [];
-    let nonCalibratedValues = [];
-
-    searchResult.forEach((course) => {
-      if (course.Course_Rating !== "Not Calibrated") {
-        nonCalibratedValues.push(course);
-      } else {
-        CalibratedValues.push(course);
-      }
-    });
-
-    searchResult = nonCalibratedValues.concat(CalibratedValues);
-    console.log(nonCalibratedValues);
-
+  
+    if (searchResultCount > 0) {
+      let calibratedValues = [];
+      let nonCalibratedValues = [];
+  
+      searchResult.forEach((course) => {
+        if (course.Course_Rating !== "Not Calibrated") {
+          nonCalibratedValues.push(course);
+        } else {
+          calibratedValues.push(course);
+        }
+      });
+  
+      searchResult = nonCalibratedValues.concat(calibratedValues);
+      console.log(nonCalibratedValues);
+    }
+  
     res.render("search-results", {
       searchResult: searchResult,
       searchResultCount: searchResultCount,
@@ -184,6 +186,7 @@ app.get('/search-results', async (req, res) => {
     console.error(error);
     res.status(500).send('An error occurred while searching');
   }
+  
 });
 
 
