@@ -141,10 +141,8 @@ app.get('/search-results', async (req, res) => {
     sortOptions.Course_Rating = 1; // Sort by Course_Rating in ascending order
   }
 
-  let searchResult = []; // Initialize searchResult as an empty array
-
   try {
-    let searchResult;
+   
   
     if (Object.keys(condition).length === 0) {
       // No query parameters provided, fetch all objects
@@ -155,6 +153,14 @@ app.get('/search-results', async (req, res) => {
     }
   
     const searchResultCount = searchResult.length;
+  
+    searchResult.sort((a, b) => {
+      if (sort === 'low to high') {
+        return a.Course_Rating - b.Course_Rating; // Sort by Course_Rating in ascending order
+      } else {
+        return b.Course_Rating - a.Course_Rating; // Sort by Course_Rating in descending order
+      }
+    });
   
     let calibratedValues = [];
     let nonCalibratedValues = [];
@@ -169,7 +175,7 @@ app.get('/search-results', async (req, res) => {
   
     searchResult = nonCalibratedValues.concat(calibratedValues);
     console.log(nonCalibratedValues);
-  
+
     // Sort the search result based on Course_Rating
     searchResult.sort((a, b) => {
       if (sort === 'low to high') {
