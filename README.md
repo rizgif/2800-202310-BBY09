@@ -16,7 +16,7 @@
     4. Did you encounter any limitations? What were they, and how did you overcome them? Be specific. [ 2 marks]
 9. Contact Information [1 mark]
 
-<h1>Coursla<h1>
+<h1>Coursla 🌿</h1>
 
 Project Description: 
 
