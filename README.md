@@ -1,42 +1,44 @@
 <h1 style>Coursla 🌿</h1>
 
-Our project, BBY-09, is developing online course integration platforms to assist students and working professionals struggling to find suitable online courses with key features such as filtering and sorting.
+<h2>Project Description</h2>
 
-During our development process, we used many technologies that include the following: 
+<p>Our project, BBY-09, is developing online course integration platforms to assist students and working professionals struggling to find suitable online courses with key features such as filtering and sorting.</p>
 
+
+<h2>Technologies</h2>
 <ul>
   <li><strong>Frontend:</strong></li>
     <ul>
-      <li>VS Code</li>
-      <li>HTML</li>
-      <li>CSS</li>
-      <li>JS</li>
-      <li>Bootstrap</li>
-      <li>JQuery</li>
-      <li>sweetalert2</li>
+      <li>VS Code 1.56.2</li>
+      <li>HTML5</li>
+      <li>CSS3</li>
+      <li>JS(ES2022)</li>
+      <li>Bootstrap 5.3.0</li>
+      <li>JQuery 3.6.0</li>
+      <li>sweetalert2 11.1.0</li>
     </ul>
   <li><strong>Backend:</strong></li>
     <ul>
       <li>Kaggle</li>
-      <li>Node.js</li>
+      <li>Node.js 16.0.0</li>
     </ul>
   <li><strong>Database:</strong></li>
     <ul>
-      <li>MongoDB</li>
+      <li>MongoDB 5.0</li>
       <li>Firestore Cloud Storage</li>
     </ul>
   <li><strong>Development Tools:</strong></li>
     <ul>
-      <li>SourceTree</li>
+      <li>SourceTree 4.2.2</li>
       <li>ChatGPT</li>
       <li>GitHub</li>
-      <li>Sublime Merge</li>
-      <li>Studio3T</li>
+      <li>Sublime Merge 2.0.0</li>
+      <li>Studio 3T 2022.11</li>
     </ul>
 </ul>
 
 
-<h3>Listing of File Contents of folder</h3>
+<h2>Files</h2>
 
 ```bash
 .
@@ -171,7 +173,7 @@ During our development process, we used many technologies that include the follo
     └── write-review.ejs
 ```
 
-<h2>Installing and Running Coursla</h2>
+<h2>Installation</h2>
 <p>To install and run the project, follow these steps:</p>
 <ol>
     <li>Install Node.js:
@@ -231,7 +233,7 @@ During our development process, we used many technologies that include the follo
     </li>
 </ol>
  
-<h2>How to use the Coursla</h2>
+<h2>Features</h2>
  <h4>1. Search and Filter Online Courses:</h4>
   <ul>
     <li>Utilize the search functionality to find courses based on keywords.</li>
@@ -269,6 +271,68 @@ During our development process, we used many technologies that include the follo
 <p></p>
 
 <h2>Credits, References, and Licenses </h2>
+
+<h4>## Contributors</h4>
+<ul>
+    <li>[Ai (Chelsea) Yang](https://github.com/chelseaY119)</li>
+    <li>[Heesun Lee](https://github.com/heesun-task)</li>
+    <li>[Yerim Moon](https://github.com/yerim01)</li>
+    <li>[Riz Nur Saidy](https://github.com/rizgif)</li>
+</ul>
+<h4>## Special Thanks</h4>
+<ul>
+    <li>Hoda/BCIT</li>
+</ul>
+
+<h4>## References</h4>
+<p>Node.js: Official website and documentation - https://nodejs.org
+
+ChatGPT by OpenAI: OpenAI website and documentation - https://www.openai.com
+
+Visual Studio Code: Official website and documentation - https://code.visualstudio.com
+
+Bootstrap: Official website and documentation - https://getbootstrap.com
+
+jQuery: Official website and documentation - https://jquery.com
+
+sweetalert2: GitHub repository - https://github.com/sweetalert2/sweetalert2
+
+Kaggle: Kaggle website and dataset documentation - https://www.kaggle.com
+
+MongoDB: Official website and documentation - https://www.mongodb.com
+
+Firestore Cloud Storage: Google Cloud Firestore documentation - https://cloud.google.com/firestore
+
+SourceTree: Official website and documentation - https://www.sourcetreeapp.com
+
+GitHub: Official website and documentation - https://github.com
+
+Sublime Merge: Official website and documentation - https://www.sublimemerge.com
+
+Studio3T: Official website and documentation - https://studio3t.com </p>
+
+<h4>## Licenses</h4>
+<p>MIT License
+
+Copyright (c) 2023 Coursla
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</p>
 
 <h2>Testing Plan</h2>
 <p>https://docs.google.com/spreadsheets/d/1R2CTAVH1uW8hAfJFPMFDrY7AkzYZVItiOzR5ZkBB2FQ/edit#gid=394496370</p>
