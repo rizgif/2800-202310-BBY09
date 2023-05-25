@@ -1,29 +1,31 @@
 .review-setting {
-    margin-top: 20px;
-    margin-bottom: -10px;
+  margin-top: 20px;
+  margin-bottom: -10px;
 }
+
 .review-setting .dropdown {
-    display: flex;
-    align-items: end;
-    justify-content: end;
-    bottom: 0px;
-    
+  display: flex;
+  align-items: end;
+  justify-content: end;
+  bottom: 0px;
+
 }
 
 .review-setting img {
-    width: 25px;
-    height: 25px;
+  width: 25px;
+  height: 25px;
 }
 
 
-.review-setting .wrapper{
-    padding: 2%;
-    width: auto;
+.review-setting .wrapper {
+  padding: 2%;
+  width: auto;
 }
 
 /* Style the modal */
 .review-modal .modal {
-  display: none; /* Hide the modal by default */
+  display: none;
+  /* Hide the modal by default */
   position: fixed;
   z-index: 9999;
   left: 0;
@@ -58,12 +60,10 @@
   background-color: #f2e8cf;
 }
 
-.review-modal .modal-header{
-    font-weight: bold;
-    text-align:center;
-    justify-content: center;
-    align-items: center;
-    color:#386641;
+.review-modal .modal-header {
+  font-weight: bold;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  color: #386641;
 }
-
-
