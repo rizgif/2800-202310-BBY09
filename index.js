@@ -158,7 +158,6 @@ app.get('/search-results', async (req, res) => {
     let nonCalibratedValues = [];
 
     searchResult.forEach((course) => {
-
       if (course.Course_Rating !== "Not Calibrated") {
         nonCalibratedValues.push(course);
       } else {
@@ -166,9 +165,8 @@ app.get('/search-results', async (req, res) => {
       }
     });
 
-    searchResult = nonCalibratedValues.concat(nonCalibratedValues);
+    searchResult = nonCalibratedValues.concat(CalibratedValues);
     console.log(nonCalibratedValues);
-
 
     res.render("search-results", {
       searchResult: searchResult,
@@ -187,6 +185,7 @@ app.get('/search-results', async (req, res) => {
     res.status(500).send('An error occurred while searching');
   }
 });
+
 
 app.get('/course-details', async (req, res) => {
   const courseId = req.query.courseId;
