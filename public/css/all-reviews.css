@@ -17,7 +17,7 @@
 
 .overall-rating-wrapper {
     display: grid;
-    grid-template-columns: 0.4fr 0.7fr;
+    grid-template-columns: 0.4fr 1fr;
     grid-template-rows: repeat(4, 1fr);
     grid-gap: 10px;
     margin-top: 5%;
@@ -78,15 +78,15 @@
 .review-3,
 .review-4 {
     display: grid;
-    grid-template-columns: 0.4fr 1fr;
+    grid-template-columns: 70px 1fr;
     grid-gap: 10px;
 }
 
 .rating-wrapper .review-category, .overall-rating-wrapper .review-category {
     font-size: 15px;
     text-align: right;
-    margin-right: 5%;
-    justify-content:center; 
+    justify-content:center;
+    white-space: nowrap;
 }
 
 .rating-wrapper .review-slider {
@@ -112,10 +112,11 @@
 .all-rating > .label {
     font-size: 15px;
     padding: 2%;
+    font-weight: bold;
 }
 
 .mean {
-    font-size: 50px; 
+    font-size: 40px;
     font-weight: bold;
     padding: 2%;
     color: #6a994e;
