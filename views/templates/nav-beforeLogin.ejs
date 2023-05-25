@@ -11,21 +11,33 @@
 </nav>
 
 <script>
+  /**
+   * Function to show the menu by displaying the navigation links.
+   * @author Riz Nur Saidy
+   */
   function showMenu() {
-      // console.log("hello");
+    // console.log("hello");
     var navLinks = document.getElementById("navlinks");
     navLinks.style.display = "inline-block";
-    }
+  }
 
-    function hideMenu() {
+  /**
+   * Function to hide the menu by hiding the navigation links.
+   * @author Riz Nur Saidy
+   */
+  function hideMenu() {
     var navLinks = document.getElementById("navlinks");
     navLinks.style.display = "none";
-    }
+  }
 
-        // Function to handle the window resize event
-    function handleResize() {
-      
+  /**
+   * Function to handle the window resize event.
+   * Checks the window width and shows or hides the navigation links accordingly.
+   * @author Riz Nur Saidy
+   */
+  function handleResize() {
     var windowWidth = window.innerWidth || document.documentElement.clientWidth;
+
     // Check if the window width is above 830px
     if (windowWidth > 830) {
       // Show the navigation links
@@ -34,11 +46,14 @@
       // Hide the navigation links
       hideMenu();
     }
-    }
-    // Event listener for the window resize event
-    window.addEventListener("resize", handleResize);
-    // Initial check when the page loads
-    handleResize();
+  }
+
+  // Event listener for the window resize event
+  window.addEventListener("resize", handleResize);
+
+  // Initial check when the page loads
+  handleResize();
+
 
 
 </script>
