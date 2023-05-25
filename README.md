@@ -251,4 +251,8 @@ During our development process, we used many technologies that include the follo
 <p>Coursla used AI for the development of the application but it was not incorporated within the application itself.</p>
 <p></p>
 
+<h2>Credits, References, and Licenses </h2>
 
+<h2>Contact Information</h2>
+<ul>
+</ul>
