@@ -1,72 +1,85 @@
 <% if (isLoggedIn) { %>
   <%- include("templates/header", {username: username}) %>
-<% } else { %>
-  <%- include("templates/header-beforeLogin") %>
-<% } %>
-<div class="search-wrapper">
-    <form action="/search-results" method="get" class="needs-validation" novalidate>
-        <div class="search-bar justify-content-center">
-            <div class="form-group">
-                <input value="<%= courseSearch %>" name="courseSearch" type="text" class="form-control"
-                       id="courseSearch" placeholder="Search courses" required/>
-            </div>
-            <button type="submit" class="btn btn-main-search mb-2" style="width:50px;" id="searchicon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search"
-                     viewBox="0 0 16 16">
-                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
-                </svg>
+    <% } else { %>
+      <%- include("templates/header-beforeLogin") %>
+        <% } %>
+          <div class="search-wrapper">
+            <form action="/search-results" method="get" class="needs-validation" novalidate>
+              <div class="search-bar justify-content-center">
+                <div class="form-group">
+                  <input value="<%= courseSearch %>" name="courseSearch" type="text" class="form-control"
+                    id="courseSearch" placeholder="Search courses" required />
+                </div>
+                <button type="submit" class="btn btn-main-search mb-2" style="width:50px;" id="searchicon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                    class="bi bi-search" viewBox="0 0 16 16">
+                    <path
+                      d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z">
+                    </path>
+                  </svg>
+                </button>
+              </div>
+              <div class="filter-bar row justify-content-center">
+                <div class="btn-group">
+                  <select id="provider" name="provider" class="form-select">
+                    <option value="" <% if (provider=="" || !provider) { %> selected <% } %>>Provider</option>
+                    <option value="udemy" <% if (provider=="udemy" ) { %> selected <% } %>>Udemy</option>
+                    <option value="coursera" <% if (provider=="coursera" ) { %> selected <% } %>>Coursera</option>
+                  </select>
+                  <select id="level" name="level" class="form-select">
+                    <option value="" <% if (level=="" || !level) { %> selected <% } %>>Level</option>
+                    <option value="all" <% if (level=="all" ) { %> "selected" <% } %>>All</option>
+                    <option value="beginner" <% if (level=="beginner" ) { %> selected <% } %>>Beginner</option>
+                    <option value="intermediate" <% if (level=="intermidate" ) { %> "selected" <% } %>>Intermediate
+                    </option>
+                    <option value="advanced" <% if (level=="advanced" ) { %> selected <% } %>>Advanced</option>
+                  </select>
+                  <select id="sort" name="sort" class="form-select">
+                    <option value="high to low" <% if (sort=="high to low" || !sort) { %> selected <% } %>>High to Low
+                    </option>
+                    <option value="low to high" <% if (sort=="low to high" || sort=="lowtohigh" ) { %> selected <% } %>
+                        >Low to High</option>
+                  </select>
+                </div>
+                <button id="applyFilters" class="btn btn-primary">Apply Filters</button>
+              </div>
+            </form>
+            <button id="searchList-scrollUp" onclick="scrollToTop()" title="Scroll Up">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#6A994E"
+                class="bi bi-arrow-up-circle-fill" viewBox="0 0 16 16">
+                <path
+                  d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z" />
+              </svg>
             </button>
-        </div>
-        <div class="filter-bar row justify-content-center">
-          <div class="btn-group">
-              <select id="provider" name="provider" class="form-select">
-                  <option value="" <% if (provider == "" || !provider) { %> selected <% } %>>Provider</option>
-                  <option value="udemy" <% if (provider == "udemy") { %> selected <% } %>>Udemy</option>
-                  <option value="coursera" <% if (provider == "coursera") { %> selected <% } %>>Coursera</option>
-              </select>
-              <select id="level" name="level" class="form-select">
-                  <option value="" <% if (level == "" || !level) { %> selected <% } %>>Level</option>
-                  <option value="all" <% if (level == "all") { %> "selected" <% } %>>All</option>
-                  <option value="beginner" <% if (level == "beginner") { %> selected <% } %>>Beginner</option>
-                  <option value="intermediate" <% if (level == "intermidate") { %> "selected" <% } %>>Intermediate</option>
-                  <option value="advanced" <% if (level == "advanced") { %> selected <% } %>>Advanced</option>
-              </select>
-              <select id="sort" name="sort" class="form-select">
-                  <option value="high to low"  <% if (sort == "high to low" || !sort) { %> selected <% } %>>High to Low</option>
-                  <option value="low to high"  <% if (sort == "low to high" || sort == "lowtohigh") { %> selected <% } %>>Low to High</option>
-              </select>
+            <p class="display-result">'<%= searchResultCount %>' result(s) for:
+                <div></div>
+                <span class="filter-tags">#<%= courseSearch %></span>
+                <% if (provider && provider !=="default" ) { %>
+                  <span class="filter-tags">#<%= provider %></span>
+                  <% } %>
+                    <% if (level && level !=="default" ) { %>
+                      <span class="filter-tags">#<%= level %></span>
+                      <% } %>
+                        <% if (sort && sort !=="default" ) { %>
+                          <span class="filter-tags">#<%= sort %></span>
+                          <% } %>
+            </p>
+            <% for(let i=0; i < searchResultCount; i++) { %>
+              <%- include('templates/list', { result: searchResult[i], userBookmarks: userBookmarks}) %>
+                <% } %>
           </div>
-          <button id="applyFilters" class="btn btn-primary">Apply Filters</button>
-      </div>
-    </form>
-    <button id="searchList-scrollUp" onclick="scrollToTop()" title="Scroll Up">
-      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#6A994E" class="bi bi-arrow-up-circle-fill" viewBox="0 0 16 16">
-        <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
-      </svg>
-    </button>
-    <p class = "display-result">'<%= searchResultCount %>' result(s) for:
-      <div></div>
-      <span class="filter-tags">#<%= courseSearch %></span>
-      <% if (provider && provider !== "default") { %>
-         <span class="filter-tags">#<%= provider %></span>
-      <% } %>
-      <% if (level && level !== "default") { %>
-        <span class="filter-tags">#<%= level %></span>
-      <% } %>
-      <% if (sort && sort !== "default") { %>
-        <span class="filter-tags">#<%= sort %></span>
-      <% } %>
-      </p>
-    <% for(let i = 0; i < searchResultCount; i++) { %>
-        <%- include('templates/list', { result: searchResult[i], userBookmarks: userBookmarks}) %>
-    <% } %>
-</div>
-<script>
-  const courseCard = document.querySelector('.CourseCard-StyledCourseCard');
-  courseCard.addEventListener('click', () => {
-  courseCard.classList.toggle('clicked');
-});
-</script>
-<%- include("templates/footer") %>
+          <script>
+            
+            /* Toggle the "clicked" class on the course card element when clicked, allowing for 
+            visual changes or indicating the selected state. */
 
+            // Toggle class on course card click
+            const courseCard = document.querySelector('.CourseCard-StyledCourseCard');
 
+            // Event listener for click on the course card
+            courseCard.addEventListener('click', () => {
+              courseCard.classList.toggle('clicked');
+            });
+
+          </script>
+          <%- include("templates/footer") %>

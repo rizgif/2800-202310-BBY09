@@ -56,65 +56,71 @@
 </div>
 
 <script>
-  $(document).ready(function () {
-    $(document).on("click", ".edit-review-link", function (e) {
-      e.preventDefault();
+/*
+   This jQuery code manages the editing and deletion functionality of reviews on a 
+   web page. It binds event listeners to specific elements and performs corresponding
+    actions. Designed for web pages with review interaction features.
+*/
 
-      const reviewId = $(this).data("review-id");
+$(document).ready(function () {
+  // Edit Review Link Click Handler
+  $(document).on("click", ".edit-review-link", function (e) {
+    e.preventDefault();
 
-      // Redirect to the edit review page with the review ID
-      window.location.href = "/reviews/write/updateReview/" + reviewId;
-    });
+    const reviewId = $(this).data("review-id");
+
+    // Redirect to the edit review page with the review ID
+    window.location.href = "/reviews/write/updateReview/" + reviewId;
   });
 
+  // Delete Review Link Click Handler
   $(document).ready(function () {
     var deletedCourseIds = [];
-    // Handle delete review link click
+
     $(document).on("click", ".delete-review-link", function (e) {
       e.preventDefault();
       let deletionPerformed = false;
-      const courseIdtobedeleted = $(this).data("course-id");
+      const courseIdToBeDeleted = $(this).data("course-id");
 
-      if (deletedCourseIds.includes(courseIdtobedeleted)) {
-        return; // Skip further processing
+      // Skip further processing if review already deleted
+      if (deletedCourseIds.includes(courseIdToBeDeleted)) {
+        return;
       }
 
       const desiredUserEmail = $("#desireUserEmail").data("useremail");
 
-      // Show the custom modal
+      // Show the delete review modal
       $("#deleteReviewModal").css("display", "block");
 
       // Delete button clicked and delete the review from the database
       $("#confirmDeleteBtn").on("click", function () {
         // Ajax request to delete the review
         $.ajax({
-          url:
-            "/reviews/deleteReview/" +
-            courseIdtobedeleted +
-            "?useremail=" +
-            desiredUserEmail,
+          url: "/reviews/deleteReview/" + courseIdToBeDeleted + "?useremail=" + desiredUserEmail,
           type: "POST",
           success: function (result) {
             // Handle success response
             $(".my-review-wrapper").each(function () {
               var courseId = $(this).find(".course_id").val().toString();
-              if (courseIdtobedeleted === courseId && !deletionPerformed) {
+              if (courseIdToBeDeleted === courseId && !deletionPerformed) {
                 $(this).remove();
                 deletionPerformed = true;
               }
-              deletedCourseIds.push(courseIdtobedeleted);
+              deletedCourseIds.push(courseIdToBeDeleted);
             });
           },
         });
 
-        // Hide the modal
+        // Hide the delete review modal
         $("#deleteReviewModal").css("display", "none");
       });
     });
 
-    // Cancel button clicked and hide the modal
+    // Cancel button clicked and hide the delete review modal
     $("#cancelDeleteBtn").on("click", function () {
       $("#deleteReviewModal").css("display", "none");
     });
   });
+});
+
 </script>

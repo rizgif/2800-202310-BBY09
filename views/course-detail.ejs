@@ -119,12 +119,9 @@
         <% } %>
     </div>
 
-    <!-- add css later -->
     <a class="write-review-link" href="/reviews/write/:<%= courseId %>">
         <button class="btn btn-primary">Write a Review</button>
     </a>
-
-    <% console.log("pair review", reviewSliderPairs[0].user.username) %>
 
     <% reviewSliderPairs.forEach(pair=> { %>
         <%- include("read-review", { review: pair.review, sliderValue: pair.sliderValue, username: pair.user.username,
