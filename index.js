@@ -117,7 +117,7 @@ app.get('/search-results', async (req, res) => {
 
   const condition = {};
 
-  if (courseSearch) {
+  if (courseSearch && (courseSearch !== "all_courses")) {
     condition.Title = { $regex: `${courseSearch}`, $options: 'i' };
   }
   if (provider) condition.Provider = { $regex: `${provider}`, $options: 'i' };
@@ -133,7 +133,7 @@ app.get('/search-results', async (req, res) => {
   }
 
   try {
-    if (Object.keys(condition).length === 0) {
+    if (Object.keys(condition).length === 0 || courseSearch === "all_courses") {
       // No query parameters provided, fetch all objects
       searchResult = await courseCollection.find({}).toArray();
     } else {
@@ -156,7 +156,7 @@ app.get('/search-results', async (req, res) => {
     });
   
     searchResult = nonCalibratedValues.concat(calibratedValues);
-    console.log(nonCalibratedValues);
+    // console.log(nonCalibratedValues);
 
     // Sort the search result based on Course_Rating
     searchResult.sort((a, b) => {
@@ -172,7 +172,7 @@ app.get('/search-results', async (req, res) => {
       searchResultCount: searchResultCount,
       isLoggedIn: isLoggedIn(req),
       userBookmarks,
-      courseSearch,
+      courseSearch: courseSearch === "all_courses" ? "" : courseSearch,
       provider,
       level,
       rating,
