@@ -1,4 +1,4 @@
-async function toggleBookmark(e, courseId) {
+const toggleBookmark = async (e, courseId) => {
   e.stopPropagation();
   e.preventDefault();
 
@@ -11,8 +11,8 @@ async function toggleBookmark(e, courseId) {
     // Remove bookmark
     const response = await fetch("/removeBookmark", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ courseId: courseId }),
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({courseId: courseId}),
     });
     if (response.ok) {
       bookmarkButton.classList.toggle("bookmarked");
@@ -24,8 +24,8 @@ async function toggleBookmark(e, courseId) {
     // Add bookmark
     const response = await fetch("/addBookmark", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ courseId: courseId }),
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({courseId: courseId}),
     });
     if (response.ok) {
       bookmarkButton.classList.toggle("bookmarked");
@@ -33,4 +33,4 @@ async function toggleBookmark(e, courseId) {
       console.error("Failed to add bookmark");
     }
   }
-}
+};
