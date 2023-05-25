@@ -246,8 +246,10 @@ During our development process, we used many technologies that include the follo
         
 <h2>AI and Coursla</h2>
 
-<p>As per the project theme, we relied on AI technology to help develop our app. We used ChatGPT to help us create functions, design our functions, and debug our code.</p> 
-<p>For our project, we used two MOOC dataset that were publicly available on Kaggle. Iniitally, we attempted to use ChatGPT to help us sort all of the courses into ten categories. However, our team noticed that there were too many values (7000+ data points) and we learned that ChatGPT could only process the datasets in small batches.</p>
+<p>As per the project theme, we relied on AI technology to help develop our app. We used ChatGPT to help us generate project ideas, create functions, design our functions, and debug our code. In addition, we have employed ChatGpt to assist in the composition of professional documents.</p> 
+
+<p>For our project, we used two MOOC dataset that were publicly available on Kaggle. Iniitally, we attempted to use ChatGPT to help us sort all of the courses into ten categories. However, our team noticed that there were too many values (7000+ data points) and we learned that ChatGPT could only process the datasets in small batches. Because of this, we didn't use AI to clean our dataset. Instead, we cleaned our dataset manually using another tool (studio 3T). </p>
+
 <p>Coursla used AI for the development of the application but it was not incorporated within the application itself.</p>
 <p></p>
 
@@ -255,4 +257,8 @@ During our development process, we used many technologies that include the follo
 
 <h2>Contact Information</h2>
 <ul>
+<li>Ai (Chelsea) Yang: ayang106@my.bcit.ca</li>
+<li>Heesun Lee: hlee532@my.bcit.ca </li>
+<li>Yerim Moon: ymoon10@my.bcit.ca </li>
+<li>Riz Nur Saidy:  rnursaidy@my.bcit.ca</li>
 </ul>
