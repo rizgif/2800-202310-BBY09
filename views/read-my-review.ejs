@@ -1,77 +1,80 @@
-<% const sum = parseInt(sliderValue.courseContentSliderValue) + parseInt(sliderValue.studentSupportSliderValue) +
-        parseInt(sliderValue.courseStructureSliderValue) + parseInt(sliderValue.teachingStyleSliderValue); %>
- 
+<% const sum = parseInt(sliderValue.courseContentSliderValue) +
+parseInt(sliderValue.studentSupportSliderValue) +
+parseInt(sliderValue.courseStructureSliderValue) +
+parseInt(sliderValue.teachingStyleSliderValue); %>
+
 <div class="my-review-wrapper">
-    <a href="/course-details?courseId=<%= courseId %>">
-        <div class="my-review-provider">
-            <div class="my-review-provider-wrapper">
-                <div class="my-review-provider-thumbnail">
-                    <img src="/image/randomimage/<%= imgNum %>.jpeg" alt="Image <%= imgNum %>">
-                </div>
-                <div class="my-review-provider-title">
-                    <p> <%= title %> </p>
-                </div>
-            </div>
+  <a href="/course-details?courseId=<%= courseId %>">
+    <div class="my-review-provider">
+      <div class="my-review-provider-wrapper">
+        <div class="my-review-provider-thumbnail">
+          <img
+            src="/image/randomimage/<%= imgNum %>.jpeg"
+            alt="Image <%= imgNum %>"
+          />
         </div>
-    </a>
-
-    <!-- read from database -->
-    <div class="my-review-grid-container">
-        <input type="hidden" class="course_id" value="<%= review.CourseID %>">
-        <div class="rating">
-            <div class="rating-wrapper">
-                <div class="my-review-rating-label">
-                    Overall
-                </div>
-            </div>
+        <div class="my-review-provider-title">
+          <p><%= title %></p>
         </div>
-
-        <div class="my-review-review-grid">
-
-            <div class="my-review-user_info">
-                <img class="my-review-img-avatar" src="<%= avatar?.includes('/image/avatar.png') ? '/image/avatar.png' : (avatar || '/image/avatar.png') %>" alt="">
-                <%= username %>
-
-            </div>
-            <div class="my-review-time_stamp">
-                <%= review.Time %>
-            </div>
-
-            <div class="my-review-user_review user_review">
-                <%- review.Review.replaceAll('\n', '<br>' ) %>
-                <%- include("edit-my-review", {username: username, id: review._id.toString(), courseId:
-                courseId, myReviewPage: myReviewPage, email: email}) %>
-            </div>
-
-        </div>
-
-        <div class="my-review-level">
-            <div class="my-review-level-wrapper">
-                <button id="ratingButton" class="my-review-rating-button">
-                    <%= (sum / 4).toFixed(1) %>
-                </button>
-            </div>
-        </div>
-
-        <div class="my-review-review-category">Course Content</div>
-        <div class="my-review-review-slider">
-            <%- include("templates/read-slider", { type: "courseContent" , value: sliderValue.courseContentSliderValue
-            }) %>
-        </div>
-        <div class="my-review-review-category">Course Structure</div>
-        <div class="my-review-review-slider">
-            <%- include("templates/read-slider", { type: "courseStructure" , value:
-            sliderValue.courseStructureSliderValue }) %>
-        </div>
-        <div class="my-review-review-category">Teaching Style</div>
-        <div class="my-review-review-slider">
-            <%- include("templates/read-slider", { type: "teachingStyle" , value: sliderValue.teachingStyleSliderValue
-            }) %>
-        </div>
-        <div class="my-review-review-category">Student Support</div>
-        <div class="my-review-review-slider">
-            <%- include("templates/read-slider", { type: "studentSupport" , value: sliderValue.studentSupportSliderValue
-            }) %>
-        </div>
+      </div>
     </div>
+  </a>
+
+  <!-- read from database -->
+  <div class="my-review-grid-container">
+    <input type="hidden" class="course_id" value="<%= review.CourseID %>" />
+    <div class="rating">
+      <div class="rating-wrapper">
+        <div class="my-review-rating-label">Overall</div>
+      </div>
+    </div>
+
+    <div class="my-review-review-grid">
+      <div class="my-review-user_info">
+        <img
+          class="my-review-img-avatar"
+          src="<%= avatar?.includes('/image/avatar.png') ? '/image/avatar.png' : (avatar || '/image/avatar.png') %>"
+          alt=""
+        />
+        <%= username %>
+      </div>
+      <div class="my-review-time_stamp"><%= review.Time %></div>
+
+      <div class="my-review-user_review user_review">
+        <%- review.Review.replaceAll('\n', '<br />' ) %> <%-
+        include("edit-my-review", {username: username, id:
+        review._id.toString(), courseId: courseId, myReviewPage: myReviewPage,
+        email: email}) %>
+      </div>
+    </div>
+
+    <div class="my-review-level">
+      <div class="my-review-level-wrapper">
+        <button id="ratingButton" class="my-review-rating-button">
+          <%= (sum / 4).toFixed(1) %>
+        </button>
+      </div>
+    </div>
+
+    <div class="my-review-review-category">Course Content</div>
+    <div class="my-review-review-slider">
+      <%- include("templates/read-slider", { type: "courseContent" , value:
+      sliderValue.courseContentSliderValue }) %>
+    </div>
+    <div class="my-review-review-category">Course Structure</div>
+    <div class="my-review-review-slider">
+      <%- include("templates/read-slider", { type: "courseStructure" , value:
+      sliderValue.courseStructureSliderValue }) %>
+    </div>
+    <div class="my-review-review-category">Teaching Style</div>
+    <div class="my-review-review-slider">
+      <%- include("templates/read-slider", { type: "teachingStyle" , value:
+      sliderValue.teachingStyleSliderValue }) %>
+    </div>
+    <div class="my-review-review-category">Student Support</div>
+    <div class="my-review-review-slider">
+      <%- include("templates/read-slider", { type: "studentSupport" , value:
+      sliderValue.studentSupportSliderValue }) %>
+    </div>
+  </div>
 </div>
