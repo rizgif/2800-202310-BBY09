@@ -29,7 +29,7 @@
 <!-- writing a review -->
 <form action="/submitReview/<%= courseId %>" method="POST">
   <div class="write-review-grid">
-    <div class="user-profile" style="">
+    <div class="user-profile">
       <img
         class="img-avatar"
         src="<%= avatar?.includes('/image/avatar.png') ? '/image/avatar.png' : (avatar || '/image/avatar.png') %>"
@@ -123,88 +123,106 @@
 <% } %>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
 <script>
-  const sliders = document.querySelectorAll(".slider");
+/* This code handles sliders, timestamp assignment, character count display, and form
+ submission validation. It relies on DOM elements and jQuery for its functionality. */
 
-  sliders.forEach(function (slider) {
+ // Get all slider elements
+const sliders = document.querySelectorAll(".slider");
+
+// Iterate over each slider
+sliders.forEach(function (slider) {
+  // Get all slider boxes within the slider
+  const sliderBoxes = slider.querySelectorAll(".slider-box");
+
+  // Add click event listener to each slider box
+  sliderBoxes.forEach(function (box, index) {
+    box.addEventListener("click", function () {
+      updateSlider(slider, index);
+    });
+  });
+
+  // Update the slider based on the active index
+  function updateSlider(slider, activeIndex) {
     const sliderBoxes = slider.querySelectorAll(".slider-box");
+    const hiddenInput = slider.querySelector('input[type="hidden"]');
 
+    // Toggle the "active" class for each slider box based on the index
     sliderBoxes.forEach(function (box, index) {
-      box.addEventListener("click", function () {
-        updateSlider(slider, index);
-      });
+      if (index <= activeIndex) {
+        box.classList.add("active");
+      } else {
+        box.classList.remove("active");
+      }
     });
 
-    function updateSlider(slider, activeIndex) {
-      const sliderBoxes = slider.querySelectorAll(".slider-box");
-      const hiddenInput = slider.querySelector('input[type="hidden"]');
+    // Update the hidden input value with the selected index + 1
+    hiddenInput.value = activeIndex + 1;
+  }
+});
 
-      sliderBoxes.forEach(function (box, index) {
-        if (index <= activeIndex) {
-          box.classList.add("active");
-        } else {
-          box.classList.remove("active");
-        }
-      });
+// Add click event listener to the "submit-review-btn" button
+document
+  .getElementById("submit-review-btn")
+  .addEventListener("click", function () {
+    // Get the current timestamp
+    var currentDate = new Date().toISOString().split("T")[0];
 
-      hiddenInput.value = activeIndex + 1; // Update the hidden input value with the selected index + 1
+    // Assign the timestamp value to the hidden input field in the form
+    document.getElementById("timestamp-input").value = currentDate;
+  });
+
+$(document).ready(function () {
+  // Get the textarea element
+  var textarea = $(".write-review");
+
+  // Get the character count element
+  var characterCount = $(".character-count");
+
+  // Calculate the initial character count
+  var reviewContent = textarea.val();
+  var initialCount = reviewContent.length;
+
+  // Set the initial character count
+  characterCount.text(initialCount + "/800");
+
+  // Update the character count on input
+  textarea.on("input", function () {
+    var text = textarea.val();
+    var count = text.length;
+
+    // Update the character count text based on condition
+    if (count <= 800) {
+      characterCount.text(count + "/800");
+    } else {
+      // Handle the case when the character limit is exceeded
+      characterCount.text("Limit Exceeded");
     }
   });
+});
 
-  document
-    .getElementById("submit-review-btn")
-    .addEventListener("click", function () {
-      // Get the current timestamp
-      var currentDate = new Date().toISOString().split("T")[0];
+$(document).ready(function () {
+  // Add submit event listener to all forms
+  $("form").on("submit", function (e) {
+    e.preventDefault();
 
-      // Assign the timestamp value to the hidden input field in the form
-      document.getElementById("timestamp-input").value = currentDate;
-    });
+    // Get the value of the review textarea
+    var review = $('textarea[name="review"]').val().trim();
 
-  $(document).ready(function () {
-    // Get the textarea element
-    var textarea = $(".write-review");
-
-    // Get the character count element
-    var characterCount = $(".character-count");
-
-    // Calculate the initial character count
-    var reviewContent = textarea.val();
-    var initialCount = reviewContent.length;
-
-    // Set the initial character count
-    characterCount.text(initialCount + "/800");
-
-    // Update the character count on input
-    textarea.on("input", function () {
-      var text = textarea.val();
-      var count = text.length;
-
-      // Update the character count text based on condition
-      if (count <= 800) {
-        characterCount.text(count + "/800");
-      } else {
-        // Handle the case when the character limit is exceeded
-        characterCount.text("Limit Exceeded");
-      }
-    });
+    // Check if a review is provided
+    if (!review) {
+      Swal.fire({
+        title: "Error",
+        text: "Please provide a review",
+      });
+    } else {
+      // Submit the form
+      this.submit();
+    }
   });
+});
 
-  $(document).ready(function () {
-    $("form").on("submit", function (e) {
-      e.preventDefault();
-      var review = $('textarea[name="review"]').val().trim();
-      if (!review) {
-        Swal.fire({
-          title: "Error",
-          text: "Please provide a review",
-        });
-      } else {
-        // Submit the form
-        this.submit();
-      }
-    });
-  });
 </script>
 
 <%- include("templates/footer") %>
