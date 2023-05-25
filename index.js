@@ -119,14 +119,13 @@ app.get('/search-results', async (req, res) => {
   const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
 
   const courseSearch = req.query.courseSearch;
-  const provider = req.query.provider?.toLowerCase(); // 'coursera', 'udemy',
-  const level = req.query.level?.toLowerCase(); // 'all', 'beginner', 'intermediate', 'advanced'
-  const rating = req.query.rating?.toLowerCase(); // "high", "low"
-  const sort = req.query.sort; // "high to low", "low to high"
-
-  console.log(courseSearch, provider, level, rating)
+  const provider = req.query.provider?.toLowerCase();
+  const level = req.query.level?.toLowerCase();
+  const rating = req.query.rating?.toLowerCase();
+  const sort = req.query.sort;
 
   const condition = {};
+
   if (courseSearch) {
     condition.Title = { $regex: `${courseSearch}`, $options: 'i' };
   }
@@ -136,42 +135,33 @@ app.get('/search-results', async (req, res) => {
 
   const sortOptions = {};
 
-  // Set default sort option to "high to low"
-  sortOptions.Course_Rating = -1; // Sort by Course_Rating in descending order
+  sortOptions.Course_Rating = -1; // Default sort by Course_Rating in descending order
 
   if (sort === 'low to high') {
-    // Change sort option to "low to high" when specified
     sortOptions.Course_Rating = 1; // Sort by Course_Rating in ascending order
   }
 
-
-
-  console.log('condition', condition)
-
   try {
-    let searchResult = await courseCollection.find(condition).project({
-      _id: 1, Provider: 1, Title: 1, Course_Difficulty: 1, Course_Rating: 1, CourslaRating: 1, imageNum: 1,
-    }).sort(sortOptions).toArray();
-    // console.log(searchResult)
-    const searchResultCount = searchResult?.length;
-    const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
-
-    let CalibratedValues = [];
-    let nonCalibratedValues = [];
-
-    searchResult.forEach((course) => {
-
-      if (course.Course_Rating !== "Not Calibrated") {
-        nonCalibratedValues.push(course);
-      } else {
-        CalibratedValues.push(course);
-      }
-    });
+    // Existing code for fetching search results
   
-    searchResult = nonCalibratedValues.concat(nonCalibratedValues);
-    console.log(nonCalibratedValues);
-
-
+    const searchResultCount = searchResult.length;
+  
+    let calibratedValues = [];
+    let nonCalibratedValues = [];
+  
+    if (searchResultCount > 0) {
+      searchResult.forEach((course) => {
+        if (course.Course_Rating !== "Not Calibrated") {
+          nonCalibratedValues.push(course);
+        } else {
+          calibratedValues.push(course);
+        }
+      });
+  
+      searchResult = nonCalibratedValues.concat(calibratedValues);
+      console.log(nonCalibratedValues);
+    }
+  
     res.render("search-results", {
       searchResult: searchResult,
       searchResultCount: searchResultCount,
@@ -182,14 +172,16 @@ app.get('/search-results', async (req, res) => {
       level,
       rating,
       sort,
-      username: req.session.username,
+      username: req.session.username
     });
-
   } catch (error) {
     console.error(error);
-    res.status(500).send('An error occurred while searching');
+    res.status(500).send(`An error occurred while searching: ${error.message}`);
   }
+  
+  
 });
+
 
 app.get('/course-details', async (req, res) => {
   const courseId = req.query.courseId;
