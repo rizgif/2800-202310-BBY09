@@ -46,4 +46,17 @@ During our development process, we used many technologies that include the follo
     </li>
 </ul>
 
+<details>
+<summary>Listing of File Contents</summary>
+```
+fdsafds
+```
+</details>
+
+<h2>How to run the Coursla App!</h2>
+<ol>
+    <li>MongoDB</li>
+    <li>MongoDB</li>
+</ol>
+
 
