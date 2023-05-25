@@ -144,7 +144,7 @@ app.get('/search-results', async (req, res) => {
   let searchResult = []; // Initialize searchResult as an empty array
 
   try {
-    let searchResult;
+   
   
     if (Object.keys(condition).length === 0) {
       // No query parameters provided, fetch all objects
