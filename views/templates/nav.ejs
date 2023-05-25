@@ -1,48 +1,38 @@
 <nav class="nav">
-
-      
-        <div class="nav-links" id="navlinks">
-            <img
-              alt="closemenu"
-              id="i1"
-              src="/image/closemenu.png"
-              onclick="hideMenu()"
-            />
-            <ul>
-              
-             
-              <li><p class="welcomemessage">Hello, <%= username %> 🌿</></li>
-              <li><a href="/">Home</a></li>
-              <li><a href="/profile">Profile</a></li>
-              <li><a href="/bookmarks">Bookmarks</a></li>
-              <li><a href="/my-reviews">My Reviews</a></li>
-              <li class="logoutnav"><a href="/logout">Log Out</a></li>
-             
-            </ul>
-        </div>
-          <img alt="menu" id="i2" src="/image/openmenu.png" onclick="showMenu()" />
-    
-
-
+    <div class="nav-links" id="navlinks">
+        <img
+            alt="closemenu"
+            id="i1"
+            src="/image/closemenu.png"
+            onclick="hideMenu()"
+        />
+        <ul>
+            <li><p class="welcomemessage">Hello, <%= username %> 🌿</p></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><a href="/bookmarks">Bookmarks</a></li>
+            <li><a href="/my-reviews">My Reviews</a></li>
+            <li class="logoutnav"><a href="/logout">Log Out</a></li>
+        </ul>
+    </div>
+    <img alt="menu" id="i2" src="/image/openmenu.png" onclick="showMenu()"/>
 </nav>
-
-
 <script>
 
-    function showMenu() {
-      // console.log("hello");
+  function showMenu() {
+    // console.log("hello");
     var navLinks = document.getElementById("navlinks");
     navLinks.style.display = "inline-block";
-    }
+  }
 
-    function hideMenu() {
+  function hideMenu() {
     var navLinks = document.getElementById("navlinks");
     navLinks.style.display = "none";
-    }
+  }
 
-        // Function to handle the window resize event
-    function handleResize() {
-      
+  // Function to handle the window resize event
+  function handleResize() {
+
     var windowWidth = window.innerWidth || document.documentElement.clientWidth;
     // Check if the window width is above 768px
     if (windowWidth > 768) {
@@ -52,15 +42,13 @@
       // Hide the navigation links
       hideMenu();
     }
-    }
-    // Event listener for the window resize event
-    window.addEventListener("resize", handleResize);
-    // Initial check when the page loads
-    handleResize();
+  }
+
+  // Event listener for the window resize event
+  window.addEventListener("resize", handleResize);
+  // Initial check when the page loads
+  handleResize();
 
 
-        
-
-    
 </script>
 
