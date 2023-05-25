@@ -4,11 +4,11 @@
   <%- include("templates/header-beforeLogin") %>
 <% } %>
 <div class="search-wrapper">
-    <form action="/search-results" method="get" id="form-submit">
+    <form action="/search-results" method="get" class="needs-validation" novalidate>
         <div class="search-bar justify-content-center">
             <div class="form-group">
                 <input value="<%= courseSearch %>" name="courseSearch" type="text" class="form-control"
-                       id="courseSearch" placeholder="Search courses">
+                       id="courseSearch" placeholder="Search courses" required>
             </div>
             <button type="submit" class="btn btn-main-search mb-2" style="width:50px;" id="searchicon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search"
@@ -62,18 +62,9 @@
     <% } %>
 </div>
 <script>
-const courseCard = document.querySelector('.CourseCard-StyledCourseCard');
+  const courseCard = document.querySelector('.CourseCard-StyledCourseCard');
   courseCard.addEventListener('click', () => {
   courseCard.classList.toggle('clicked');
-});
-
-
-const form = document.querySelector('#form-submit');
-  form.addEventListener('submit', (event) => {
-  const courseSearchInput = document.getElementById('courseSearch');
-  if (courseSearchInput.value.trim() === '') {
-  courseSearchInput.value = 'all_courses';
-}
 });
 </script>
 <%- include("templates/footer") %>

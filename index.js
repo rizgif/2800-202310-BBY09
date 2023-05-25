@@ -117,7 +117,7 @@ app.get('/search-results', async (req, res) => {
 
   const condition = {};
 
-  if (courseSearch && (courseSearch !== "all_courses")) {
+  if (courseSearch) {
     condition.Title = { $regex: `${courseSearch}`, $options: 'i' };
   }
   if (provider) condition.Provider = { $regex: `${provider}`, $options: 'i' };
@@ -133,26 +133,46 @@ app.get('/search-results', async (req, res) => {
   }
 
   try {
-    if (Object.keys(condition).length === 0 || courseSearch === "all_courses") {
+    if (Object.keys(condition).length === 0) {
       // No query parameters provided, fetch all objects
-      searchResult = await courseCollection.find({})?.toArray() || [];
+      searchResult = await courseCollection.find({}).toArray();
     } else {
       // Query parameters provided, filter the search
-      searchResult = await courseCollection.find(condition)?.toArray() || [];
+      searchResult = await courseCollection.find(condition).toArray();
     }
   
-    const searchResultCount = searchResult?.length;
+    const searchResultCount = searchResult.length;
   
   
     let calibratedValues = [];
     let nonCalibratedValues = [];
+  
+    searchResult.forEach((course) => {
+      if (course.Course_Rating !== "Not Calibrated") {
+        nonCalibratedValues.push(course);
+      } else {
+        calibratedValues.push(course);
+      }
+    });
+  
+    searchResult = nonCalibratedValues.concat(calibratedValues);
+    // console.log(nonCalibratedValues);
+
+    // Sort the search result based on Course_Rating
+    searchResult.sort((a, b) => {
+      if (sort === 'low to high') {
+        return a.Course_Rating - b.Course_Rating;
+      } else {
+        return b.Course_Rating - a.Course_Rating;
+      }
+    });
   
     res.render("search-results", {
       searchResult: searchResult,
       searchResultCount: searchResultCount,
       isLoggedIn: isLoggedIn(req),
       userBookmarks,
-      courseSearch: courseSearch === "all_courses" ? "" : courseSearch,
+      courseSearch,
       provider,
       level,
       rating,
