@@ -3,29 +3,36 @@
 Our project, BBY-09, is developing online course integration platforms to assist students and working professionals struggling to find suitable online courses with key features such as filtering and sorting.
 
 During our development process, we used many technologies that include the following: 
+
 <ul>
-    <li><h3>Tools</h3>
-        <ul>
-        <li>VS Code</li>
-        <li>Source tree</li>
-        <li>ChatGPT</li>
-        <li>GitHub</li>
-        <li>Sublime Merge</li>
-        <li>Studio3T</li>
-        </ul>
-    </li>
-    <li><h3>Skills & Libraries</h3>
-        <ul>
-        <li>HTML</li>
-        <li>CSS</li>
-        <li>JS</li>
-        <li>MongoDB</li>
-        <li>Kaggle</li>
-        <li>Node JS</li>
-        <li>sweetalert2</li>
-        <li>Firestore Cloud Storage</li>
-        <li>Bootstrap</li>
-        <li>JQuery</li>  
+  <li><strong>Frontend:</strong></li>
+    <ul>
+      <li>VS Code</li>
+      <li>HTML</li>
+      <li>CSS</li>
+      <li>JS</li>
+      <li>Bootstrap</li>
+      <li>JQuery</li>
+      <li>sweetalert2</li>
+    </ul>
+  <li><strong>Backend:</strong></li>
+    <ul>
+      <li>Kaggle</li>
+      <li>Node.js</li>
+    </ul>
+  <li><strong>Database:</strong></li>
+    <ul>
+      <li>MongoDB</li>
+      <li>Firestore Cloud Storage</li>
+    </ul>
+  <li><strong>Development Tools:</strong></li>
+    <ul>
+      <li>SourceTree</li>
+      <li>ChatGPT</li>
+      <li>GitHub</li>
+      <li>Sublime Merge</li>
+      <li>Studio3T</li>
+    </ul>
 </ul>
 
 
@@ -184,6 +191,15 @@ During our development process, we used many technologies that include the follo
         </ul>
     </li>
     <br>
+     <li>Install project dependencies:
+        <ul>
+            <li>Navigate to the project directory in the terminal or command prompt.</li>
+            <li>Run the following command to install the dependencies listed in the project's package.json file:</li>
+            <li><code>npm install</code> </li>
+            <li>Replace <repository_url> with the URL of the GitHub repository.</li>
+        </ul>
+    </li>
+    <br>
     <li>Set up environment variables:
         <ul>
             <li>Create a .env file in the project root directory.</li>
@@ -245,8 +261,10 @@ During our development process, we used many technologies that include the follo
         
 <h2>AI and Coursla</h2>
 
-<p>As per the project theme, we relied on AI technology to help develop our app. We used ChatGPT to help us create functions, design our functions, and debug our code.</p> 
-<p>For our project, we used two MOOC dataset that were publicly available on Kaggle. Iniitally, we attempted to use ChatGPT to help us sort all of the courses into ten categories. However, our team noticed that there were too many values (7000+ data points) and we learned that ChatGPT could only process the datasets in small batches.</p>
+<p>As per the project theme, we relied on AI technology to help develop our app. We used ChatGPT to help us generate project ideas, create functions, design our functions, and debug our code. In addition, we have employed ChatGpt to assist in the composition of professional documents.</p> 
+
+<p>For our project, we used two MOOC dataset that were publicly available on Kaggle. Iniitally, we attempted to use ChatGPT to help us sort all of the courses into ten categories. However, our team noticed that there were too many values (7000+ data points) and we learned that ChatGPT could only process the datasets in small batches. Because of this, we didn't use AI to clean our dataset. Instead, we cleaned our dataset manually using another tool (studio 3T). </p>
+
 <p>Coursla used AI for the development of the application but it was not incorporated within the application itself.</p>
 <p></p>
 
@@ -988,6 +1006,14 @@ Public License instead of this License.  But first, please read
 <https://www.gnu.org/licenses/why-not-lgpl.html>.
 </p>
 
+<h2>Testing Plan</h2>
+<p>https://docs.google.com/spreadsheets/d/1R2CTAVH1uW8hAfJFPMFDrY7AkzYZVItiOzR5ZkBB2FQ/edit#gid=394496370</p>
+
 <h2>Contact Information</h2>
 <ul>
+<li>Ai (Chelsea) Yang: ayang106@my.bcit.ca</li>
+<li>Heesun Lee: hlee532@my.bcit.ca </li>
+<li>Yerim Moon: ymoon10@my.bcit.ca </li>
+<li>Riz Nur Saidy:  rnursaidy@my.bcit.ca</li>
 </ul>
+
