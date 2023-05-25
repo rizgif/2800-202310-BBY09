@@ -29,7 +29,7 @@
     </ul>
   <li><strong>Development Tools:</strong></li>
     <ul>
-      <li>SourceTre 4.2.2</li>
+      <li>SourceTree 4.2.2</li>
       <li>ChatGPT</li>
       <li>GitHub</li>
       <li>Sublime Merge 2.0.0</li>
@@ -278,7 +278,6 @@
     <li>[Heesun Lee](https://github.com/heesun-task)</li>
     <li>[Yerim Moon](https://github.com/yerim01)</li>
     <li>[Riz Nur Saidy](https://github.com/rizgif)</li>
-    <li></li>
 </ul>
 <h4>## Special Thanks</h4>
 <ul>
