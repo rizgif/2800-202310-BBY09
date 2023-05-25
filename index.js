@@ -95,15 +95,6 @@ app.use(session({
 ));
 
 /* === Pages === */
-
-const routePath = "./views/html";
-
-// app.get('/', (req,res) => {
-//   // let username = req.session.username || 'test';
-//   // res.render("index", {isLoggedIn: isLoggedIn(req), username: username});
-//   res.render("index", {isLoggedIn: false});
-// });
-
 app.get('/', async (req, res) => {
   if (req.session.authenticated && !req.session.uid) {
     const result = await userCollection.find({ email: req.session.email }).project({ _id: 1 }).toArray();
@@ -142,8 +133,6 @@ app.get('/search-results', async (req, res) => {
   }
 
   try {
-   
-  
     if (Object.keys(condition).length === 0) {
       // No query parameters provided, fetch all objects
       searchResult = await courseCollection.find().toArray();
@@ -278,13 +267,6 @@ app.get('/course-details', async (req, res) => {
 
   // console.log(reviewSliderPairs)
   updateCourse(courseId, overallCategorySums, reviewSliderPairs.length);
-
-  // reviewSliderPairs =  await Promise.all(
-  //   reviewSliderPairs.map(async (pair) => {
-  //     const userInfo = await userCollection.findOne({ email: pair.review.email });
-  //     return {...pair, userInfo}
-  //   }
-  // ));
 
   res.render("course-detail", {
     req: req,
