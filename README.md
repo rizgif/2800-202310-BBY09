@@ -1,42 +1,44 @@
 <h1 style>Coursla 🌿</h1>
 
-Our project, BBY-09, is developing online course integration platforms to assist students and working professionals struggling to find suitable online courses with key features such as filtering and sorting.
+<h2>Project Description</h2>
 
-During our development process, we used many technologies that include the following: 
+<p>Our project, BBY-09, is developing online course integration platforms to assist students and working professionals struggling to find suitable online courses with key features such as filtering and sorting.</p>
 
+
+<h2>Technologies</h2>
 <ul>
   <li><strong>Frontend:</strong></li>
     <ul>
-      <li>VS Code</li>
-      <li>HTML</li>
-      <li>CSS</li>
-      <li>JS</li>
-      <li>Bootstrap</li>
-      <li>JQuery</li>
-      <li>sweetalert2</li>
+      <li>VS Code 1.56.2</li>
+      <li>HTML5</li>
+      <li>CSS3</li>
+      <li>JS(ES2022)</li>
+      <li>Bootstrap 5.3.0</li>
+      <li>JQuery 3.6.0</li>
+      <li>sweetalert2 11.1.0</li>
     </ul>
   <li><strong>Backend:</strong></li>
     <ul>
       <li>Kaggle</li>
-      <li>Node.js</li>
+      <li>Node.js 16.0.0</li>
     </ul>
   <li><strong>Database:</strong></li>
     <ul>
-      <li>MongoDB</li>
+      <li>MongoDB 5.0</li>
       <li>Firestore Cloud Storage</li>
     </ul>
   <li><strong>Development Tools:</strong></li>
     <ul>
-      <li>SourceTree</li>
+      <li>SourceTre 4.2.2</li>
       <li>ChatGPT</li>
       <li>GitHub</li>
-      <li>Sublime Merge</li>
-      <li>Studio3T</li>
+      <li>Sublime Merge 2.0.0</li>
+      <li>Studio 3T 2022.11</li>
     </ul>
 </ul>
 
 
-<h3>Listing of File Contents of folder</h3>
+<h2>Files</h2>
 
 ```bash
 .
@@ -171,7 +173,7 @@ During our development process, we used many technologies that include the follo
     └── write-review.ejs
 ```
 
-<h2>Installing and Running Coursla</h2>
+<h2>Installation</h2>
 <p>To install and run the project, follow these steps:</p>
 <ol>
     <li>Install Node.js:
@@ -231,7 +233,7 @@ During our development process, we used many technologies that include the follo
     </li>
 </ol>
  
-<h2>How to use the Coursla</h2>
+<h2>Features</h2>
  <h4>1. Search and Filter Online Courses:</h4>
   <ul>
     <li>Utilize the search functionality to find courses based on keywords.</li>
