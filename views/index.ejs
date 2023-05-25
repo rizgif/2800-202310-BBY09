@@ -18,7 +18,13 @@
     <div class="row justify-content-center searchbox-main mx-auto">
         <div class="col-sm-8">
 
-          <form action="/search-results" method="get" class="form-inline my-2 my-lg-0 d-flex justify-content-center">
+          <!-- Updated code for the alert message -->
+          <div id="alertMessage" class="alert-message">
+            <p>Please enter a search keyword.</p>
+            <span id="alertMessageClose" class="alert-message-close">&times;</span>
+          </div>
+
+          <form action="/search-results" method="get" class="form-inline my-2 my-lg-0 d-flex justify-content-center" onsubmit="return validateSearchForm()">
 
             <div class="form-group mx-2 mb-2" style="width:300px;">
                 <input name="courseSearch" type="text" class="form-control" id="courseSearch" placeholder="Search courses">
@@ -59,3 +65,20 @@
     </div>
 </div>
 <%- include("templates/footer") %>
+
+<script>
+  function validateSearchForm() {
+    const searchInput = document.getElementById("courseSearch").value;
+    if (searchInput.trim() === "") {
+      const alertMessage = document.getElementById("alertMessage");
+      alertMessage.style.display = "block";
+      return false; // Prevent form submission
+    }
+    return true; // Proceed with form submission
+  }
+
+  document.getElementById("alertMessageClose").addEventListener("click", function() {
+    const alertMessage = document.getElementById("alertMessage");
+    alertMessage.style.display = "none";
+  });
+</script>
