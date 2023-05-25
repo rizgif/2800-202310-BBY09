@@ -3,8 +3,7 @@ const express = require('express');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const bcrypt = require('bcrypt');
-const Joi = require("joi");
-const { ObjectId, MongoClient } = require("mongodb");
+const {ObjectId, MongoClient} = require("mongodb");
 const nodemailer = require('nodemailer');
 const bodyParser = require('body-parser');
 
@@ -14,10 +13,7 @@ const {
   sessionValidation,
   loginValidation,
   signupValidation,
-  isValidSession,
-  isAdmin,
   isLoggedIn,
-  reviewValidation
 } = require('./middleware');
 const {editProfileValidation} = require("./middleware/edit-profile");
 
@@ -66,7 +62,7 @@ const email_host = process.env.EMAIL_HOST;
 const email_password = process.env.EMAIL_PASSWORD;
 /* END secret section */
 
-let { database } = include('databaseConnection');
+let {database} = include('databaseConnection');
 
 const userCollection = database.db(mongodb_database).collection('users');
 const bookmarkCollection = database.db(mongodb_database).collection('bookmarks');
@@ -76,7 +72,7 @@ const tokenCollection = database.db(mongodb_database).collection('tokens');
 
 app.set('view engine', 'ejs');
 
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({extended: false}));
 
 
 var mongoStore = MongoStore.create({
@@ -84,30 +80,30 @@ var mongoStore = MongoStore.create({
   crypto: {
     secret: mongodb_session_secret
   }
-})
+});
 
 app.use(session({
-  secret: node_session_secret,
-  store: mongoStore, //default is memory store
-  saveUninitialized: false,
-  resave: true
-}
+    secret: node_session_secret,
+    store: mongoStore, //default is memory store
+    saveUninitialized: false,
+    resave: true
+  }
 ));
 
 /* === Pages === */
 app.get('/', async (req, res) => {
   if (req.session.authenticated && !req.session.uid) {
-    const result = await userCollection.find({ email: req.session.email }).project({ _id: 1 }).toArray();
+    const result = await userCollection.find({email: req.session.email}).project({_id: 1}).toArray();
     req.session.uid = result[0]._id;
 
   }
-  res.render("index", { isLoggedIn: isLoggedIn(req), username: req.session.username });
+  res.render("index", {isLoggedIn: isLoggedIn(req), username: req.session.username});
 });
 
-
+//
 app.get('/search-results', async (req, res) => {
   const userId = req.session.uid;
-  const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
+  const userBookmarks = await bookmarkCollection.find({userId: userId}).toArray();
 
   const courseSearch = req.query.courseSearch;
   const provider = req.query.provider?.toLowerCase();
@@ -118,11 +114,11 @@ app.get('/search-results', async (req, res) => {
   const condition = {};
 
   if (courseSearch) {
-    condition.Title = { $regex: `${courseSearch}`, $options: 'i' };
+    condition.Title = {$regex: `${courseSearch}`, $options: 'i'};
   }
-  if (provider) condition.Provider = { $regex: `${provider}`, $options: 'i' };
-  if (level) condition.Course_Difficulty = { $regex: `${level}`, $options: 'i' };
-  if (rating) condition.Course_Rating = { $regex: `${rating}`, $options: 'i' };
+  if (provider) condition.Provider = {$regex: `${provider}`, $options: 'i'};
+  if (level) condition.Course_Difficulty = {$regex: `${level}`, $options: 'i'};
+  if (rating) condition.Course_Rating = {$regex: `${rating}`, $options: 'i'};
 
   const sortOptions = {};
 
@@ -140,13 +136,13 @@ app.get('/search-results', async (req, res) => {
       // Query parameters provided, filter the search
       searchResult = await courseCollection.find(condition).toArray();
     }
-  
+
     const searchResultCount = searchResult.length;
-  
-  
+
+
     let calibratedValues = [];
     let nonCalibratedValues = [];
-  
+
     searchResult.forEach((course) => {
       if (course.Course_Rating !== "Not Calibrated") {
         nonCalibratedValues.push(course);
@@ -154,7 +150,7 @@ app.get('/search-results', async (req, res) => {
         calibratedValues.push(course);
       }
     });
-  
+
     searchResult = nonCalibratedValues.concat(calibratedValues);
     // console.log(nonCalibratedValues);
 
@@ -166,7 +162,7 @@ app.get('/search-results', async (req, res) => {
         return b.Course_Rating - a.Course_Rating;
       }
     });
-  
+
     res.render("search-results", {
       searchResult: searchResult,
       searchResultCount: searchResultCount,
@@ -181,9 +177,12 @@ app.get('/search-results', async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.render('error', { message: `An error occurred while searching: ${error.message}`, username: req.session.username });
+    res.render('error', {
+      message: `An error occurred while searching: ${error.message}`,
+      username: req.session.username
+    });
   }
-  
+
 });
 
 
@@ -193,11 +192,11 @@ app.get('/course-details', async (req, res) => {
   const username = req.session.username;
   const userId = req.session.uid;
 
-  const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
+  const userBookmarks = await bookmarkCollection.find({userId: userId}).toArray();
   const email = req.session.email;
-  const selecteduser = await userCollection.find({ email: email }).toArray();
+  const selecteduser = await userCollection.find({email: email}).toArray();
 
-  const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
+  const courseInfo = await courseCollection.findOne({_id: new ObjectId(courseId)});
 
   console.log(selecteduser)
   let reviewSliderPairs = await Promise.all(
@@ -211,7 +210,7 @@ app.get('/course-details', async (req, res) => {
           studentSupportSliderValue: review.StudentSupportRating
         };
 
-        const user = await userCollection.findOne({ email: review.email });
+        const user = await userCollection.findOne({email: review.email});
         const avatar = user ? user.avatar : null;
 
         return {
@@ -247,7 +246,7 @@ app.get('/course-details', async (req, res) => {
   async function updateCourse(courseId, overallCategorySums, totalvote) {
     // Update the course document with the specified courseId
     await courseCollection.updateOne(
-      { _id: new ObjectId(courseId) },
+      {_id: new ObjectId(courseId)},
       {
         $set: {
           OverallCategorySums: overallCategorySums,
@@ -296,9 +295,9 @@ app.post('/removeBookmark', async (req, res) => {
   const userId = req.session.uid; // user's _id
   const courseId = req.body.courseId; // course's _id
 
-  const bookmark = await bookmarkCollection.findOne({ userId: userId, courseId: courseId });
+  const bookmark = await bookmarkCollection.findOne({userId: userId, courseId: courseId});
   if (bookmark) {
-    const result = await bookmarkCollection.deleteOne({ _id: bookmark._id });
+    const result = await bookmarkCollection.deleteOne({_id: bookmark._id});
     if (result.deletedCount === 1) {
       res.sendStatus(200);
     } else {
@@ -316,17 +315,17 @@ app.get('/bookmarks', async (req, res) => {
   } else {
     try {
       const userId = req.session.uid;
-  
+
       const bookmarkedCourses = await database.db(mongodb_database).collection('bookmarks').aggregate([
         {
-          $match: { userId: userId } // Match the bookmarks for the current user
+          $match: {userId: userId} // Match the bookmarks for the current user
         },
         {
           $lookup: {
             from: 'courses',
-            let: { courseId: { $toObjectId: '$courseId' } },
+            let: {courseId: {$toObjectId: '$courseId'}},
             pipeline: [
-              { $match: { $expr: { $eq: ['$_id', '$$courseId'] } } },
+              {$match: {$expr: {$eq: ['$_id', '$$courseId']}}},
               {
                 $project: {
                   _id: 1,
@@ -346,23 +345,32 @@ app.get('/bookmarks', async (req, res) => {
           $unwind: '$courseDetails'
         }
       ]).toArray();
-  
-      const userBookmarks = await bookmarkCollection.find({ userId: userId }).toArray();
-  
-      res.render('bookmarks', { bookmarkedCourses, isLoggedIn: isLoggedIn(req), userBookmarks, username: req.session.username});
+
+      const userBookmarks = await bookmarkCollection.find({userId: userId}).toArray();
+
+      res.render('bookmarks', {
+        bookmarkedCourses,
+        isLoggedIn: isLoggedIn(req),
+        userBookmarks,
+        username: req.session.username
+      });
     } catch (error) {
       res.status(500).send('Internal Server Error');
     }
   }
-  
+
 });
 
 
 app.get('/login', (req, res) => {
-  res.render("login", { isLoggedIn: isLoggedIn(req) });
+  res.render("login", {isLoggedIn: isLoggedIn(req)});
 });
 app.get('/error', (req, res) => {
-  res.render("login", { isLoggedIn: isLoggedIn(req), message: req.query.message || req.body.message, username: req.session.username });
+  res.render("login", {
+    isLoggedIn: isLoggedIn(req),
+    message: req.query.message || req.body.message,
+    username: req.session.username
+  });
 });
 
 app.get('/sample', (req, res) => {
@@ -372,7 +380,12 @@ app.get('/sample', (req, res) => {
 app.post('/login-submit', loginValidation, async (req, res) => {
   let email = req.body.email;
 
-  const result = await userCollection.find({ email: email }).project({ password: 1, username: 1, avatar: 1, _id: 1 }).toArray();
+  const result = await userCollection.find({email: email}).project({
+    password: 1,
+    username: 1,
+    avatar: 1,
+    _id: 1
+  }).toArray();
   req.session.uid = result[0]._id;
   req.session.authenticated = true;
   req.session.email = email;
@@ -389,7 +402,7 @@ app.post('/login-submit', loginValidation, async (req, res) => {
 });
 
 app.get('/signup', (req, res) => {
-  res.render('signup', { isLoggedIn: isLoggedIn(req) });
+  res.render('signup', {isLoggedIn: isLoggedIn(req)});
 });
 
 app.post('/signup-submit', signupValidation, async (req, res) => {
@@ -397,23 +410,26 @@ app.post('/signup-submit', signupValidation, async (req, res) => {
   let username = req.body.username?.trim();
   let email = req.body.email?.trim();
 
-  if(isLoggedIn(req)){
+  if (isLoggedIn(req)) {
     res.redirect('/');
     return;
   }
 
   // check if the id already exists
-  const emailCheck = await userCollection.find({ email: email }).project({ _id: 1 }).toArray();
+  const emailCheck = await userCollection.find({email: email}).project({_id: 1}).toArray();
 
   if (emailCheck.length > 0) {
-    res.render('signup-submit', { signupFail: true, errorMessage: `This email already exists. \n Please choose a different email.` });
+    res.render('signup-submit', {
+      signupFail: true,
+      errorMessage: `This email already exists. \n Please choose a different email.`
+    });
     return;
   }
 
   // If inputs are valid, add the member
   let hashedPassword = await bcrypt.hash(password, saltRounds);
 
-  await userCollection.insertOne({ username: username, email: email, password: hashedPassword, user_type: 'user' });
+  await userCollection.insertOne({username: username, email: email, password: hashedPassword, user_type: 'user'});
   console.log("Inserted user");
 
   // Create a session
@@ -440,12 +456,12 @@ app.post('/find-password', async (req, res) => {
   const email = req.body.email;
 
   try {
-    const user = await userCollection.findOne({ email: email });
+    const user = await userCollection.findOne({email: email});
 
     if (user) {
       const token = new ObjectId().toString();
       const expireTime = new Date(Date.now() + 3600000); // Token expires in 1 hour
-      await tokenCollection.insertOne({ token: token, uid: user._id, expireAt: expireTime });
+      await tokenCollection.insertOne({token: token, uid: user._id, expireAt: expireTime});
 
       const transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -471,7 +487,10 @@ app.post('/find-password', async (req, res) => {
       await transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
           console.log(error);
-          res.render('find-password', { message: 'Failed to send email. Please try again later.', username: user.username });
+          res.render('find-password', {
+            message: 'Failed to send email. Please try again later.',
+            username: user.username
+          });
         } else {
           console.log(info);
           res.redirect("/login?successMessage=Please check your email");
@@ -479,29 +498,29 @@ app.post('/find-password', async (req, res) => {
         }
       });
     } else {
-      res.render('find-password', { message: 'No user found with that email address.', username: user.username });
+      res.render('find-password', {message: 'No user found with that email address.', username: user.username});
     }
   } catch (error) {
     console.log(error);
-    res.render('find-password', { message: 'Failed to find user. Please try again later.', username: user.username });
+    res.render('find-password', {message: 'Failed to find user. Please try again later.', username: user.username});
   }
 });
 
 app.get('/reset-password/:token', async (req, res) => {
   const token = req.params.token;
   try {
-    const tokenData = await tokenCollection.findOne({ token: token });
+    const tokenData = await tokenCollection.findOne({token: token});
 
     if (tokenData && tokenData.expireAt > new Date()) {
-      const user = await userCollection.findOne({ _id: tokenData.uid });
+      const user = await userCollection.findOne({_id: tokenData.uid});
       console.log(user)
-      res.render('reset-password', { token: token, username: user.username, avatar: user.avatar });
+      res.render('reset-password', {token: token, username: user.username, avatar: user.avatar});
     } else {
-      res.render('error', { message: 'Invalid or expired token', username: req.session.username });
+      res.render('error', {message: 'Invalid or expired token', username: req.session.username});
     }
   } catch (error) {
     console.error(error);
-    res.render('error', { message: 'An error occurred', username: req.session.username });
+    res.render('error', {message: 'An error occurred', username: req.session.username});
   }
 });
 
@@ -512,35 +531,35 @@ app.post('/reset-password-submit', async (req, res) => {
   let newPassword = req.body.password1;
 
   try {
-    const tokenData = await tokenCollection.findOne({ token: token });
+    const tokenData = await tokenCollection.findOne({token: token});
     console.log('tokenData', token, tokenData)
-    const user = await userCollection.findOne({ _id: tokenData.uid });
+    const user = await userCollection.findOne({_id: tokenData.uid});
     console.log('user', user)
 
     /* update the new password */
     // If inputs are valid, add the member
     let hashedPassword = await bcrypt.hash(newPassword, saltRounds);
     let uid = user._id;
-    await userCollection.updateOne({ _id: new ObjectId(uid) }, { $set: { password: hashedPassword } });
+    await userCollection.updateOne({_id: new ObjectId(uid)}, {$set: {password: hashedPassword}});
     console.log('password is changed')
     res.redirect("/profile");
 
   } catch (error) {
     console.error(error);
-    res.render('error', { message: 'An error occurred', username: req.session.username, isLoggedIn: isLoggedIn(req) });
+    res.render('error', {message: 'An error occurred', username: req.session.username, isLoggedIn: isLoggedIn(req)});
   }
 
 });
 
 app.get('/profile', sessionValidation, (req, res) => {
-  let { username, email, avatar } = req.session;
-  res.render('profile', { username, email, avatar, isLoggedIn: isLoggedIn(req) });
+  let {username, email, avatar} = req.session;
+  res.render('profile', {username, email, avatar, isLoggedIn: isLoggedIn(req)});
 });
 
 app.get('/change-password', sessionValidation, async (req, res) => {
   const message = req.query.message || '';
   const avatar = req.session.avatar;
-  res.render('change-password', { message, avatar, isLoggedIn: isLoggedIn(req), username: req.session.username });
+  res.render('change-password', {message, avatar, isLoggedIn: isLoggedIn(req), username: req.session.username});
 });
 
 app.post('/change-password-submit', sessionValidation, async (req, res) => {
@@ -551,7 +570,7 @@ app.post('/change-password-submit', sessionValidation, async (req, res) => {
   let oldPassword = req.body.oldPassword;
 
   // check if the password is correct
-  const result = await userCollection.find({ email: email }).project({ _id: 1, password: 1 }).toArray();
+  const result = await userCollection.find({email: email}).project({_id: 1, password: 1}).toArray();
   if (!await bcrypt.compare(oldPassword, result[0].password)) {
     res.redirect("/change-password?message=Old%20password%20is%20incorrect");
     return;
@@ -561,7 +580,7 @@ app.post('/change-password-submit', sessionValidation, async (req, res) => {
   // If inputs are valid, add the member
   let hashedPassword = await bcrypt.hash(newPassword, saltRounds);
   let uid = result[0]._id;
-  await userCollection.updateOne({ _id: new ObjectId(uid) }, { $set: { password: hashedPassword } });
+  await userCollection.updateOne({_id: new ObjectId(uid)}, {$set: {password: hashedPassword}});
   console.log('password is changed')
   res.redirect("/profile");
 });
@@ -572,7 +591,14 @@ app.get('/edit-profile', sessionValidation, async (req, res) => {
   let username = req.session.username;
   let avatar = req.session.avatar;
   let uid = req.session.uid;
-  res.render("edit-profile", { email, username, avatar, firebaseConfig, uid: new ObjectId(uid).toString(), isLoggedIn: isLoggedIn(req) });
+  res.render("edit-profile", {
+    email,
+    username,
+    avatar,
+    firebaseConfig,
+    uid: new ObjectId(uid).toString(),
+    isLoggedIn: isLoggedIn(req)
+  });
 });
 
 app.post('/edit-profile-submit', editProfileValidation, async (req, res) => {
@@ -580,12 +606,12 @@ app.post('/edit-profile-submit', editProfileValidation, async (req, res) => {
   let avatar = req.body.avatar;
   let uid = req.session.uid;
 
-  if(!isLoggedIn(req)) {
+  if (!isLoggedIn(req)) {
     res.redirect("/login");
     return;
   }
 
-  await userCollection.updateOne({ _id: new ObjectId(uid) }, { $set: { username, avatar } });
+  await userCollection.updateOne({_id: new ObjectId(uid)}, {$set: {username, avatar}});
   req.session.username = username;
   req.session.avatar = avatar;
 
@@ -708,7 +734,6 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
 });
 
 
-
 //delete the review from database
 app.post('/reviews/deleteReview/:id', async (req, res) => {
   const courseId = req.params.id;
@@ -717,7 +742,7 @@ app.post('/reviews/deleteReview/:id', async (req, res) => {
 
   console.log("deleted review is for this course: ", courseId);
   // Get the review ID before deleting the review
-  const deletedReview = await reviewCollection.findOne({ CourseID: courseId, email: email });
+  const deletedReview = await reviewCollection.findOne({CourseID: courseId, email: email});
 
   if (!deletedReview || deletedReview?.length < 1) {
     return false;
@@ -729,23 +754,22 @@ app.post('/reviews/deleteReview/:id', async (req, res) => {
 
   if (deletedReview) {
     const deletedReviewId = deletedReview._id.toString();
-    await reviewCollection.deleteOne({ CourseID: courseId, email: email });
+    await reviewCollection.deleteOne({CourseID: courseId, email: email});
 
     if (reviewCount <= 5) {
       await userCollection.updateOne(
-        { _id: new ObjectId(uid) },
-        { $set: { Badges: " " } }
+        {_id: new ObjectId(uid)},
+        {$set: {Badges: " "}}
       );
     }
 
     await userCollection.updateOne(
-      { ReviewID: deletedReviewId },
-      { $pull: { ReviewID: deletedReviewId } }
+      {ReviewID: deletedReviewId},
+      {$pull: {ReviewID: deletedReviewId}}
     );
 
     res.redirect(`/course-details?courseId=${courseId}`);
-  }
-  else {
+  } else {
     res.status(404).send('Review not found');
   }
 });
@@ -757,25 +781,27 @@ app.post('/submitReview/:id', async (req, res) => {
   const username = req.session.username; // Replace 'username' with the actual field name
   const email = req.session.email;
   const courseId = req.params.id;
-  const Existingreviews = await reviewCollection.findOne({ CourseID: courseId, email: email });
+  const Existingreviews = await reviewCollection.findOne({CourseID: courseId, email: email});
 
   const myReviewPage = req.query.myReviewPage;
 
   console.log('submit', myReviewPage)
 
-  const { review,
+  const {
+    review,
     courseContentSliderValue,
     courseStructureSliderValue,
     teachingStyleSliderValue,
     studentSupportSliderValue,
-    currentDate } = req.body;
+    currentDate
+  } = req.body;
 
   // if there is a exisiting review, direct user to edit their existing review
   if (Existingreviews) {
     console.log('Update user review and active index');
     // Update an existing review
     await reviewCollection.updateOne(
-      { _id: new ObjectId(Existingreviews._id.toString()) }, // Specify the query criteria
+      {_id: new ObjectId(Existingreviews._id.toString())}, // Specify the query criteria
       {
         $set: {
           Review: review,
@@ -813,18 +839,17 @@ app.post('/submitReview/:id', async (req, res) => {
     if (reviewCount > 1) {
 
       await userCollection.updateOne(
-        { email: email }, // Specify the query criteria
+        {email: email}, // Specify the query criteria
         {
           $push: {
             ReviewID: insertedReview._id.toString()
           }
         }
       );
-    }
-    else {
+    } else {
 
       await userCollection.updateOne(
-        { email: email }, // Specify the query criteria
+        {email: email}, // Specify the query criteria
         {
           $set: {
             ReviewID: [insertedReview._id.toString()]
@@ -838,23 +863,23 @@ app.post('/submitReview/:id', async (req, res) => {
       console.log('User has written 5 reviews, give them a badge');
 
       const response = await userCollection.updateOne(
-        { _id: new ObjectId(uid) },
-        { $set: { Badges: "Reviewer" } }
+        {_id: new ObjectId(uid)},
+        {$set: {Badges: "Reviewer"}}
       );
-      
+
       res.redirect('/course-details?easterEgg=true&courseId=' + courseId);
       return false;
     } else if (reviewCount > 5) {
       // to make sure they have badge
       await userCollection.updateOne(
-        { _id: new ObjectId(uid) },
-        { $set: { Badges: "Reviewer" } }
+        {_id: new ObjectId(uid)},
+        {$set: {Badges: "Reviewer"}}
       )
     } else {
       // to prevent user remove review and get badge
       await userCollection.updateOne(
-        { _id: new ObjectId(uid) },
-        { $set: { Badges: " " } }
+        {_id: new ObjectId(uid)},
+        {$set: {Badges: " "}}
       );
     }
 
@@ -862,19 +887,18 @@ app.post('/submitReview/:id', async (req, res) => {
 
   if (myReviewPage) {
     res.redirect('/my-reviews');
-  }
-  else {
+  } else {
     res.redirect('/course-details?courseId=' + courseId);
   }
 });
 
 app.get('/my-reviews', async (req, res) => {
   const email = req.session.email;
-  const reviews = await reviewCollection.find({ email: email }).toArray();
+  const reviews = await reviewCollection.find({email: email}).toArray();
   const username = req.session.username;
   let courseId;
   const reviewGroups = {};
-  
+
   // Group reviews by courseId
   reviews.forEach(review => {
     courseId = review.CourseID;
@@ -883,12 +907,12 @@ app.get('/my-reviews', async (req, res) => {
     }
     reviewGroups[courseId].push(review);
   });
-  
+
   const reviewSliderPairs = [];
   // Retrieve course information for each group
   for (const courseId in reviewGroups) {
-    const courseInfo = await courseCollection.findOne({ _id: new ObjectId(courseId) });
-    
+    const courseInfo = await courseCollection.findOne({_id: new ObjectId(courseId)});
+
     const groupReviews = reviewGroups[courseId];
     const groupSliderPairs = await Promise.all(
       groupReviews.map(async review => {
@@ -899,7 +923,7 @@ app.get('/my-reviews', async (req, res) => {
           studentSupportSliderValue: review.StudentSupportRating
         };
 
-        const user = await userCollection.findOne({ email: review.email });
+        const user = await userCollection.findOne({email: review.email});
         const avatar = user ? user.avatar : null;
 
         return {
@@ -939,7 +963,7 @@ app.get('/my-reviews', async (req, res) => {
   async function updateCourse(courseId, overallCategorySums, totalvote) {
     // Update the course document with the specified courseId
     await courseCollection.updateOne(
-      { _id: new ObjectId(courseId) },
+      {_id: new ObjectId(courseId)},
       {
         $set: {
           OverallCategorySums: overallCategorySums,
@@ -968,7 +992,7 @@ app.use(express.static(__dirname + "/public"));
 
 app.get("*", (req, res) => {
   res.status(404);
-  res.render("404", { isLoggedIn: isLoggedIn(req), username: req.session.username });
+  res.render("404", {isLoggedIn: isLoggedIn(req), username: req.session.username});
 })
 
 app.listen(port, () => {
