@@ -16,8 +16,8 @@
     4. Did you encounter any limitations? What were they, and how did you overcome them? Be specific. [ 2 marks]
 9. Contact Information [1 mark]
 
-Project Title: Coursla 
+• Project Title: Coursla 
 
-Project Description: 
+• Project Description: Our project, BBY-09, is developing online course integration platforms to assist students and working professionals struggling to find suitable online courses with key features such as filtering and sorting.
 
-Our project, BBY-09, is developing online course integration platforms to assist students and working professionals struggling to find suitable online courses with key features such as filtering and sorting.
+• Technologies used for Coursla:
