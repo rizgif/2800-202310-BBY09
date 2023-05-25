@@ -142,22 +142,14 @@ app.get('/search-results', async (req, res) => {
   }
 
   try {
-    let searchResult;
-    
-    if (Object.keys(condition).length === 0) {
-      // No query parameters provided, fetch all objects
-      searchResult = await courseCollection.find().toArray();
-    } else {
-      // Query parameters provided, filter the search
-      searchResult = await courseCollection.find(condition).sort(sortOptions).toArray();
-    }
+    // Existing code for fetching search results
   
     const searchResultCount = searchResult.length;
   
-    if (searchResultCount > 0) {
-      let calibratedValues = [];
-      let nonCalibratedValues = [];
+    let calibratedValues = [];
+    let nonCalibratedValues = [];
   
+    if (searchResultCount > 0) {
       searchResult.forEach((course) => {
         if (course.Course_Rating !== "Not Calibrated") {
           nonCalibratedValues.push(course);
@@ -184,8 +176,9 @@ app.get('/search-results', async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).send('An error occurred while searching');
+    res.status(500).send(`An error occurred while searching: ${error.message}`);
   }
+  
   
 });
 
