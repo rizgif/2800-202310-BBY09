@@ -141,28 +141,40 @@ app.get('/search-results', async (req, res) => {
     sortOptions.Course_Rating = 1; // Sort by Course_Rating in ascending order
   }
 
-  let searchResult = []; // Initialize searchResult as an empty array
-
   try {
-    // Existing code for fetching search results
+    let searchResult;
+  
+    if (Object.keys(condition).length === 0) {
+      // No query parameters provided, fetch all objects
+      searchResult = await courseCollection.find().toArray();
+    } else {
+      // Query parameters provided, filter the search
+      searchResult = await courseCollection.find(condition).toArray();
+    }
   
     const searchResultCount = searchResult.length;
+  
+    searchResult.sort((a, b) => {
+      if (sort === 'low to high') {
+        return a.Course_Rating - b.Course_Rating; // Sort by Course_Rating in ascending order
+      } else {
+        return b.Course_Rating - a.Course_Rating; // Sort by Course_Rating in descending order
+      }
+    });
   
     let calibratedValues = [];
     let nonCalibratedValues = [];
   
-    if (searchResultCount > 0) {
-      searchResult.forEach((course) => {
-        if (course.Course_Rating !== "Not Calibrated") {
-          nonCalibratedValues.push(course);
-        } else {
-          calibratedValues.push(course);
-        }
-      });
+    searchResult.forEach((course) => {
+      if (course.Course_Rating !== "Not Calibrated") {
+        nonCalibratedValues.push(course);
+      } else {
+        calibratedValues.push(course);
+      }
+    });
   
-      searchResult = nonCalibratedValues.concat(calibratedValues);
-      console.log(nonCalibratedValues);
-    }
+    searchResult = nonCalibratedValues.concat(calibratedValues);
+    console.log(nonCalibratedValues);
   
     res.render("search-results", {
       searchResult: searchResult,
@@ -180,7 +192,6 @@ app.get('/search-results', async (req, res) => {
     console.error(error);
     res.status(500).send(`An error occurred while searching: ${error.message}`);
   }
-  
   
 });
 
