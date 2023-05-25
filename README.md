@@ -121,7 +121,6 @@ During our development process, we used many technologies that include the follo
 │       ├── image.js
 │       ├── modal.js
 │       └── search-list.js
-├── sample.env
 ├── utils.js
 └── views
     ├── 404.ejs
@@ -181,6 +180,15 @@ During our development process, we used many technologies that include the follo
             <li>Change to the directory where you want to clone the repository.</li>
             <li>Run the following command to clone the repository:</li>
             <li><code>git clone <repository_url></code> </li>
+            <li>Replace <repository_url> with the URL of the GitHub repository.</li>
+        </ul>
+    </li>
+    <br>
+     <li>Install project dependencies:
+        <ul>
+            <li>Navigate to the project directory in the terminal or command prompt.</li>
+            <li>Run the following command to install the dependencies listed in the project's package.json file:</li>
+            <li><code>npm install</code> </li>
             <li>Replace <repository_url> with the URL of the GitHub repository.</li>
         </ul>
     </li>
