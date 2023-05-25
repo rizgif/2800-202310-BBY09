@@ -1,13 +1,13 @@
-.title-wrapper{
-   margin: 3%;
+.title-wrapper {
+    margin: 3%;
     margin-top: 8%;
     margin-bottom: 4%;
-    
+
     border-top: 1px solid var(--color-divider);
 }
 
 .title-wrapper .title {
-    margin-top:  40px;
+    margin-top: 40px;
     font-weight: bold;
 }
 
@@ -26,7 +26,6 @@
     margin-bottom: 10%;
     padding: 5%;
     height: auto;
-    /* width: 90vw; */
     border-radius: 15px;
     border: 1px solid #ccc;
     box-shadow: 0 0px 5px rgba(0, 0, 0, 0.3);
@@ -34,41 +33,41 @@
     overflow: hidden;
     grid-auto-flow: row;
     grid-template-areas:
-    "a1 a2"
-    "a1  a4"
-    "a1  a6"
-    "a1  a8";
+        "a1 a2"
+        "a1  a4"
+        "a1  a6"
+        "a1  a8";
 
 }
 
 
 .all-rating {
-    grid-area:  a1;
+    grid-area: a1;
     text-align: center;
     justify-content: center;
     align-items: center;
     display: flex;
     background-color: white;
-    border-radius:10px;
+    border-radius: 10px;
 }
 
-.review-1{
+.review-1 {
     grid-area: a2;
 }
 
 
 
-.review-2{
+.review-2 {
     grid-area: a4;
 }
 
 
-.review-3{
+.review-3 {
     grid-area: a6;
 }
 
 
-.review-4{
+.review-4 {
     grid-area: a8;
 }
 
@@ -90,13 +89,9 @@
 }
 
 .rating-wrapper .review-slider {
-    /* font-size: 23px;
-    text-align: right;
-    font-weight: bold; */
     margin-top: 2%;
-    /* margin-right: 5%;
-    justify-content:center; */
 }
+
 .all-rating {
     display: flex;
     flex-direction: column;
@@ -109,7 +104,7 @@
     margin-bottom: 0.5rem;
 }
 
-.all-rating > .label {
+.all-rating>.label {
     font-size: 15px;
     padding: 2%;
     font-weight: bold;
@@ -123,12 +118,13 @@
 }
 
 .divider {
-    
-    font-size: 2rem; /* Adjust the font size as desired */
+
+    font-size: 2rem;
+    /* Adjust the font size as desired */
     align-self: flex-end;
 }
 
-.number-ratings{
+.number-ratings {
     border-top: 1px solid var(--color-divider);
     padding-top: 4%;
     padding-bottom: 2%;

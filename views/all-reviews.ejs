@@ -1,52 +1,47 @@
-<link rel="stylesheet" href="/css/all-reviews.css">
+<link rel="stylesheet" href="/css/all-reviews.css" />
 
-            <div class="title-wrapper">
-                <h1 class="title">
-                    Coursla Review
-                </h1>
-                <p class="subtitle">
-                    Discover honest and categorized course reviews.
-                </p>
-            </div>
+<div class="title-wrapper">
+  <h1 class="title">Coursla Review</h1>
+  <p class="subtitle">Discover honest and categorized course reviews.</p>
+</div>
 
-            <div class="overall-rating-wrapper">
+<div class="overall-rating-wrapper">
+  <div class="all-rating">
+    <div class="all-rating-score">
+      <span class="mean">
+        <%= parseInt(CourslaRating) > 0 ? parseFloat(CourslaRating).toFixed(1) :
+        "N/A" %> </span
+      ><span class="divider">/5</span>
+    </div>
+    <div class="label">Overall<br>Rating</div>
+  </div>
 
-                <div class="all-rating">
-                    <div class="all-rating-score">
-                        <span class="mean">
-                            <%= parseInt(CourslaRating) > 0 ? parseFloat(CourslaRating).toFixed(1) : "N/A" %>
-                        </span><span class="divider">/5</span>
-                    </div>
-                    <div class="label">Overall<br>Rating</div>
-                </div>
-
-                <div class="review-1">
-                    <div class="review-category">Course<br>Content</div>
-                    <div class="review-slider">
-                        <%- include("templates/read-slider", { type: "courseContent" , value:
-                            overallCategorySums.courseContent / num}) %>
-                    </div>
-                </div>
-                <div class="review-2">
-                    <div class="review-category">Course<br>Structure</div>
-                    <div class="review-slider">
-                        <%- include("templates/read-slider", { type: "courseContent" , value:
-                            overallCategorySums.courseStructure / num}) %>
-                    </div>
-                </div>
-                <div class="review-3">
-                    <div class="review-category">Teaching<br>Style</div>
-                    <div class="review-slider">
-                        <%- include("templates/read-slider", { type: "courseContent" , value:
-                            overallCategorySums.teachingStyle / num}) %>
-                    </div>
-                </div>
-                <div class="review-4">
-                    <div class="review-category">Student<br>Support</div>
-                    <div class="review-slider">
-                        <%- include("templates/read-slider", { type: "courseContent" , value:
-                            overallCategorySums.studentSupport / num}) %>
-                    </div>
-                </div>
-
-            </div>
+  <div class="review-1">
+    <div class="review-category">Course<br>Content</div>
+    <div class="review-slider">
+      <%- include("templates/read-slider", { type: "courseContent" , value:
+      overallCategorySums.courseContent / num}) %>
+    </div>
+  </div>
+  <div class="review-2">
+    <div class="review-category">Course<br>Structure</div>
+    <div class="review-slider">
+      <%- include("templates/read-slider", { type: "courseContent" , value:
+      overallCategorySums.courseStructure / num}) %>
+    </div>
+  </div>
+  <div class="review-3">
+    <div class="review-category">Teaching<br>Style</div>
+    <div class="review-slider">
+      <%- include("templates/read-slider", { type: "courseContent" , value:
+      overallCategorySums.teachingStyle / num}) %>
+    </div>
+  </div>
+  <div class="review-4">
+    <div class="review-category">Student<br>Support</div>
+    <div class="review-slider">
+      <%- include("templates/read-slider", { type: "courseContent" , value:
+      overallCategorySums.studentSupport / num}) %>
+    </div>
+  </div>
+</div>

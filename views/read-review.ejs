@@ -1,69 +1,70 @@
-<link rel="stylesheet" href="/css/read-review-card.css">
+<link rel="stylesheet" href="/css/read-review-card.css" />
 
-<% const sum=parseInt(sliderValue.courseContentSliderValue) + parseInt(sliderValue.studentSupportSliderValue) +
-    parseInt(sliderValue.courseStructureSliderValue) + parseInt(sliderValue.teachingStyleSliderValue); %>
+<% const sum=parseInt(sliderValue.courseContentSliderValue) +
+parseInt(sliderValue.studentSupportSliderValue) +
+parseInt(sliderValue.courseStructureSliderValue) +
+parseInt(sliderValue.teachingStyleSliderValue); %>
 
-    <!-- read from database -->
-    <div class=" grid-container">
+<!-- read from database -->
+<div class="grid-container">
+  <!-- Other review content -->
+  <input type="hidden" class="course_id" value="<%= review.CourseID %>" />
+  <input type="hidden" class="selected_email" value="<%= review.email %>" />
 
-    <!-- Other review content -->
-    <input type="hidden" class="course_id" value="<%= review.CourseID %>">
-    <input type="hidden" class="selected_email" value="<%= review.email %>">
-
-    <div class="rating">
-        <div class="rating-wrapper">
-            <div class="rating-label">
-                Overall
-            </div>
-        </div>
+  <div class="rating">
+    <div class="rating-wrapper">
+      <div class="rating-label">Overall</div>
     </div>
+  </div>
 
-    <div class="review-grid">
+  <div class="review-grid">
+    <div class="time_stamp"><%= review.Time %></div>
+    <div class="user_info">
+      <img
+        class="img-avatar"
+        src="<%= avatar?.includes('/image/avatar.png') ? '/image/avatar.png' : (avatar || '/image/avatar.png') %>"
+        alt=""
+      />
+      <%= username %> <% if(Badges==='Reviewer' ) { %>
+      <span class="easter-crown lg"
+        ><img src="/image/crown.png" alt="5 reviews user"
+      /></span>
+      <% } %>
+    </div>
+    <div class="user_review">
+      <%- review.Review.replaceAll('\n', '<br />' ) %> <% if
+      (selecteduser?.[0]?.username === username) { %> <%- include("edit-review",
+      {username: username, id: review._id.toString(), courseId: courseId,
+      myReviewPage: myReviewPage, selecteduser: selecteduser}) %> <% } %>
+    </div>
+  </div>
 
-        <div class="time_stamp">
-            <%= review.Time %>
-        </div>
-        <div class="user_info">
-            <img class="img-avatar" src="<%= avatar?.includes('/image/avatar.png') ? '/image/avatar.png' : (avatar || '/image/avatar.png') %>" alt="">
-            <%= username %>
-                <% if(Badges==='Reviewer' ) { %>
-                    <span class="easter-crown lg"><img src="/image/crown.png" alt="5 reviews user"></span>
-                    <% } %>
-        </div>
-        <div class="user_review">
-            <%- review.Review.replaceAll('\n', '<br>' ) %>
-                <% if (selecteduser?.[0]?.username === username) { %>
-                    <%- include("edit-review", {username: username, id: review._id.toString(), courseId: courseId,
-                        myReviewPage: myReviewPage, selecteduser: selecteduser}) %>
-                        <% } %>
-        </div>
+  <div class="level">
+    <div class="level-wrapper">
+      <button id="ratingButton" class="rating-button">
+        <%= (sum / 4).toFixed(1) %>
+      </button>
+    </div>
+  </div>
 
-    </div>
-
-    <div class="level">
-        <div class="level-wrapper">
-            <button id="ratingButton" class="rating-button">
-                <%= (sum / 4).toFixed(1) %>
-            </button>
-        </div>
-    </div>
-
-    <div class="review-category">Course Content</div>
-    <div class="review-slider">
-        <%- include("templates/read-slider", { type: "courseContent" , value: sliderValue.courseContentSliderValue }) %>
-    </div>
-    <div class="review-category">Course Structure</div>
-    <div class="review-slider">
-        <%- include("templates/read-slider", { type: "courseStructure" , value: sliderValue.courseStructureSliderValue
-            }) %>
-    </div>
-    <div class="review-category">Teaching Style</div>
-    <div class="review-slider">
-        <%- include("templates/read-slider", { type: "teachingStyle" , value: sliderValue.teachingStyleSliderValue }) %>
-    </div>
-    <div class="review-category">Student Support</div>
-    <div class="review-slider">
-        <%- include("templates/read-slider", { type: "studentSupport" , value: sliderValue.studentSupportSliderValue })
-            %>
-    </div>
-    </div>
+  <div class="review-category">Course Content</div>
+  <div class="review-slider">
+    <%- include("templates/read-slider", { type: "courseContent" , value:
+    sliderValue.courseContentSliderValue }) %>
+  </div>
+  <div class="review-category">Course Structure</div>
+  <div class="review-slider">
+    <%- include("templates/read-slider", { type: "courseStructure" , value:
+    sliderValue.courseStructureSliderValue }) %>
+  </div>
+  <div class="review-category">Teaching Style</div>
+  <div class="review-slider">
+    <%- include("templates/read-slider", { type: "teachingStyle" , value:
+    sliderValue.teachingStyleSliderValue }) %>
+  </div>
+  <div class="review-category">Student Support</div>
+  <div class="review-slider">
+    <%- include("templates/read-slider", { type: "studentSupport" , value:
+    sliderValue.studentSupportSliderValue }) %>
+  </div>
+</div>
