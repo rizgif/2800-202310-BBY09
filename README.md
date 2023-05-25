@@ -32,7 +32,7 @@ During our development process, we used many technologies that include the follo
         <li>Studio3T</li>
         </ul>
     </li>
-    <li><h3>Skilles & Libraries</h3>
+    <li><h3>Skills & Libraries</h3>
         <ul>
         <li>HTML</li>
         <li>CSS</li>
@@ -42,16 +42,149 @@ During our development process, we used many technologies that include the follo
         <li>Node JS</li>
         <li>sweetalert2</li>
         <li>Firestore Cloud Storage</li>
-        </ul>
-    </li>
+        <li>Bootstrap</li>
+        <li>JQuery</li>  
 </ul>
 
-<details>
-<summary>Listing of File Contents</summary>
+
+<h3>Listing of File Contents of folder</h3>
+
+```bash
+.
+├── README.md
+├── databaseConnection.js
+├── index.js
+├── middleware
+│   ├── admin.js
+│   ├── edit-profile.js
+│   ├── index.js
+│   ├── login.js
+│   ├── review.js
+│   ├── session.js
+│   └── signup.js
+├── public
+│   ├── css
+│   │   ├── all-reviews.css
+│   │   ├── bookmarks.css
+│   │   ├── bootstrap.css
+│   │   ├── common.css
+│   │   ├── confetti-rain.css
+│   │   ├── course-detail.css
+│   │   ├── coursecard.css
+│   │   ├── custom.css
+│   │   ├── easter-egg.css
+│   │   ├── edit-review.css
+│   │   ├── form.css
+│   │   ├── header.css
+│   │   ├── main.css
+│   │   ├── my-reviews.css
+│   │   ├── profile.css
+│   │   ├── read-my-review-card.css
+│   │   ├── read-review-card.css
+│   │   ├── reviewcard2.css
+│   │   ├── search-list.css
+│   │   ├── search.css
+│   │   ├── slider.css
+│   │   └── write-review-card.css
+│   ├── font
+│   │   └── Lato
+│   │       ├── Lato-Black.ttf
+│   │       ├── Lato-BlackItalic.ttf
+│   │       ├── Lato-Bold.ttf
+│   │       ├── Lato-BoldItalic.ttf
+│   │       ├── Lato-Italic.ttf
+│   │       ├── Lato-Light.ttf
+│   │       ├── Lato-LightItalic.ttf
+│   │       ├── Lato-Regular.ttf
+│   │       ├── Lato-Thin.ttf
+│   │       ├── Lato-ThinItalic.ttf
+│   │       └── OFL.txt
+│   ├── image
+│   │   ├── ads_main.png
+│   │   ├── avatar.png
+│   │   ├── bookmark.png
+│   │   ├── camera.png
+│   │   ├── closemenu.png
+│   │   ├── complete.png
+│   │   ├── coursla_main.png
+│   │   ├── crown.png
+│   │   ├── favicon.ico
+│   │   ├── logo-coursera.svg
+│   │   ├── logo-round-coursera.png
+│   │   ├── logo-round-udemy.webp
+│   │   ├── logo-udemy.svg
+│   │   ├── openmenu.png
+│   │   ├── randomimage
+│   │   │   ├── 1.jpeg
+│   │   │   ├── 2.jpeg
+│   │   │   ├── 3.jpeg
+│   │   │   ├── 4.jpeg
+│   │   │   ├── 5.jpeg
+│   │   │   ├── 6.jpeg
+│   │   │   ├── 7.jpeg
+│   │   │   ├── 8.jpeg
+│   │   │   └── 9.jpeg
+│   │   ├── rating.png
+│   │   ├── reviews.png
+│   │   ├── rick-roll-rick-ashley.gif
+│   │   ├── rick-roll-rick-rolled.gif
+│   │   ├── selective.png
+│   │   ├── setting.png
+│   │   └── udemy.png
+│   └── js
+│       ├── bookmark.js
+│       ├── common.js
+│       ├── confetti-rain.js
+│       ├── easter-egg.js
+│       ├── image.js
+│       ├── modal.js
+│       └── search-list.js
+├── sample.env
+├── utils.js
+└── views
+    ├── 404.ejs
+    ├── all-reviews.ejs
+    ├── bookmarks.ejs
+    ├── change-password.ejs
+    ├── course-detail.ejs
+    ├── edit-my-review.ejs
+    ├── edit-profile.ejs
+    ├── edit-review.ejs
+    ├── error.ejs
+    ├── find-password.ejs
+    ├── index-afterLogin.ejs
+    ├── index.ejs
+    ├── login-submit.ejs
+    ├── login.ejs
+    ├── my-review.ejs
+    ├── profile.ejs
+    ├── read-my-review.ejs
+    ├── read-review.ejs
+    ├── reset-password.ejs
+    ├── search-results.ejs
+    ├── signup-submit.ejs
+    ├── signup.ejs
+    ├── templates
+    │   ├── bookmarks-list.ejs
+    │   ├── easter-egg.ejs
+    │   ├── footer.ejs
+    │   ├── head.ejs
+    │   ├── header-beforeLogin.ejs
+    │   ├── header-index-beforeLogin.ejs
+    │   ├── header.ejs
+    │   ├── list.ejs
+    │   ├── loader.ejs
+    │   ├── nav-beforeLogin.ejs
+    │   ├── nav.ejs
+    │   ├── profile-avatar.ejs
+    │   ├── read-slider.ejs
+    │   ├── write-slider-dontchange.ejs
+    │   └── write-slider.ejs
+    └── write-review.ejs
 ```
-fdsafds
-```
-</details>
+
+
+
 
 <h2>How to run the Coursla App!</h2>
 <ol>
