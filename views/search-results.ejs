@@ -4,7 +4,7 @@
   <%- include("templates/header-beforeLogin") %>
 <% } %>
 <div class="search-wrapper">
-    <form action="/search-results" method="get">
+    <form action="/search-results" method="get" id="form-submit">
         <div class="search-bar justify-content-center">
             <div class="form-group">
                 <input value="<%= courseSearch %>" name="courseSearch" type="text" class="form-control"
@@ -62,9 +62,18 @@
     <% } %>
 </div>
 <script>
-  const courseCard = document.querySelector('.CourseCard-StyledCourseCard');
+const courseCard = document.querySelector('.CourseCard-StyledCourseCard');
   courseCard.addEventListener('click', () => {
   courseCard.classList.toggle('clicked');
+});
+
+
+const form = document.querySelector('#form-submit');
+  form.addEventListener('submit', (event) => {
+  const courseSearchInput = document.getElementById('courseSearch');
+  if (courseSearchInput.value.trim() === '') {
+  courseSearchInput.value = 'all_courses';
+}
 });
 </script>
 <%- include("templates/footer") %>
