@@ -5,10 +5,8 @@
 <% } %>
 
 <div class="text-center">
-    <div class="">
-        <% if (isLoggedIn) { %>
-        
-        <% } else { %>
+    <div>
+        <% if (!isLoggedIn) { %>
             <div class="p-3 loginarea-main before-login">
                 <a class="btn btn-primary-white btn-lg px-4" href="/login">Login</a>
                 <a id="signbutton_index" class="btn btn-primary btn-lg px-4" href="/signup">Sign up</a>
@@ -33,10 +31,6 @@
                     </svg>
                 </button>
               </form>
-
-
-
-              
             </div>
         </div>
 
@@ -47,23 +41,23 @@
         <% } else { %>
             <div class=" mx-auto p-3 slogan-main">
                 <h1 class="display-5 fw-bold text-body-emphasis">Join the Coursla Family</h1>
-                <p>Love Coursla? Let's make it official.</p> 
+                <p>Love Coursla? Let's make it official.</p>
+            </div>
         <% } %>
+        <div class="ads-container-main">
+            <div class="item">
+              <img src="image/rating.png">
+              <p>Manage and edit your ratings</p>
             </div>
-            <div class="ads-container-main">
-                <div class="item">
-                  <img src="image/rating.png">
-                  <p>Manage and edit your ratings</p>
-                </div>
-                <div class="item">
-                  <img src="image/selective.png">
-                  <p>Filter and select your courses</p>
-                </div>
-                <div class="item">
-                  <img src="image/reviews.png">
-                  <p>See other users’ reviews</p>
-                </div>
+            <div class="item">
+              <img src="image/selective.png">
+              <p>Filter and select your courses</p>
             </div>
+            <div class="item">
+              <img src="image/reviews.png">
+              <p>See other users’ reviews</p>
+            </div>
+        </div>
     </div>
 </div>
 <%- include("templates/footer") %>
