@@ -1,22 +1,4 @@
-# 2800-202310-BBY09
-
-1. Project Title [1 mark]
-2. Project Description (One Sentence Pitch) [2 marks]
-3. Technologies used  [2 marks]
-    - frontend, backend, database?
-    - other tech tools
-4. Listing of File Contents of folder [2 marks]
-5. How to install or run the project [2 marks]
-6. How to use the product (Features) [2 marks]
-7. Include Credits, References, and Licenses [ 2 marks]
-8. How did you use AI? Tell us exactly what AI services and products you used and how you used them. Be very specific:
-    1. Did you use AI to help create your app? If so, how? Be specific. [ 2 marks]
-    2. DId you use AI to create data sets or clean data sets? If so, how? Be specific. [ 2 marks]
-    3. Does your app use AI? If so, how? Be specific. [ 2 marks]
-    4. Did you encounter any limitations? What were they, and how did you overcome them? Be specific. [ 2 marks]
-9. Contact Information [1 mark]
-
-<h1>Coursla 🌿</h1>
+<h1 style>Coursla 🌿</h1>
 
 Our project, BBY-09, is developing online course integration platforms to assist students and working professionals struggling to find suitable online courses with key features such as filtering and sorting.
 
@@ -183,13 +165,90 @@ During our development process, we used many technologies that include the follo
     └── write-review.ejs
 ```
 
-
-
-
-<h2>How to run the Coursla App!</h2>
+<h2>Installing and Running Coursla</h2>
+<p>To install and run the project, follow these steps:</p>
 <ol>
-    <li>MongoDB</li>
-    <li>MongoDB</li>
+    <li>Install Node.js:
+        <ul>
+            <li>Download and install Node.js from the official website (<a href="https://nodejs.org">https://nodejs.org</a>).</li>
+            <li>Follow the installation instructions for your operating system.</li>
+        </ul>
+    </li>
+     <br>
+    <li>Clone the GitHub repository:
+        <ul>
+            <li>Open a terminal or command prompt.</li>
+            <li>Change to the directory where you want to clone the repository.</li>
+            <li>Run the following command to clone the repository:</li>
+            <li><code>git clone <repository_url></code> </li>
+            <li>Replace <repository_url> with the URL of the GitHub repository.</li>
+        </ul>
+    </li>
+    <br>
+    <li>Set up environment variables:
+        <ul>
+            <li>Create a .env file in the project root directory.</li>
+            <li>Add the necessary environment variables to the .env file. Refer to the project documentation or the .env.example file for the required variables.</li>
+        </ul>
+    </li>
+     <br>
+    <li>Set up the database:
+        <ul>
+            <li>Install and set up MongoDB.</li>
+            <li>Configure the MongoDB connection URL in the .env file.</li>
+        </ul>
+    </li>
+     <br>
+    <li>Run the project:
+        <ul>
+            <li>Run the following command to start the server:</li>
+            <li><code>npm start</code></li>
+            <li>The server should start running, and you should see a message indicating the port on which the server is listening.</li>
+        </ul>
+    </li>
+     <br>
+    <li>Access the web app:
+        <ul>
+            <li>Open a web browser.</li>
+            <li>Enter the URL http://localhost:<port> in the address bar.</li>
+            <li>Replace <port> with the port number specified in the console output.</li>
+        </ul>
+    </li>
 </ol>
+ 
+<h2>How to use the Coursla</h2>
+ <h4>1. Search and Filter Online Courses:</h4>
+  <ul>
+    <li>Utilize the search functionality to find courses based on keywords.</li>
+    <li>Apply filters such as course provider, difficulty level, or sorting to narrow down your search results.</li>
+  </ul>
+  
+  <h4>2. See Course Details:</h4>
+  <ul>
+    <li>Click on a course to access its detailed information.</li>
+    <li>Explore the course provider, difficulty level, enrollment number, description, provider and Coursla rating. </li>
+    <li>Click on external link to go to the online course provider.</li>
+  </ul>
+  
+  <h4>3. Read and Write Reviews for Courses:</h4>
+  <ul>
+    <li>Find the review section or option for each course.</li>
+    <li>Read reviews left by other users to gain insights and perspectives.</li>
+    <li>Write your own reviews, providing feedback on the course content, instructor, or learning experience.</li>
+  </ul>
+  
+  <h4>4. Bookmark Courses for Later Viewing:</h4>
+  <ul>
+    <li>Look for a bookmark or save feature associated with each course.</li>
+    <li>Click on the bookmark icon or use the provided option to save courses of interest.</li>
+    <li>Access your bookmarked courses later in your account or profile section.</li>
+  </ul>
+        
+<h2>AI and Coursla</h2>
+
+<p>As per the project theme, we relied on AI technology to help develop our app. We used ChatGPT to help us create functions, design our functions, and debug our code.</p> 
+<p>For our project, we used two MOOC dataset that were publicly available on Kaggle. Iniitally, we attempted to use ChatGPT to help us sort all of the courses into ten categories. However, our team noticed that there were too many values (7000+ data points) and we learned that ChatGPT could only process the datasets in small batches.</p>
+<p>Coursla used AI for the development of the application but it was not incorporated within the application itself.</p>
+<p></p>
 
 
