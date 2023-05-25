@@ -17,10 +17,10 @@
     </div>
     <div class="row justify-content-center searchbox-main mx-auto">
         <div class="col-sm-8">
-          <form action="/search-results" method="get" class="form-inline my-2 my-lg-0 d-flex justify-content-center">
+          <form action="/search-results" method="get" class="form-inline my-2 my-lg-0 d-flex justify-content-center needs-validation" novalidate>
 
             <div class="form-group mx-2 mb-2" style="width:300px;">
-                <input name="courseSearch" type="text" class="form-control" id="courseSearch" placeholder="Search courses">
+                <input name="courseSearch" type="text" class="form-control" id="courseSearch" placeholder="Search courses" required>
             </div>
 
             <button type="submit" class="btn btn-main-search mb-2" style="width:50px;" id="searchicon">
@@ -57,13 +57,4 @@
         </div>
     </div>
 </div>
-<script>
-  const form = document.querySelector('form');
-  form.addEventListener('submit', (event) => {
-    const courseSearchInput = document.getElementById('courseSearch');
-    if (courseSearchInput.value.trim() === '') {
-      courseSearchInput.value = 'all_courses';
-    }
-  });
-</script>
 <%- include("templates/footer") %>
