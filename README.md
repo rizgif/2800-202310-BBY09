@@ -121,7 +121,6 @@ During our development process, we used many technologies that include the follo
 │       ├── image.js
 │       ├── modal.js
 │       └── search-list.js
-├── sample.env
 ├── utils.js
 └── views
     ├── 404.ejs
