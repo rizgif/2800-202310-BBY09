@@ -1,170 +1,187 @@
 <% if (isLoggedIn) { %>
-    <%- include("templates/header") %>
-<% } else { %>
-    <%- include("templates/header-beforeLogin") %>
-<% } %>
+  <%- include("templates/header") %>
+    <% } else { %>
+      <%- include("templates/header-beforeLogin") %>
+        <% } %>
 
-<main class="form-wrapper profile-section-info">
-    <form id="form-profile" class="needs-validation" novalidate onsubmit="return false;">
-        <h2 class="h3 fw-normal">Edit Profile</h2>
-        <div class="avatar-container">
-            <div class="avatar-container-inner">
-                <%- include("templates/profile-avatar", {avatar}) %>
-        
-                <div class="add-photo">
-                    <input type="text" id="avatar" name="avatar" hidden/>
-                    <input id="upload-images" type="file" value="<%- avatar %>" accept="image/jpeg, image/png, image/jpg" hidden>
-                    <label for="upload-images">
+          <main class="form-wrapper profile-section-info">
+            <form id="form-profile" class="needs-validation" novalidate onsubmit="return false;">
+              <h2 class="h3 fw-normal">Edit Profile</h2>
+              <div class="avatar-container">
+                <div class="avatar-container-inner">
+                  <%- include("templates/profile-avatar", {avatar}) %>
+
+                    <div class="add-photo">
+                      <input type="text" id="avatar" name="avatar" hidden />
+                      <input id="upload-images" type="file" value="<%- avatar %>"
+                        accept="image/jpeg, image/png, image/jpg" hidden>
+                      <label for="upload-images">
                         <a type="button" class="btn btn-add-photo" aria-label="add photos">
-                            <span class="material-symbols-outlined">
-                                add_a_photo
-                            </span>
+                          <span class="material-symbols-outlined">
+                            add_a_photo
+                          </span>
                         </a>
-                    </label>
+                      </label>
+                    </div>
                 </div>
-            </div>
-            <button type="button" id="remove-profile" class="btn remove-profile">
-                Remove Profile
-            </button>
-        </div>
+                <button type="button" id="remove-profile" class="btn remove-profile">
+                  Remove Profile
+                </button>
+              </div>
 
-        <div class="form-floating readonly">
-            <input name="email" type="email" class="form-control" id="email" value="<%= email %>" readonly>
-            <label for="email">email</label>
-        </div>
+              <div class="form-floating readonly">
+                <input name="email" type="email" class="form-control" id="email" value="<%= email %>" readonly>
+                <label for="email">email</label>
+              </div>
 
-        <div class="form-indication">
-            <p>Name must be between 3 and 20 characters long.</p>
-        </div>
-        <div class="form-floating">
-            <input name="username" type="text" class="form-control" id="username" placeholder="Username" value="<%= username %>" required minlength="3" maxlength="20">
-            <label for="username">Name <span>*</span></label>
-            <div class="invalid-feedback">
-                Please enter your name as 3 ~ 20 characters long.
-            </div>
-        </div>
+              <div class="form-indication">
+                <p>Name must be between 3 and 20 characters long.</p>
+              </div>
+              <div class="form-floating">
+                <input name="username" type="text" class="form-control" id="username" placeholder="Username"
+                  value="<%= username %>" required minlength="3" maxlength="20">
+                <label for="username">Name <span>*</span></label>
+                <div class="invalid-feedback">
+                  Please enter your name as 3 ~ 20 characters long.
+                </div>
+              </div>
 
-        <div class="sign-btns-container">
-            <button id="btn-submit" class="w-100 btn btn-lg btn-primary" type="submit">Save</button>
-            <%- include("templates/loader") %>
-        </div>
-    </form>
-</main>
+              <div class="sign-btns-container">
+                <button id="btn-submit" class="w-100 btn btn-lg btn-primary" type="submit">Save</button>
+                <%- include("templates/loader") %>
+              </div>
+            </form>
+          </main>
 
-<%- include("templates/footer") %>
+          <%- include("templates/footer") %>
 
-<script>
-const input = document.getElementById("upload-images");
-const output = document.getElementsByClassName("img-avatar")?.[0];
-const usernameInput = document.getElementById("username");
-const urlOutput = document.getElementById("avatar");
-const btnRemove = document.getElementById("remove-profile")
-const btnSubmit = document.getElementById("btn-submit");
+            <script>
+              /*
+             Manages user avatar uploading, display, and submission using Firebase 
+             storage. Includes event listeners for selecting images, removing previews,
+             and form submission. Designed for profile editing with image uploads.
+            */
 
-// displays selected images to preview.
-function displayImages(imgUrl) {
-  // Insert dynamic elements to preview selected images.
-  let images = "";
-  output.setAttribute("src", imgUrl)
-}
+              // DOM element references
+              const input = document.getElementById("upload-images");
+              const output = document.getElementsByClassName("img-avatar")?.[0];
+              const usernameInput = document.getElementById("username");
+              const urlOutput = document.getElementById("avatar");
+              const btnRemove = document.getElementById("remove-profile")
+              const btnSubmit = document.getElementById("btn-submit");
 
-input.addEventListener("change", () => {
-    // Update images from selected images data
-    let imgFile = input.files?.[0];
-    let imgUrl = URL.createObjectURL(imgFile);
-    input.src = imgUrl;
+              // Function to display selected images in the preview
+              function displayImages(imgUrl) {
+                // Update the source of the preview image element
+                output.setAttribute("src", imgUrl);
+              }
 
-    // Show previews
-    displayImages(imgUrl);
-});
+              // Event listener for file input change
+              input.addEventListener("change", () => {
+                // Get the selected image file
+                let imgFile = input.files?.[0];
+                let imgUrl = URL.createObjectURL(imgFile);
+                input.src = imgUrl;
 
-// Bind click events to remove selected preview item.
-btnRemove.addEventListener("click", () => {
-    input.value = '';
-    displayImages("/image/avatar.png");
-});
+                // Display the selected image in the preview
+                displayImages(imgUrl);
+              });
 
-// Initialize Firebase
-firebase.initializeApp(<%- JSON.stringify(firebaseConfig) %>);
+              // Event listener for removing selected preview item
+              btnRemove.addEventListener("click", () => {
+                // Reset the file input and display a default image in the preview
+                input.value = '';
+                displayImages("/image/avatar.png");
+              });
 
-function uploadImage(file) {
-    btnSubmit.setAttribute("disabled", true)
-    try {
-        const ref = firebase.storage().ref();
-        // const name = +new Date() + "-" + file.name;
-        const name = `<%- uid; %>`;
-        const metadata = {
-            contentType: file.type
-        };
-        const task = ref.child(name).put(file, metadata);
-        task
-            .then(snapshot => snapshot.ref.getDownloadURL())
-            .then(url => {
-                urlOutput.setAttribute("value", url);
-                console.log('image uploaded successfully');
-                post({
-                    avatar: url,
-                    username: usernameInput.value
-                });
-            })
-            .catch(console.error);
-                
+              // Initialize Firebase
+              firebase.initializeApp(<% - JSON.stringify(firebaseConfig) %>);
 
-    } catch(e) {
-        btnSubmit.removeAttribute("disabled")
-        connsole.error(e);
-    }
-    
-}
+              // Function to upload image to Firebase storage
+              function uploadImage(file) {
+                btnSubmit.setAttribute("disabled", true);
+                try {
+                  const ref = firebase.storage().ref();
+                  const name = `<%- uid; %>`;
+                  const metadata = {
+                    contentType: file.type
+                  };
+                  const task = ref.child(name).put(file, metadata);
+                  task
+                    .then(snapshot => snapshot.ref.getDownloadURL())
+                    .then(url => {
+                      urlOutput.setAttribute("value", url);
+                      console.log('Image uploaded successfully');
+                      post({
+                        avatar: url,
+                        username: usernameInput.value
+                      });
+                    })
+                    .catch(console.error);
+                } catch (e) {
+                  btnSubmit.removeAttribute("disabled");
+                  console.error(e);
+                }
+              }
 
-const post = async (data) => {
-  const response = await fetch('/edit-profile-submit', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  })
-  .then(response => {
-    if (response.ok) {
-      window.location.href = '/profile';
-    } else {
-      console.error('Error:', response.status);
-    }
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
+              // Function to send data to the server via a POST request
+              const post = async (data) => {
+                const response = await fetch('/edit-profile-submit', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(data)
+                })
+                  .then(response => {
+                    if (response.ok) {
+                      window.location.href = '/profile';
+                    } else {
+                      console.error('Error:', response.status);
+                    }
+                  })
+                  .catch(error => {
+                    console.error('Error:', error);
+                  });
+              };
 
-}
 
-// Form submission
-const form = document.getElementById("form-profile")
-$(form).submit(async function(e) {
-  const username = document.getElementById( "username" );
 
-  e.preventDefault(); // Prevent the default form submission
+              /*
+    Handles form submission, validation, and optional image upload for user profile 
+    editing on a web page. Supports jQuery, username validation, and avatar image 
+    uploading. Designed for profile editing.
+ */
+              const form = document.getElementById("form-profile");
 
-  if (!form.checkValidity() || username.value?.trim().length < 3 || username.value?.trim().length > 20) {
-    form.classList.add('was-validated');
-    username.classList.remove( "is-valid" );
-    username.classList.add( "is-invalid" );
-    username.setAttribute("invalid", true)
+              $(form).submit(async function (e) {
+                const username = document.getElementById("username");
 
-    return;
-  } else {
-    form.classList.remove('was-validated');
-    username.classList.add( "is-valid" );
-    username.classList.remove( "is-invalid" );
+                e.preventDefault(); // Prevent the default form submission
 
-    let imgFile = input.files?.[0];
+                // Validate form inputs
+                if (!form.checkValidity() || username.value?.trim().length < 3 || username.value?.trim().length > 20) {
+                  form.classList.add('was-validated');
+                  username.classList.remove("is-valid");
+                  username.classList.add("is-invalid");
+                  username.setAttribute("invalid", true);
 
-    if (imgFile) {
-      uploadImage(imgFile);
-    } else {
-      post({
-        avatar: output.src.includes('image/avatar.png') ? output.src : null,
-        username: usernameInput.value?.trim()
-      })
-    }
-  }
-});
-</script>
+                  return;
+                } else {
+                  form.classList.remove('was-validated');
+                  username.classList.add("is-valid");
+                  username.classList.remove("is-invalid");
+
+                  let imgFile = input.files?.[0];
+
+                  // Upload the image if selected, otherwise submit the form data
+                  if (imgFile) {
+                    uploadImage(imgFile);
+                  } else {
+                    post({
+                      avatar: output.src.includes('image/avatar.png') ? output.src : null,
+                      username: usernameInput.value?.trim()
+                    });
+                  }
+                }
+              });
+
+            </script>
