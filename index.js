@@ -135,7 +135,7 @@ app.get('/search-results', async (req, res) => {
   try {
     if (Object.keys(condition).length === 0) {
       // No query parameters provided, fetch all objects
-      searchResult = await courseCollection.find().toArray();
+      searchResult = await courseCollection.find({}).toArray();
     } else {
       // Query parameters provided, filter the search
       searchResult = await courseCollection.find(condition).toArray();
@@ -181,7 +181,7 @@ app.get('/search-results', async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).send(`An error occurred while searching: ${error.message}`);
+    res.render('error', { message: `An error occurred while searching: ${error.message}`, username: req.session.username });
   }
   
 });
