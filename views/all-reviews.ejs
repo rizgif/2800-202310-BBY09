@@ -17,18 +17,18 @@
                             <%= parseInt(CourslaRating) > 0 ? parseFloat(CourslaRating).toFixed(1) : "N/A" %>
                         </span><span class="divider">/5</span>
                     </div>
-                    <div class="label">Overall Rating</div>
+                    <div class="label">Overall<br>Rating</div>
                 </div>
 
                 <div class="review-1">
-                    <div class="review-category">Course Content</div>
+                    <div class="review-category">Course<br>Content</div>
                     <div class="review-slider">
                         <%- include("templates/read-slider", { type: "courseContent" , value:
                             overallCategorySums.courseContent / num}) %>
                     </div>
                 </div>
                 <div class="review-2">
-                    <div class="review-category">Course Structure</div>
+                    <div class="review-category">Course<br>Structure</div>
                     <div class="review-slider">
                         <%- include("templates/read-slider", { type: "courseContent" , value:
                             overallCategorySums.courseStructure / num}) %>
@@ -42,7 +42,7 @@
                     </div>
                 </div>
                 <div class="review-4">
-                    <div class="review-category">Student Support</div>
+                    <div class="review-category">Student<br>Support</div>
                     <div class="review-slider">
                         <%- include("templates/read-slider", { type: "courseContent" , value:
                             overallCategorySums.studentSupport / num}) %>
