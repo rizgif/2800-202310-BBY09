@@ -141,6 +141,8 @@ app.get('/search-results', async (req, res) => {
     sortOptions.Course_Rating = 1; // Sort by Course_Rating in ascending order
   }
 
+  let searchResult = []; // Initialize searchResult as an empty array
+
   try {
     // Existing code for fetching search results
   
