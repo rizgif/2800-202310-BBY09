@@ -564,13 +564,21 @@ app.post('/find-password', async (req, res) => {
         from: email_host,
         to: email,
         subject: '[Coursla] Password Reset',
-        text: `Hi ${user.username},\n\nYou requested a password reset for your account.
-        \n\nPlease click on the following link within the next hour to reset your password:
-        \n\nhttps://coursla.cyclic.app/reset-password/${token}
-        \n\nIf you did not request this reset, please ignore this email.
-        \n\nThank you,
-        \nThe Coursla App Team`
-
+        html: `Hi, <b>${user.username}</b>,
+        <br><br>You requested a password reset for your account.
+        <br><br>Please click on the following link within the next hour to reset your password:
+        <br>https://coursla.cyclic.app/reset-password/${token}
+        <br><br>If you did not request this reset, please ignore this email.
+        <br><br>Thank you,
+        <br><br>The Coursla App Team
+        <br><br>
+        <img style="width:100px;" src="cid:${token}"/>
+        `,
+        attachments: [{
+          filename: 'coursla_main.png',
+          path: './public/image/coursla_main.png',
+          cid: token //same cid value as in the html img src
+        }]
       };
 
       await transporter.sendMail(mailOptions, (error, info) => {
