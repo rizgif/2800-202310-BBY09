@@ -42,15 +42,22 @@
 <% } %>
 
 <script>
+  /**
+   * Function to be executed when the document is ready.
+   * @author Chelsea Yang
+   */
   $(document).ready(function () {
+    // Find all elements with the class "slider"
     $(".slider").each(function () {
       var sliderValueInput = $(this).find('input[type="hidden"]');
       var defaultValue = 3;
 
       // Check if the slider value is empty
       if (sliderValueInput.val() === "") {
+        // Set the default value for the slider
         sliderValueInput.val(defaultValue);
       }
     });
   });
+
 </script>

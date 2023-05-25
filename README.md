@@ -1,35 +1,44 @@
 <h1 style>Coursla 🌿</h1>
 
-Our project, BBY-09, is developing online course integration platforms to assist students and working professionals struggling to find suitable online courses with key features such as filtering and sorting.
+<h2>Project Description</h2>
 
-During our development process, we used many technologies that include the following: 
+<p>Our project, BBY-09, is developing online course integration platforms to assist students and working professionals struggling to find suitable online courses with key features such as filtering and sorting.</p>
+
+
+<h2>Technologies</h2>
 <ul>
-    <li><h3>Tools</h3>
-        <ul>
-        <li>VS Code</li>
-        <li>Source tree</li>
-        <li>ChatGPT</li>
-        <li>GitHub</li>
-        <li>Sublime Merge</li>
-        <li>Studio3T</li>
-        </ul>
-    </li>
-    <li><h3>Skills & Libraries</h3>
-        <ul>
-        <li>HTML</li>
-        <li>CSS</li>
-        <li>JS</li>
-        <li>MongoDB</li>
-        <li>Kaggle</li>
-        <li>Node JS</li>
-        <li>sweetalert2</li>
-        <li>Firestore Cloud Storage</li>
-        <li>Bootstrap</li>
-        <li>JQuery</li>  
+  <li><strong>Frontend:</strong></li>
+    <ul>
+      <li>VS Code 1.56.2</li>
+      <li>HTML5</li>
+      <li>CSS3</li>
+      <li>JS(ES2022)</li>
+      <li>Bootstrap 5.3.0</li>
+      <li>JQuery 3.6.0</li>
+      <li>sweetalert2 11.1.0</li>
+    </ul>
+  <li><strong>Backend:</strong></li>
+    <ul>
+      <li>Kaggle</li>
+      <li>Node.js 16.0.0</li>
+    </ul>
+  <li><strong>Database:</strong></li>
+    <ul>
+      <li>MongoDB 5.0</li>
+      <li>Firestore Cloud Storage</li>
+    </ul>
+  <li><strong>Development Tools:</strong></li>
+    <ul>
+      <li>SourceTre 4.2.2</li>
+      <li>ChatGPT</li>
+      <li>GitHub</li>
+      <li>Sublime Merge 2.0.0</li>
+      <li>Studio 3T 2022.11</li>
+    </ul>
 </ul>
 
 
-<h3>Listing of File Contents of folder</h3>
+<h2>Files</h2>
 
 ```bash
 .
@@ -121,7 +130,6 @@ During our development process, we used many technologies that include the follo
 │       ├── image.js
 │       ├── modal.js
 │       └── search-list.js
-├── sample.env
 ├── utils.js
 └── views
     ├── 404.ejs
@@ -165,7 +173,7 @@ During our development process, we used many technologies that include the follo
     └── write-review.ejs
 ```
 
-<h2>Installing and Running Coursla</h2>
+<h2>Installation</h2>
 <p>To install and run the project, follow these steps:</p>
 <ol>
     <li>Install Node.js:
@@ -181,6 +189,15 @@ During our development process, we used many technologies that include the follo
             <li>Change to the directory where you want to clone the repository.</li>
             <li>Run the following command to clone the repository:</li>
             <li><code>git clone <repository_url></code> </li>
+            <li>Replace <repository_url> with the URL of the GitHub repository.</li>
+        </ul>
+    </li>
+    <br>
+     <li>Install project dependencies:
+        <ul>
+            <li>Navigate to the project directory in the terminal or command prompt.</li>
+            <li>Run the following command to install the dependencies listed in the project's package.json file:</li>
+            <li><code>npm install</code> </li>
             <li>Replace <repository_url> with the URL of the GitHub repository.</li>
         </ul>
     </li>
@@ -216,7 +233,7 @@ During our development process, we used many technologies that include the follo
     </li>
 </ol>
  
-<h2>How to use the Coursla</h2>
+<h2>Features</h2>
  <h4>1. Search and Filter Online Courses:</h4>
   <ul>
     <li>Utilize the search functionality to find courses based on keywords.</li>
@@ -246,13 +263,86 @@ During our development process, we used many technologies that include the follo
         
 <h2>AI and Coursla</h2>
 
-<p>As per the project theme, we relied on AI technology to help develop our app. We used ChatGPT to help us create functions, design our functions, and debug our code.</p> 
-<p>For our project, we used two MOOC dataset that were publicly available on Kaggle. Iniitally, we attempted to use ChatGPT to help us sort all of the courses into ten categories. However, our team noticed that there were too many values (7000+ data points) and we learned that ChatGPT could only process the datasets in small batches.</p>
+<p>As per the project theme, we relied on AI technology to help develop our app. We used ChatGPT to help us generate project ideas, create functions, design our functions, and debug our code. In addition, we have employed ChatGpt to assist in the composition of professional documents.</p> 
+
+<p>For our project, we used two MOOC dataset that were publicly available on Kaggle. Iniitally, we attempted to use ChatGPT to help us sort all of the courses into ten categories. However, our team noticed that there were too many values (7000+ data points) and we learned that ChatGPT could only process the datasets in small batches. Because of this, we didn't use AI to clean our dataset. Instead, we cleaned our dataset manually using another tool (studio 3T). </p>
+
 <p>Coursla used AI for the development of the application but it was not incorporated within the application itself.</p>
 <p></p>
 
 <h2>Credits, References, and Licenses </h2>
 
+<h4>## Contributors</h4>
+<ul>
+    <li>[Ai (Chelsea) Yang](https://github.com/chelseaY119)</li>
+    <li>[Heesun Lee](https://github.com/heesun-task)</li>
+    <li>[Yerim Moon](https://github.com/yerim01)</li>
+    <li>[Riz Nur Saidy](https://github.com/rizgif)</li>
+    <li></li>
+</ul>
+<h4>## Special Thanks</h4>
+<ul>
+    <li>Hoda/BCIT</li>
+</ul>
+
+<h4>## References</h4>
+<p>Node.js: Official website and documentation - https://nodejs.org
+
+ChatGPT by OpenAI: OpenAI website and documentation - https://www.openai.com
+
+Visual Studio Code: Official website and documentation - https://code.visualstudio.com
+
+Bootstrap: Official website and documentation - https://getbootstrap.com
+
+jQuery: Official website and documentation - https://jquery.com
+
+sweetalert2: GitHub repository - https://github.com/sweetalert2/sweetalert2
+
+Kaggle: Kaggle website and dataset documentation - https://www.kaggle.com
+
+MongoDB: Official website and documentation - https://www.mongodb.com
+
+Firestore Cloud Storage: Google Cloud Firestore documentation - https://cloud.google.com/firestore
+
+SourceTree: Official website and documentation - https://www.sourcetreeapp.com
+
+GitHub: Official website and documentation - https://github.com
+
+Sublime Merge: Official website and documentation - https://www.sublimemerge.com
+
+Studio3T: Official website and documentation - https://studio3t.com </p>
+
+<h4>## Licenses</h4>
+<p>MIT License
+
+Copyright (c) 2023 Coursla
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</p>
+
+<h2>Testing Plan</h2>
+<p>https://docs.google.com/spreadsheets/d/1R2CTAVH1uW8hAfJFPMFDrY7AkzYZVItiOzR5ZkBB2FQ/edit#gid=394496370</p>
+
 <h2>Contact Information</h2>
 <ul>
+<li>Ai (Chelsea) Yang: ayang106@my.bcit.ca</li>
+<li>Heesun Lee: hlee532@my.bcit.ca </li>
+<li>Yerim Moon: ymoon10@my.bcit.ca </li>
+<li>Riz Nur Saidy:  rnursaidy@my.bcit.ca</li>
 </ul>
+
