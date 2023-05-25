@@ -90,8 +90,16 @@ app.use(session({
   }
 ));
 
-/* === Pages === */
+
+/**
+ * Handle the root route and render the index page.
+ * @param {object} req - The Express request object.
+ * @param {object} res - The Express response object.
+ * @returns {void}
+ */
+
 app.get('/', async (req, res) => {
+  // Logic for handling the root route and rendering the index page
   if (req.session.authenticated && !req.session.uid) {
     const result = await userCollection.find({email: req.session.email}).project({_id: 1}).toArray();
     req.session.uid = result[0]._id;
@@ -100,8 +108,14 @@ app.get('/', async (req, res) => {
   res.render("index", {isLoggedIn: isLoggedIn(req), username: req.session.username});
 });
 
-//
+/**
+ * Handle the search-results route and display search results based on query parameters.
+ * @param {object} req - The Express request object.
+ * @param {object} res - The Express response object.
+ * @returns {void}
+ */
 app.get('/search-results', async (req, res) => {
+  // Logic for handling the search-results route and displaying search results
   const userId = req.session.uid;
   const userBookmarks = await bookmarkCollection.find({userId: userId}).toArray();
 
@@ -185,8 +199,14 @@ app.get('/search-results', async (req, res) => {
 
 });
 
-
+/**
+ * Handle the course-details route and render the course details page.
+ * @param {object} req - The Express request object.
+ * @param {object} res - The Express response object.
+ * @returns {void}
+ */
 app.get('/course-details', async (req, res) => {
+  // Logic for handling the course-details route and rendering the course details page
   const courseId = req.query.courseId;
   const reviews = await reviewCollection.find().toArray();
   const username = req.session.username;
@@ -278,8 +298,14 @@ app.get('/course-details', async (req, res) => {
   });
 });
 
-
+/**
+ * Handle the addBookmark route and add a bookmark for the user.
+ * @param {object} req - The Express request object.
+ * @param {object} res - The Express response object.
+ * @returns {void}
+ */
 app.post('/addBookmark', async (req, res) => {
+  // Logic for handling the addBookmark route and adding a bookmark for the user
   const userId = req.session.uid; // user's _id
   const courseId = req.body.courseId; // course's _id
 
@@ -291,7 +317,14 @@ app.post('/addBookmark', async (req, res) => {
   res.sendStatus(200);
 });
 
+/**
+ * Handle the removeBookmark route and remove a bookmark for the user.
+ * @param {object} req - The Express request object.
+ * @param {object} res - The Express response object.
+ * @returns {void}
+ */
 app.post('/removeBookmark', async (req, res) => {
+  // Logic for handling the removeBookmark route and removing a bookmark for the user
   const userId = req.session.uid; // user's _id
   const courseId = req.body.courseId; // course's _id
 
@@ -309,7 +342,14 @@ app.post('/removeBookmark', async (req, res) => {
 
 });
 
+/**
+ * Handle the bookmarks route and render the bookmarks page.
+ * @param {object} req - The Express request object.
+ * @param {object} res - The Express response object.
+ * @returns {void}
+ */
 app.get('/bookmarks', async (req, res) => {
+  // Logic for handling the bookmarks route and rendering the bookmarks page
   if (!req.session.authenticated) {
     res.redirect('/');
   } else {
@@ -361,8 +401,14 @@ app.get('/bookmarks', async (req, res) => {
 
 });
 
-
+/**
+ * Handle the login route and render the login page.
+ * @param {object} req - The Express request object.
+ * @param {object} res - The Express response object.
+ * @returns {void}
+ */
 app.get('/login', (req, res) => {
+  // Logic for handling the login route and rendering the login page
   res.render("login", {isLoggedIn: isLoggedIn(req)});
 });
 app.get('/error', (req, res) => {
@@ -377,7 +423,14 @@ app.get('/sample', (req, res) => {
   res.render("sample");
 });
 
+/**
+ * Handle the login-submit route and process the login form submission.
+ * @param {object} req - The Express request object.
+ * @param {object} res - The Express response object.
+ * @returns {void}
+ */
 app.post('/login-submit', loginValidation, async (req, res) => {
+  // Logic for handling the login-submit route and processing the login form submission
   let email = req.body.email;
 
   const result = await userCollection.find({email: email}).project({
@@ -401,11 +454,26 @@ app.post('/login-submit', loginValidation, async (req, res) => {
   res.redirect('/');
 });
 
+
+/**
+ * Handle the signup route and render the signup page.
+ * @param {object} req - The Express request object.
+ * @param {object} res - The Express response object.
+ * @returns {void}
+ */
 app.get('/signup', (req, res) => {
+  // Logic for handling the signup route and rendering the signup page
   res.render('signup', {isLoggedIn: isLoggedIn(req)});
 });
 
+/**
+ * Handle the signup-submit route and process the signup form submission.
+ * @param {object} req - The Express request object.
+ * @param {object} res - The Express response object.
+ * @returns {void}
+ */
 app.post('/signup-submit', signupValidation, async (req, res) => {
+  // Logic for handling the signup-submit route and processing the signup form submission
   let password = req.body.password;
   let username = req.body.username?.trim();
   let email = req.body.email?.trim();
@@ -444,25 +512,46 @@ app.post('/signup-submit', signupValidation, async (req, res) => {
   res.redirect('/');
 });
 
+/**
+ * Handle the logout route and log out the user.
+ * @param {object} req - The Express request object.
+ * @param {object} res - The Express response object.
+ * @returns {void}
+ */
 app.get('/logout', (req, res) => {
+  // Logic for handling the logout route and logging out the user
   req.session.destroy();
   res.redirect("/");
 });
 
+
+/**
+ * Render the find-password page.
+ * @param {object} req - The Express request object.
+ * @param {object} res - The Express response object.
+ * @returns {void}
+ */
 app.get('/find-password', (req, res) => {
   res.render('find-password');
 });
+
+/**
+ * Process the find password form submission and send a password reset email if the user is found.
+ * @param {object} req - The Express request object.
+ * @param {object} res - The Express response object.
+ * @returns {void}
+ */
 app.post('/find-password', async (req, res) => {
   const email = req.body.email;
 
   try {
     const user = await userCollection.findOne({email: email});
-
+    // Generate and store a password reset token
     if (user) {
       const token = new ObjectId().toString();
       const expireTime = new Date(Date.now() + 3600000); // Token expires in 1 hour
       await tokenCollection.insertOne({token: token, uid: user._id, expireAt: expireTime});
-
+      // Send password reset email to the user
       const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -506,6 +595,12 @@ app.post('/find-password', async (req, res) => {
   }
 });
 
+/**
+ * Render the reset password page for a specific token.
+ * @param {object} req - The Express request object.
+ * @param {object} res - The Express response object.
+ * @returns {void}
+ */
 app.get('/reset-password/:token', async (req, res) => {
   const token = req.params.token;
   try {
@@ -524,6 +619,12 @@ app.get('/reset-password/:token', async (req, res) => {
   }
 });
 
+/**
+ * Process the password reset form submission and update the user's password.
+ * @param {object} req - The Express request object.
+ * @param {object} res - The Express response object.
+ * @returns {void}
+ */
 app.post('/reset-password-submit', async (req, res) => {
   console.log('change password submit');
   /* Check the old password */
@@ -551,17 +652,35 @@ app.post('/reset-password-submit', async (req, res) => {
 
 });
 
+/**
+ * Render the profile page.
+ * @param {object} req - The Express request object.
+ * @param {object} res - The Express response object.
+ * @returns {void}
+ */
 app.get('/profile', sessionValidation, (req, res) => {
   let {username, email, avatar} = req.session;
   res.render('profile', {username, email, avatar, isLoggedIn: isLoggedIn(req)});
 });
 
+/**
+ * Render the change password page.
+ * @param {object} req - The Express request object.
+ * @param {object} res - The Express response object.
+ * @returns {void}
+ */
 app.get('/change-password', sessionValidation, async (req, res) => {
   const message = req.query.message || '';
   const avatar = req.session.avatar;
   res.render('change-password', {message, avatar, isLoggedIn: isLoggedIn(req), username: req.session.username});
 });
 
+/**
+ * Process the change password form submission and update the user's password.
+ * @param {object} req - The Express request object.
+ * @param {object} res - The Express response object.
+ * @returns {void}
+ */
 app.post('/change-password-submit', sessionValidation, async (req, res) => {
   console.log('change password submit');
   /* Check the old password */
@@ -585,7 +704,12 @@ app.post('/change-password-submit', sessionValidation, async (req, res) => {
   res.redirect("/profile");
 });
 
-
+/**
+ * Render the edit profile page.
+ * @param {object} req - The Express request object.
+ * @param {object} res - The Express response object.
+ * @returns {void}
+ */
 app.get('/edit-profile', sessionValidation, async (req, res) => {
   let email = req.session.email;
   let username = req.session.username;
@@ -601,6 +725,12 @@ app.get('/edit-profile', sessionValidation, async (req, res) => {
   });
 });
 
+/**
+ * Process the edit profile form submission and update the user's profile information.
+ * @param {object} req - The Express request object.
+ * @param {object} res - The Express response object.
+ * @returns {void}
+ */
 app.post('/edit-profile-submit', editProfileValidation, async (req, res) => {
   let username = req.body.username?.trim();
   let avatar = req.body.avatar;
@@ -618,7 +748,12 @@ app.post('/edit-profile-submit', editProfileValidation, async (req, res) => {
   res.redirect("/profile");
 });
 
-// write a review on a specific course
+/**
+ * Render the write review page for a specific course.
+ * @param {object} req - The Express request object.
+ * @param {object} res - The Express response object.
+ * @returns {void}
+ */
 app.get('/reviews/write/:courseid', async (req, res) => {
   const username = req.session.username;
   const avatar = req.session.avatar;
@@ -693,7 +828,12 @@ app.get('/reviews/write/:courseid', async (req, res) => {
 });
 
 
-//change the review written for a specific course
+/**
+ * Render the write review page for updating a specific review.
+ * @param {object} req - The Express request object.
+ * @param {object} res - The Express response object.
+ * @returns {void}
+ */
 app.get('/reviews/write/updateReview/:id', async (req, res) => {
   const username = req.session.username;
   const avatar = req.session.avatar;
@@ -734,7 +874,12 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
 });
 
 
-//delete the review from database
+/**
+ * Delete a review from the database.
+ * @param {object} req - The Express request object.
+ * @param {object} res - The Express response object.
+ * @returns {void}
+ */
 app.post('/reviews/deleteReview/:id', async (req, res) => {
   const courseId = req.params.id;
   const email = req.query.useremail || req.session.email;
@@ -775,7 +920,12 @@ app.post('/reviews/deleteReview/:id', async (req, res) => {
 });
 
 
-//write to database
+/**
+ * Write a review to the database.
+ * @param {object} req - The Express request object.
+ * @param {object} res - The Express response object.
+ * @returns {void}
+ */
 app.post('/submitReview/:id', async (req, res) => {
   const uid = req.session.uid;
   const username = req.session.username; // Replace 'username' with the actual field name
@@ -892,6 +1042,12 @@ app.post('/submitReview/:id', async (req, res) => {
   }
 });
 
+/**
+ * Render the user's review page.
+ * @param {object} req - The Express request object.
+ * @param {object} res - The Express response object.
+ * @returns {void}
+ */
 app.get('/my-reviews', async (req, res) => {
   const email = req.session.email;
   const reviews = await reviewCollection.find({email: email}).toArray();
@@ -988,13 +1144,27 @@ app.get('/my-reviews', async (req, res) => {
   });
 });
 
+/**
+ * Serve static files from the "public" directory.
+ */
 app.use(express.static(__dirname + "/public"));
 
+/**
+ * Handle the wildcard route for all unmatched routes.
+ * @param {object} req - The Express request object.
+ * @param {object} res - The Express response object.
+ * @returns {void}
+ */
 app.get("*", (req, res) => {
   res.status(404);
   res.render("404", {isLoggedIn: isLoggedIn(req), username: req.session.username});
 })
 
+/**
+ * Start the Express server and listen on the specified port.
+ * @param {number} port - The port number on which to listen.
+ * @returns {void}
+ */
 app.listen(port, () => {
   console.log("Node application listening on port " + port);
 });
