@@ -67,7 +67,8 @@
 
 
   .alert-message {
-    display: inline-block;
+    position: relative;
+    display: none;
     padding: 10px 20px;
     background-color: #f8d7da;
     color: #721c24;
@@ -81,10 +82,14 @@
   }
   
   .alert-message-close {
-    float: right;
+    position: absolute;
+    top: 5px;
+    right: 5px;
     cursor: pointer;
     color: #721c24;
     font-weight: bold;
+    font-size: 18px;
+    line-height: 1;
   }
   
   .alert-message-close:hover {

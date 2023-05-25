@@ -5,18 +5,20 @@
 <% } %>
 <div class="search-wrapper">
     <form action="/search-results" method="get">
-        <div class="search-bar justify-content-center">
-            <div class="form-group">
-                <input value="<%= courseSearch %>" name="courseSearch" type="text" class="form-control"
-                       id="courseSearch" placeholder="Search courses">
-            </div>
-            <button type="submit" class="btn btn-main-search mb-2" style="width:50px;" id="searchicon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search"
-                     viewBox="0 0 16 16">
-                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
-                </svg>
-            </button>
+      <div class="search-bar justify-content-center">
+        <div class="form-group">
+          <input value="<%= courseSearch %>" name="courseSearch" type="text" class="form-control" id="courseSearch" placeholder="Search courses">
         </div>
+        <button type="submit" class="btn btn-main-search mb-2" style="width:50px;" id="searchicon" onclick="return validateSearchForm()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
+          </svg>
+        </button>
+      </div>
+      <div id="alertMessage" class="alert-message">
+        <p>Please enter a search keyword.</p>
+        <span id="alertMessageClose" class="alert-message-close">&times;</span>
+      </div>
         <div class="filter-bar row justify-content-center">
           <div class="btn-group">
               <select id="provider" name="provider" class="form-select">
@@ -66,6 +68,26 @@
   courseCard.addEventListener('click', () => {
   courseCard.classList.toggle('clicked');
 });
+
+
+  function validateSearchForm() {
+    const searchInput = document.getElementById("courseSearch").value;
+    if (searchInput.trim() === "") {
+      const alertMessage = document.getElementById("alertMessage");
+      alertMessage.style.display = "block";
+      return false; // Prevent form submission
+    }
+    return true; // Proceed with form submission
+  }
+
+  document.getElementById("alertMessageClose").addEventListener("click", function() {
+    const alertMessage = document.getElementById("alertMessage");
+    alertMessage.style.display = "none";
+  });
+
+
+
+
 </script>
 <%- include("templates/footer") %>
 
