@@ -16,6 +16,13 @@
     box-shadow: 0 0px 5px rgba(0, 0, 0, 0.3);
     overflow: hidden;
 }
+.edit-title {
+    margin-top: 20px;
+    display: block;
+}
+.write-review-grid .user-profile {
+    grid-column: 1/3;
+}
 
 .user-profile {
     display: flex;
