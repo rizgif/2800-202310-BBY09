@@ -154,13 +154,6 @@ app.get('/search-results', async (req, res) => {
   
     const searchResultCount = searchResult.length;
   
-    searchResult.sort((a, b) => {
-      if (sort === 'low to high') {
-        return a.Course_Rating - b.Course_Rating; // Sort by Course_Rating in ascending order
-      } else {
-        return b.Course_Rating - a.Course_Rating; // Sort by Course_Rating in descending order
-      }
-    });
   
     let calibratedValues = [];
     let nonCalibratedValues = [];
