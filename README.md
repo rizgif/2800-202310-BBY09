@@ -3,29 +3,36 @@
 Our project, BBY-09, is developing online course integration platforms to assist students and working professionals struggling to find suitable online courses with key features such as filtering and sorting.
 
 During our development process, we used many technologies that include the following: 
+
 <ul>
-    <li><h3>Tools</h3>
-        <ul>
-        <li>VS Code</li>
-        <li>Source tree</li>
-        <li>ChatGPT</li>
-        <li>GitHub</li>
-        <li>Sublime Merge</li>
-        <li>Studio3T</li>
-        </ul>
-    </li>
-    <li><h3>Skills & Libraries</h3>
-        <ul>
-        <li>HTML</li>
-        <li>CSS</li>
-        <li>JS</li>
-        <li>MongoDB</li>
-        <li>Kaggle</li>
-        <li>Node JS</li>
-        <li>sweetalert2</li>
-        <li>Firestore Cloud Storage</li>
-        <li>Bootstrap</li>
-        <li>JQuery</li>  
+  <li><strong>Frontend:</strong></li>
+    <ul>
+      <li>VS Code</li>
+      <li>HTML</li>
+      <li>CSS</li>
+      <li>JS</li>
+      <li>Bootstrap</li>
+      <li>JQuery</li>
+      <li>sweetalert2</li>
+    </ul>
+  <li><strong>Backend:</strong></li>
+    <ul>
+      <li>Kaggle</li>
+      <li>Node.js</li>
+    </ul>
+  <li><strong>Database:</strong></li>
+    <ul>
+      <li>MongoDB</li>
+      <li>Firestore Cloud Storage</li>
+    </ul>
+  <li><strong>Development Tools:</strong></li>
+    <ul>
+      <li>SourceTree</li>
+      <li>ChatGPT</li>
+      <li>GitHub</li>
+      <li>Sublime Merge</li>
+      <li>Studio3T</li>
+    </ul>
 </ul>
 
 
@@ -261,6 +268,10 @@ During our development process, we used many technologies that include the follo
 
 <h2>Credits, References, and Licenses </h2>
 
+<h2>Testing Plan</h2>
+<p>https://docs.google.com/spreadsheets/d/1R2CTAVH1uW8hAfJFPMFDrY7AkzYZVItiOzR5ZkBB2FQ/edit#gid=394496370</p>
+
 <h2>Contact Information</h2>
 <ul>
 </ul>
+
