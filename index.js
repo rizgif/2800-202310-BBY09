@@ -325,6 +325,7 @@ app.get('/bookmarks', async (req, res) => {
                   Title: 1,
                   Provider: 1,
                   Course_Rating: 1,
+                  CourslaRating: 1,
                   Course_Difficulty: 1,
                   imageNum: 1
                 }
