@@ -342,7 +342,6 @@ app.get('/bookmarks', async (req, res) => {
   
       res.render('bookmarks', { bookmarkedCourses, isLoggedIn: isLoggedIn(req), userBookmarks, username: req.session.username});
     } catch (error) {
-      console.error(error);
       res.status(500).send('Internal Server Error');
     }
   }
@@ -636,9 +635,7 @@ app.get('/reviews/write/:courseid', async (req, res) => {
       reviewId: reviewId,
       avatar: avatar,
       email: email
-      // myReviewPage: myReviewPage
     }
-    // console.log(avatar)
     res.render("write-review", renderData);
 
   } else {
@@ -651,7 +648,6 @@ app.get('/reviews/write/:courseid', async (req, res) => {
       avatar: avatar,
       courseId: courseId,
       editReview: false,
-      // specificReview: specificReview,
       hasReview: hasReview,
       email: email
 
@@ -670,12 +666,8 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
   const reviews = await reviewCollection.find().toArray();
   const myReviewPage = req.query.myReviewPage;
 
-  // console.log("hello?", myReviewPage)
-
-  // console.log(username);
   const reviewSliderPairs = reviews.map(review => ({
     username: review.username,
-    // review: review.Review,
     sliderValue: {
       courseContentSliderValue: review.CourseContentRating,
       courseStructureSliderValue: review.CourseStructureRating,
@@ -688,12 +680,10 @@ app.get('/reviews/write/updateReview/:id', async (req, res) => {
 
   // Find the specific review for the current user based on the review ID
   const specificReview = reviews.find(review => review._id.toString() === reviewId);
-  // console.log("specific", specificReview)
   const courseID = specificReview.CourseID;
 
   const renderData = {
     req: req,
-    // sliderValues: sliderValues,
     reviewSliderPairs: reviewSliderPairs,
     username: username,
     editReview: true,
@@ -724,8 +714,6 @@ app.post('/reviews/deleteReview/:id', async (req, res) => {
     return false;
   }
 
-  // console.log(deletedReview);
-
   const reviewCount = await reviewCollection.countDocuments({
     email: email
   });
@@ -733,9 +721,6 @@ app.post('/reviews/deleteReview/:id', async (req, res) => {
   if (deletedReview) {
     const deletedReviewId = deletedReview._id.toString();
     await reviewCollection.deleteOne({ CourseID: courseId, email: email });
-
-    // Delete the corresponding review ID from the array in the user document
-    console.log('reviewCount', reviewCount);
 
     if (reviewCount <= 5) {
       await userCollection.updateOne(
@@ -776,9 +761,6 @@ app.post('/submitReview/:id', async (req, res) => {
     studentSupportSliderValue,
     currentDate } = req.body;
 
-  // const errorMessage = await reviewValidation(req.body);
-  console.log(req.errorMessage);
-
   // if there is a exisiting review, direct user to edit their existing review
   if (Existingreviews) {
     console.log('Update user review and active index');
@@ -797,9 +779,7 @@ app.post('/submitReview/:id', async (req, res) => {
         }
       }
     );
-    console.log('Review updated successfully');
   } else {
-
     await reviewCollection.insertOne({
       Review: review,
       CourseContentRating: courseContentSliderValue,
@@ -812,7 +792,6 @@ app.post('/submitReview/:id', async (req, res) => {
       CourseID: courseId
     });
 
-    console.log(review);
     const insertedReview = await reviewCollection.findOne({
       Review: review,
       email: email
@@ -821,8 +800,6 @@ app.post('/submitReview/:id', async (req, res) => {
     const reviewCount = await reviewCollection.countDocuments({
       email: email
     });
-
-    console.log("Number of reviews:", reviewCount);
 
     if (reviewCount > 1) {
 
@@ -855,8 +832,7 @@ app.post('/submitReview/:id', async (req, res) => {
         { _id: new ObjectId(uid) },
         { $set: { Badges: "Reviewer" } }
       );
-      // console.log('response',response)
-
+      
       res.redirect('/course-details?easterEgg=true&courseId=' + courseId);
       return false;
     } else if (reviewCount > 5) {
